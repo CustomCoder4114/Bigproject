@@ -1,0 +1,320 @@
+body {
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+.wel {
+    width: 100%;
+    height: 365px;
+    margin-top: 65px;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.1;
+    position: relative;
+}
+
+.lucid {
+    width: 100%;
+    height: 570px;
+    background: linear-gradient(to left, whitesmoke);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    margin-top: -20px;
+}
+
+.welc {
+    overflow: visible;
+    font-size: 20px;
+    color: whitesmoke;
+    font-weight: bold;
+    margin-left: 50px;
+}
+
+.bred {
+    color: red;
+    margin-top: -20px;
+    font-size: 50px;
+    font-weight: bold;
+    margin-left: 50px;
+    line-height: 1.1;
+}
+
+.welcm {
+    font-size: 27px;
+    color: whitesmoke;
+    margin-left: 50px;
+    margin-top: -27px;
+}
+.firstimg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 570px;
+    background: #f5f5f5;
+}
+
+.seconimg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 570px;
+    background: #f5f5f5;
+}
+
+
+
+.ofa {
+    overflow: visible;
+    font-size: 30px;
+    color: black;
+    font-weight: bold;
+    margin-left: 550px;
+}
+
+.manyw {
+    font-size: 27px;
+    color: black;
+    margin-left: 310px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+.third {
+    width: 100%;
+    height: 470px;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    margin-top: -23px;
+
+    background: linear-gradient(to left,#FF8C00);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.hthird {
+    color: darkblue;
+    margin-left: 500px;
+}
+.pthird {
+    font-size: 27px;
+    color: whitesmoke;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+.mv {
+    width: 100%;
+    height: 950px;
+    background: linear-gradient(to right, #FFFDD0);
+    margin-top: -25px;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.1;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px 50px;
+    box-sizing: border-box;
+}
+.miss {
+    color: rgb(0, 77, 179);
+    margin-left: 50px;
+}
+.vis {
+    color: rgb(0, 77, 179);
+    margin-left: 50px;
+}
+.mmiss {
+    font-size: 27px;
+    color: black;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+.mvis {
+    font-size: 27px;
+    color: black;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+/*Welcome to Eschool — This is a modern, innovative, and inclusive digital learning platform built with one mission in mind: to make high-quality education accessible to every learner, everywhere.
+At Eschool, we believe that education is not just a privilege but a fundamental right. Our platform was created after observing the challenges many students face — lack of quality study materials, limited access to good teachers, and the growing need for flexible, easy-to-understand learning resources. We exist to solve these problems and create a space where learning becomes simpler, smarter, and more enjoyable.
+
+🌍 Who We Are
+
+Eschool is a dedicated educational hub that brings together students, teachers, and lifelong learners under one digital roof. We are a team of passionate educators, developers, and innovators who understand the power of knowledge and the importance of making it available to anyone who seeks it.
+
+We specialize in providing:
+
+High-quality educational videos that break down complex concepts.
+
+Well-structured subject notes crafted for clarity and understanding.
+
+Career-building resources for learners who want to grow professionally.
+
+A platform for teachers to earn by sharing their valuable knowledge.
+
+Our commitment is to build a safe, reliable, and user-friendly environment where both learners and educators can thrive.
+
+🎯 Our Mission
+
+Our mission is simple but powerful:
+To provide accessible, affordable, and high-quality education to all learners, regardless of their background or location.
+
+We want to remove the barriers that hold students back by providing:
+
+Easy-to-understand learning materials
+
+A flexible learning schedule
+
+A comfortable platform for studying from home
+
+Opportunities for teachers to develop their careers
+
+A supportive digital community
+
+We aim to impact millions of learners worldwide by shaping a future where education is not limited by distance, cost, or opportunity.
+
+🌟 Our Vision
+
+Our vision is to become a global leader in online education by:
+
+Bridging the educational gap between privileged and underprivileged learners
+
+Encouraging innovation in teaching
+
+Empowering content creators and educators
+
+Supporting students every step of the way
+
+Building a world where quality education reaches every corner of society
+
+We aspire to create a future where every learner has the tools, knowledge, and confidence they need to succeed academically and professionally.
+
+🧠 What We Offer
+📚 1. High-Quality Educational Videos
+
+Our video lessons are created with the learner in mind. They are:
+
+Clear
+
+Step-by-step
+
+Engaging
+
+Easy to understand
+
+Each subject is broken down into simple explanations, visual demonstrations, and real examples to help students learn more effectively than traditional classroom methods.
+
+📝 2. Well-Structured Notes
+
+We provide professionally designed notes that summarize every topic in a simple, understandable format.
+These notes help students:
+
+Revise faster
+
+Understand key concepts
+
+Prepare for exams
+
+Improve their performance in school
+
+Our goal is to make studying less stressful and more enjoyable.
+
+💼 3. Career-Building Tools
+
+Eschool doesn’t only focus on academic education.
+We help learners build careers with:
+
+Skill development programs
+
+Professional courses
+
+Guidance on career paths
+
+Tools to prepare for the future job market
+
+We prepare learners for a world that is constantly changing.
+
+💰 4. Opportunities for Teachers
+
+Eschool is also a platform for educators.
+
+We value teachers, trainers, and content creators by giving them the chance to:
+
+Share their knowledge
+
+Build an audience
+
+Earn income for their work
+
+Grow their teaching career online
+
+Our goal is to support teachers just as much as we support students.
+
+🤝 Why Choose Us?
+
+You should choose Eschool because we offer:
+
+✔ A clean, modern, easy-to-use platform
+
+✔ High-quality content from trained educators
+
+✔ 24/7 access to learning materials
+
+✔ A supportive community
+
+✔ A place for teachers to grow and be rewarded
+
+✔ A learning environment that respects your pace
+
+✔ Simplicity, quality, and effectiveness
+
+We put students first, teachers second, and technology third — because learning is always about people.
+
+❤️ Our Commitment
+
+At Eschool, we are committed to:
+
+Supporting students emotionally and academically
+
+Continually improving the learning experience
+
+Expanding our library of subjects and courses
+
+Working with professional educators
+
+Innovating new teaching methods
+
+Making education fun, not frustrating
+
+We believe every student deserves the chance to succeed, and we exist to make that possible.
+
+🌱 Our Values
+🔹 Accessibility
+
+Education should reach everyone — no matter who they are or where they live.
+
+🔹 Innovation
+
+We embrace technology and new ideas to improve learning.
+
+🔹 Quality
+
+Every resource we provide meets high educational standards.
+
+🔹 Integrity
+
+We believe in honesty, transparency, and doing what’s right.
+
+🔹 Empowerment
+
+We help students and teachers unlock their full potential.
+
+🌐 Join the Eschool Community
+
+By joining Eschool, you become part of a growing global community dedicated to learning, teaching, and personal growth. Whether you are a student looking for help with your studies, a professional working to upgrade your skills, or a teacher hoping to share your talent — Eschool is here to support you every step of the way.
+
+Eschool is not just a platform — it is a movement toward equal, quality education for all.*/
