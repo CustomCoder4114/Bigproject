@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Eschool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cssi.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="whlogo">
+        <a class="logo" href="/learn"><span class="red">E</span>SCHOOL</a>
+        <p class="slogan">EDUCATION IS A RIGHT</p>
+        </div>
+        <ul class="ulc">
+            <li><a class="link active" href="/learn">Home</a></li>
+            <li><a class="link" href="/aboutus">About us</a></li>
+            <li><a class="link" href="#">Services</a></li>
+            <li><a class="link" href="#">Contact</a></li>
+            <li><a class="link" href="#">Donate</a></li>
+            <li><a class="link" href="#">Help</a></li>     
+        </ul>
+        <div class="allbtn">
+         <button id="logbtn" class="btn" onclick="window.location.href='/Login'">Login</button>
+        <button class="btn" onclick="window.location.href='/register'" id="regbtn">Register</button>
+        </div>
+    </nav>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll('.ulc li a');
+
+    // Restore the active link when page loads
+    let activeLink = localStorage.getItem("activeNavLink");
+    if (activeLink) {
+        links.forEach(l => l.classList.remove("active"));
+        const linkToActivate = document.querySelector(`.ulc li a[href="${activeLink}"]`);
+        if (linkToActivate) {
+            linkToActivate.classList.add("active");
+        }
+    }
+
+    // Add click event for storing active link
+    links.forEach(link => {
+        link.addEventListener('click', function () {
+            localStorage.setItem("activeNavLink", this.getAttribute("href"));
+        });
+    });
+});
+</script>
+
+
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+{% extends "fronten.html" %}
+
+{% block content %}
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='forregister.css') }}">
+<form action="">
+<div class="page-content">
+<div class="form-box">
+<div class="register-container" id="register">
+    <div class="top">
+        <span>Have an account? <a href="/Login">Login</a></span>
+        <header>Sign Up</header>
+    </div>
+    <div class="two-forms">
+        <div class="input-box">
+            <input type="text" class="input-field" placeholder="Firstname" required>
+            <i class='bx  bx-user'></i> 
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" placeholder="Lastname" required>
+            <i class='bx  bx-user'></i> 
+        </div>
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" placeholder="Email" required>
+            <i class='bx  bx-envelope'></i> 
+        </div>
+        <div class="input-box">
+            <input type="password" class="input-field" placeholder="Password" required>
+            <i class='bx  bx-lock'></i> 
+        </div>
+        <div class="input-box">
+            <input type="submit" class="submit" value="Register">
+        </div>
+        <div class="two-col">
+            <div class="one">
+                <input type="checkbox" id="register-check">
+                <label for="register-check"> Remember me</label>
+            </div>
+            <div class="two">
+                <label><a href="#">Terms & conditions</a></label>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</form>
+{% endblock %}

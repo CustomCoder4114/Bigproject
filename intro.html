@@ -1,0 +1,55 @@
+{% extends "fronten.html" %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+   <div class="pill-container">
+     <button class="pill-btn active" onclick="window.location.href='/learn'" id="learn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22h11a2.5 2.5 0 0 0 2.5-2.5v-15A2.5 2.5 0 0 0 17.5 2h-11A2.5 2.5 0 0 0 4 4.5v15z"/></svg>
+      Learn educational knowledge
+     </button>
+
+    <button class="pill-btn" onclick="window.location.href='/career'" id="career">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6h-4l-2-2H10L8 6H4v14h16V6z"/></svg>
+      Build Your Career
+    </button>
+
+    <button class="pill-btn" onclick="window.location.href='/earn'" id="earn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 4.6c.29 0 .57-.07.82-.2H9a2 2 0 1 1 4 0h.09c.39.17.72.45 1 1.51A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c0 .29.07.57.2.82V10a2 2 0 1 1 0 4h-.09c-.17.39-.45.72-1.51 1z"/></svg>
+      Earn On Eschool
+    </button>
+  </div> 
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".pill-btn");
+
+    // Restore active button from localStorage
+    const activeId = localStorage.getItem("activeButton");
+    if (activeId) {
+        const activeBtn = document.getElementById(activeId);
+        if (activeBtn) {
+            buttons.forEach(b => b.classList.remove("active"));
+            activeBtn.classList.add("active");
+        }
+    }
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", function () {
+            // Save id of clicked button before redirect
+            localStorage.setItem("activeButton", this.id);
+
+            // Remove active from all
+            buttons.forEach(b => b.classList.remove("active"));
+
+            // Add active to clicked button
+            this.classList.add("active");
+        });
+    });
+});
+</script>
+
+{% block conten %}
+{% endblock %}
+{% endblock %}
+
+
+
