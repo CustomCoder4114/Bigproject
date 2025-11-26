@@ -14,9 +14,6 @@ def register():
 @app.route('/Login')
 def login():
     return render_template('Login.html')
-@app.route('/learn')
-def learn():
-    return render_template('learn.html')
 @app.route('/career')
 def career():
     return render_template('career.html')
@@ -30,3 +27,4 @@ def aboutus():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
