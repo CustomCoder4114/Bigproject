@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/intro')
 def intro():
     return render_template('intro.html')
-@app.route('/')
+@app.route('/learn')
 def learn():
      return render_template('learn.html')
 @app.route('/register')
@@ -27,6 +27,7 @@ def aboutus():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 
