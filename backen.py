@@ -6,7 +6,7 @@ app = Flask(__name__)
 def intro():
     return render_template('intro.html')
 @app.route('/')
-def index():
+def learn():
      return render_template('learn.html')
 @app.route('/register')
 def register():
@@ -17,6 +17,9 @@ def login():
 @app.route('/career')
 def career():
     return render_template('career.html')
+@app.route('/learn')
+def learn():
+    return render_template('learn.html')
 @app.route('/earn')
 def earn():
     return render_template('earn.html')
@@ -27,4 +30,5 @@ def aboutus():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
