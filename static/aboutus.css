@@ -1,0 +1,420 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.wel {
+    width: 100%;
+    height: 500px;
+    margin-top: 65px;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #6a89a7;
+}
+
+.wel-img {
+    width: 400px;
+    height: 500px;
+    mask-image: linear-gradient(to right, transparent, black 40%);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 40%);
+    opacity: 0.95;
+    transition: transform 0.3s ease;
+}
+.wel-img:hover {
+    transform: scale(1.04);
+}
+.lucid {
+    width: 100%;
+    height: 650px;
+    margin-top: -20px;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    display: flex;
+    background: #384959;
+    align-items: center;
+    justify-content: center;
+
+
+    
+    /*width: 100%;
+    height: 770px;
+    background: #384959;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    margin-top: -20px;*/
+}
+
+
+/*.aboutimg {
+    width: 450px;
+    height: 650px;
+    mask-image: linear-gradient(to left, transparent, black 40%);
+    -webkit-mask-image: linear-gradient(to left, transparent, black 40%);
+    opacity: 0.95;
+    transition: transform 0.3s ease;}*/
+
+.welc {
+    overflow: visible;
+    font-size: 30px;
+    color: whitesmoke;
+    font-weight: bold;
+    margin-left: 50px;
+}
+
+.bred {
+    color: red;
+    margin-top: -20px;
+    font-size: 50px;
+    font-weight: bold;
+    margin-left: 50px;
+    line-height: 1.1;
+}
+
+.welcm {
+    font-size: 27px;
+    color: whitesmoke;
+    margin-left: 50px;
+    margin-top: -27px;
+}
+
+.ofa {
+    overflow: visible;
+    font-size: 30px;
+    color: black;
+    font-weight: bold;
+    margin-left: 150px;
+}
+
+.manyw {
+    font-size: 27px;
+    color: #bdddfc;
+    margin-left: 0px;
+    margin-top: -20px;
+}
+.third {
+    width: 100%;
+    height: 570px;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    margin-top: -23px;
+    background: linear-gradient(to left, #88bdf2);
+}
+
+.hthird {
+    color: darkblue;
+    margin-left: 500px;
+}
+.pthird {
+    font-size: 27px;
+    color: whitesmoke;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+.mv {
+    width: 100%;
+    height: 950px;
+    background: linear-gradient(to right, #FFFDD0);
+    margin-top: -25px;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.1;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px 50px;
+    box-sizing: border-box;
+}
+.miss {
+    color: rgb(0, 77, 179);
+    margin-left: 50px;
+}
+.vis {
+    color: rgb(0, 77, 179);
+    margin-left: 50px;
+}
+.mmiss {
+    font-size: 27px;
+    color: black;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+.mvis {
+    font-size: 27px;
+    color: black;
+    margin-left: 50px;
+    margin-top: -20px;
+    line-height: 1.5;
+}
+/*////////////////////////////////////////*/
+
+footer {
+            background-color: #2d3748;
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #e2e8f0;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #4a5568;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .metrics-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .metric-item {
+                min-width: 250px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .metric-value {
+                font-size: 2.5rem;
+            }
+            
+            .social-login {
+                flex-direction: column;
+            }
+        }
+
+/*Welcome to Eschool — This is a modern, innovative, and inclusive digital learning platform built with one mission in mind: to make high-quality education accessible to every learner, everywhere.
+At Eschool, we believe that education is not just a privilege but a fundamental right. Our platform was created after observing the challenges many students face — lack of quality study materials, limited access to good teachers, and the growing need for flexible, easy-to-understand learning resources. We exist to solve these problems and create a space where learning becomes simpler, smarter, and more enjoyable.
+
+🌍 Who We Are
+
+Eschool is a dedicated educational hub that brings together students, teachers, and lifelong learners under one digital roof. We are a team of passionate educators, developers, and innovators who understand the power of knowledge and the importance of making it available to anyone who seeks it.
+
+We specialize in providing:
+
+High-quality educational videos that break down complex concepts.
+
+Well-structured subject notes crafted for clarity and understanding.
+
+Career-building resources for learners who want to grow professionally.
+
+A platform for teachers to earn by sharing their valuable knowledge.
+
+Our commitment is to build a safe, reliable, and user-friendly environment where both learners and educators can thrive.
+
+🎯 Our Mission
+
+Our mission is simple but powerful:
+To provide accessible, affordable, and high-quality education to all learners, regardless of their background or location.
+
+We want to remove the barriers that hold students back by providing:
+
+Easy-to-understand learning materials
+
+A flexible learning schedule
+
+A comfortable platform for studying from home
+
+Opportunities for teachers to develop their careers
+
+A supportive digital community
+
+We aim to impact millions of learners worldwide by shaping a future where education is not limited by distance, cost, or opportunity.
+
+🌟 Our Vision
+
+Our vision is to become a global leader in online education by:
+
+Bridging the educational gap between privileged and underprivileged learners
+
+Encouraging innovation in teaching
+
+Empowering content creators and educators
+
+Supporting students every step of the way
+
+Building a world where quality education reaches every corner of society
+
+We aspire to create a future where every learner has the tools, knowledge, and confidence they need to succeed academically and professionally.
+
+🧠 What We Offer
+📚 1. High-Quality Educational Videos
+
+Our video lessons are created with the learner in mind. They are:
+
+Clear
+
+Step-by-step
+
+Engaging
+
+Easy to understand
+
+Each subject is broken down into simple explanations, visual demonstrations, and real examples to help students learn more effectively than traditional classroom methods.
+
+📝 2. Well-Structured Notes
+
+We provide professionally designed notes that summarize every topic in a simple, understandable format.
+These notes help students:
+
+Revise faster
+
+Understand key concepts
+
+Prepare for exams
+
+Improve their performance in school
+
+Our goal is to make studying less stressful and more enjoyable.
+
+💼 3. Career-Building Tools
+
+Eschool doesn’t only focus on academic education.
+We help learners build careers with:
+
+Skill development programs
+
+Professional courses
+
+Guidance on career paths
+
+Tools to prepare for the future job market
+
+We prepare learners for a world that is constantly changing.
+
+💰 4. Opportunities for Teachers
+
+Eschool is also a platform for educators.
+
+We value teachers, trainers, and content creators by giving them the chance to:
+
+Share their knowledge
+
+Build an audience
+
+Earn income for their work
+
+Grow their teaching career online
+
+Our goal is to support teachers just as much as we support students.
+
+🤝 Why Choose Us?
+
+You should choose Eschool because we offer:
+
+✔ A clean, modern, easy-to-use platform
+
+✔ High-quality content from trained educators
+
+✔ 24/7 access to learning materials
+
+✔ A supportive community
+
+✔ A place for teachers to grow and be rewarded
+
+✔ A learning environment that respects your pace
+
+✔ Simplicity, quality, and effectiveness
+
+We put students first, teachers second, and technology third — because learning is always about people.
+
+❤️ Our Commitment
+
+At Eschool, we are committed to:
+
+Supporting students emotionally and academically
+
+Continually improving the learning experience
+
+Expanding our library of subjects and courses
+
+Working with professional educators
+
+Innovating new teaching methods
+
+Making education fun, not frustrating
+
+We believe every student deserves the chance to succeed, and we exist to make that possible.
+
+🌱 Our Values
+🔹 Accessibility
+
+Education should reach everyone — no matter who they are or where they live.
+
+🔹 Innovation
+
+We embrace technology and new ideas to improve learning.
+
+🔹 Quality
+
+Every resource we provide meets high educational standards.
+
+🔹 Integrity
+
+We believe in honesty, transparency, and doing what’s right.
+
+🔹 Empowerment
+
+We help students and teachers unlock their full potential.
+
+🌐 Join the Eschool Community
+
+By joining Eschool, you become part of a growing global community dedicated to learning, teaching, and personal growth. Whether you are a student looking for help with your studies, a professional working to upgrade your skills, or a teacher hoping to share your talent — Eschool is here to support you every step of the way.
+
+Eschool is not just a platform — it is a movement toward equal, quality education for all.*/

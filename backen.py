@@ -2,7 +2,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/learn')
+@app.route('/')
 def learn():
      return render_template('learn.html')
 @app.route('/intro')
