@@ -22,7 +22,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".pill-btn");
 
-    // Restore active button from localStorage
     const activeId = localStorage.getItem("activeButton");
     if (activeId) {
         const activeBtn = document.getElementById(activeId);
@@ -34,13 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     buttons.forEach(btn => {
         btn.addEventListener("click", function () {
-            // Save id of clicked button before redirect
             localStorage.setItem("activeButton", this.id);
 
-            // Remove active from all
             buttons.forEach(b => b.classList.remove("active"));
 
-            // Add active to clicked button
+      
             this.classList.add("active");
         });
     });

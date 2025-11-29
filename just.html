@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responsive Navbar</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .navbar {
+    background-color: #374151;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+  }
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFB400;
+    text-decoration: none;
+  }
+
+  /* Menu links */
+  .ulc {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ulc li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .ulc li a:hover {
+    color: #FFB400;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+
+  .hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0;
+  }
+
+  @media (max-width: 768px) {
+    .ulc {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      background-color: #374151;
+    }
+    .ulc li {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .hamburger {
+      display: flex;
+    }
+    .ulc.active {
+      display: flex;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="#" class="logo">Eschool</a>
+  <ul class="ulc">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Courses</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector('.ulc');
+    nav.classList.toggle('active');
+  }
+</script>
+
+</body>
+</html>

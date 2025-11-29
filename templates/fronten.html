@@ -21,16 +21,24 @@
             <li><a class="link" href="#">Donate</a></li>
             <li><a class="link" href="#">Help</a></li>     
         </ul>
+        <div class="hamburger" onclick="toggleMenu()">
+    <i class='bx bx-menu'></i>
+</div>
+
         <div class="allbtn">
          <button id="logbtn" class="btn" onclick="window.location.href='/Login'">Login</button>
         <button class="btn" onclick="window.location.href='/register'" id="regbtn">Register</button>
         </div>
     </nav>
     <script>
+  function toggleMenu() {
+    const nav = document.querySelector('.ulc');
+    nav.classList.toggle('active');
+  }
 document.addEventListener("DOMContentLoaded", function () {
     const links = document.querySelectorAll('.ulc li a');
 
-    // Restore the active link when page loads
+
     let activeLink = localStorage.getItem("activeNavLink");
     if (activeLink) {
         links.forEach(l => l.classList.remove("active"));
@@ -40,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Add click event for storing active link
+
     links.forEach(link => {
         link.addEventListener('click', function () {
             localStorage.setItem("activeNavLink", this.getAttribute("href"));
