@@ -6,7 +6,6 @@
 }
 body {
     display: flex;
-    min-height: 100vh;
     background: url(vitaly-gariev-u3y3918hWm4-unsplash.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -14,19 +13,27 @@ body {
     background-position: center;
 }
 .wrapper {
-    width: 651px;
+    width: auto;
+    height: auto;
     background: transparent;
     border: none; 
+    margin-top: 10%;
+    margin-left: 35%;
     color: aliceblue;
     border-radius: 12px;
-    padding: 30px 40px;
-    display: flex;
+    padding: 50px 100px;
     justify-content: center;
     align-items: center;
-    margin-top: 130px;
-    margin-left: 460px;
+    text-align: center;
     background: rgba(0, 0, 0, 0.6);
-    margin-bottom: 50px;
+    position: absolute;
+}
+@media (max-width: 1000px) {
+    .wrapper {
+    margin-top: 55%;
+    padding: 80px 120px;
+    margin-left: 30%;
+    }
 }
 .wrapper h1 {
     font-size: 36px;

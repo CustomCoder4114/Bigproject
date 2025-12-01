@@ -10,25 +10,27 @@ body {
     background-position: center;
 }
 .page-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 400px;
+    position: absolute;
     background: transparent;
     border: none;
     background: rgba(0, 0, 0, 0.6);
     border-radius: 12px;
     padding: 30px 40px;
-    margin-top: 110px;
-    margin-right: 350px;
+    margin-top: 10%;
+    margin-left: 25%;
+}
+@media (max-width: 1000px) {
+    .page-content {
+        margin-top: 60%;
+    }
 }
 .form-box {
-    position: relative;
+   position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 512px;
-    height: 420px;
+    width: auto;
+    height: auto;
     overflow: hidden;
     z-index: 2;
 }
