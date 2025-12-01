@@ -64,30 +64,27 @@ body {
   margin-left: 400px;
 }
 
-/* Hamburger bars */
 .hamburger div {
   width: 100%;
-  height: 4px;             /* slightly thicker bars */
+  height: 4px;             
   background-color: white;
-  border-radius: 2px;      /* rounded edges */
+  border-radius: 2px;      
   transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* subtle shadow for depth */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3); 
 }
 
-/* Animate bars to cross when menu is active */
 .hamburger.active div:nth-child(1) {
   transform: rotate(45deg) translate(6px, 6px);
 }
 
 .hamburger.active div:nth-child(2) {
-  opacity: 0; /* hide middle bar */
+  opacity: 0; 
 }
 
 .hamburger.active div:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
-/* Optional: icon inside hamburger (like <i>) */
 .hamburger i {
   font-size: 35px;
   color: white;
@@ -95,15 +92,14 @@ body {
   cursor: pointer;
 }
 
-/* Responsive styling */
 @media (max-width: 1000px) {
   .ulc {
-    display: none;               /* hide menu by default */
+    display: none;               
     flex-direction: column;
     width: 100%;
     background-color: #374151;
     position: absolute;
-    top: 60px;                   /* below navbar */
+    top: 60px;                  
     left: 0;
     text-align: center;
     transition: all 0.3s ease;
@@ -114,15 +110,14 @@ body {
   }
 
   .ulc.active {
-    display: flex;               /* show menu when active */
+    display: flex;              
   }
 
   .hamburger {
-    display: flex;               /* show hamburger on mobile */
+    display: flex;               
   }
 }
 
-/* Optional hover effect on bars */
 .hamburger:hover div {
   background: #1E90FF;
 }
