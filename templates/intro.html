@@ -22,26 +22,27 @@
 document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.querySelectorAll(".pill-btn");
 
-    const activeId = localStorage.getItem("activeButton");
-    if (activeId) {
-        const activeBtn = document.getElementById(activeId);
-        if (activeBtn) {
-            buttons.forEach(b => b.classList.remove("active"));
-            activeBtn.classList.add("active");
-        }
-    }
+    // Get the current path from the URL
+    const currentPath = window.location.pathname;
 
     buttons.forEach(btn => {
+        const btnHref = btn.getAttribute("onclick"); // "window.location.href='/career'"
+        // Extract the path from onclick
+        const match = btnHref.match(/'(.+)'/);
+        if (match && match[1] === currentPath) {
+            btn.classList.add("active");
+        } else {
+            btn.classList.remove("active");
+        }
+
+        // Keep click functionality
         btn.addEventListener("click", function () {
-            localStorage.setItem("activeButton", this.id);
-
             buttons.forEach(b => b.classList.remove("active"));
-
-      
             this.classList.add("active");
         });
     });
 });
+
 </script>
 
 {% block conten %}

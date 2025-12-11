@@ -16,14 +16,16 @@
         <ul class="ulc">
             <li><a class="link active" href="/">Home</a></li>
             <li><a class="link" href="/aboutus">About us</a></li>
-            <li><a class="link" href="#">Services</a></li>
-            <li><a class="link" href="#">Contact</a></li>
-            <li><a class="link" href="#">Donate</a></li>
-            <li><a class="link" href="#">Help</a></li>     
+            <li><a class="link" href="/services">Services</a></li>
+            <li><a class="link" href="/contact">Contact</a></li>
+            <li><a class="link" href="/help">Help</a></li>     
         </ul>
         <div class="hamburger" onclick="toggleMenu()">
-    <i class='bx bx-menu'></i>
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
+
 
         <div class="allbtn">
          <button id="logbtn" class="btn" onclick="window.location.href='/Login'">Login</button>
@@ -32,9 +34,10 @@
     </nav>
     <script>
   function toggleMenu() {
-    const nav = document.querySelector('.ulc');
-    nav.classList.toggle('active');
-  }
+  document.querySelector('.ulc').classList.toggle('active');
+  document.querySelector('.hamburger').classList.toggle('active');
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const links = document.querySelectorAll('.ulc li a');
 

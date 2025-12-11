@@ -2,12 +2,12 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/')
-def learn():
-     return render_template('learn.html')
 @app.route('/intro')
 def intro():
     return render_template('intro.html')
+@app.route('/')
+def learn():
+     return render_template('learn.html')
 @app.route('/register')
 def register():
     return render_template('register.html')
@@ -23,14 +23,15 @@ def earn():
 @app.route('/aboutus')
 def aboutus():
     return render_template('aboutus.html')
-
+@app.route('/services')
+def services():
+    return render_template('services.html')
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+@app.route('/help')
+def help():
+    return render_template('help.html')
 
 if __name__ == '__main__':
-    app.run()
-
-
-
-
-
-
-
+    app.run(debug=True)

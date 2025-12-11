@@ -52,7 +52,7 @@ body {
 }
 /* Hamburger container */
 .hamburger {
-  display: none; /* hidden by default, shown on mobile */
+  display: none; 
   flex-direction: column;
   justify-content: space-around;
   width: 35px;
@@ -239,8 +239,8 @@ body {
     }
     .header-text {
     max-width: 50%;             
-    line-height: 1.5;
-    margin-top: -20px;
+    line-height: 1.6;
+    margin-top: -10px;
     font-family: 'Inter', sans-serif;
 }
 .header img {
@@ -255,12 +255,12 @@ body {
   width: 540px;
 }
 .warm {
-        font-size: 45px;
+        font-size: 50px;
         font-family: 'Inter', sans-serif;
         color: #FFB400; 
     }
     .head {
-     font-size: 35px;
+     font-size: 40px;
         font-family: 'Poppins', sans-se;
         color: #fff;
         margin-top: -39px;
@@ -270,9 +270,10 @@ body {
         font-size: 30px;
         font-weight: bold;
         max-width: fit-content;
-        margin-top: -30px;
+        margin-top: -20px;
         font-family: 'Inter', sans-serif;
     }
+    
     .cla {
         text-decoration: underline;
         color: #1E90FF;
@@ -495,7 +496,7 @@ body {
     font-family: 'Poppins', sans-serif;
     position: relative;
     justify-content: space-between;
-    background-color: #88bdfc;
+    background: #88bdfc;
     align-items: center;
         justify-content: center;
         text-align: center;
@@ -608,7 +609,7 @@ body {
 }
 /*///////////////////////////////////////////////*/
     .heath {
-        margin-top: -25px;
+        margin-top: -27px;
         align-items: center;
         justify-content: center;        
         background-color: #bdddfc;
@@ -622,7 +623,7 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-top: 20px;
+    padding-top: 20px;
     }
     .mheader-t {
         margin-top: 20px;

@@ -1,0 +1,71 @@
+{% extends "fronten.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='contact.css') }}">
+<div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Eschool</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+
+<!-- Header -->
+<section class="header">
+    <h1>Contact Eschool</h1>
+    <p>We’re here to support students, teachers, and partners.</p>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-container">
+
+    <!-- Contact Form -->
+    <div class="contact-form">
+        <h2>Send Us a Message</h2>
+
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+
+            <select>
+                <option>Student</option>
+                <option>Teacher</option>
+                <option>Partner</option>
+                <option>Other</option>
+            </select>
+
+            <textarea placeholder="Your Message" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+        <h2>Contact Information</h2>
+
+        <p>Location : Nairobi, Kenya</p>
+        <p>Email : eschool.com</p>
+        <p>Phone no. : +254 0721994835</p>
+        <p>+254 0721994835</p>
+
+        <p class="note">
+            Users can contact us here to learn how to upload
+            educational videos and notes for students.
+        </p>
+    </div>
+
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>© 2025 Eschool. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+
+</div>
+{% endblock %}

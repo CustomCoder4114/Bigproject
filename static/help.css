@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+.header {
+    background: #1a73e8;
+    color: white;
+    text-align: center;
+    width: auto;
+    margin-left: -20px;
+    display: block;
+    margin-top: 85px;
+    line-height: 1.8;
+}
+.opps {
+    text-align: center;
+    margin-top: 100px;
+    font-size: 50px;
+    color: white;
+    margin-top: 3 0px;
+}
+.opp {
+    text-align: center;
+    margin-top: 100px;
+    font-size: 50px;
+    color: white;
+}
