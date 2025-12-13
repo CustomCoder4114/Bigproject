@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='firstpage.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eschool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">E<span>school</span></div>
+            </a>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search courses, lessons, or resources...">
+            </div>
+            
+            <div class="header-actions">
+                <button class="notification-btn">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">
+                {{ firstname[0] }}{{ lastname[0] }}
+                     </div>
+
+                    <div class="user-info">
+                        <div class="user-name">{{ firstname }} {{ lastname }}</div>
+                        <div class="user-role">Learner</div>
+                    </div>
+                    <i class="fas fa-chevron-down" style="font-size: 0.9rem;"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-layout">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/courses" class="nav-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>My Courses</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                    <span style="margin-left: auto; background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">2</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resources</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Classmates</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help & Support</span>
+                </a>
+            </nav>
+
+            
+
+    <script>
+        // User Profile Dropdown
+        const userProfile = document.getElementById('userProfile');
+        
+        userProfile.addEventListener('click', function() {
+            // In a real app, this would open a dropdown menu
+            alert('Profile menu would open with options: View Profile, Settings, Log Out');
+        });
+        
+        // Notification Button
+        const notificationBtn = document.querySelector('.notification-btn');
+        notificationBtn.addEventListener('click', function() {
+            alert('Notifications panel would open showing:\n1. New assignment posted\n2. Class announcement\n3. Message from Sarah');
+        });
+        
+        // Quick Actions
+        const actionButtons = document.querySelectorAll('.action-btn');
+        actionButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const label = this.querySelector('.action-label').textContent;
+                
+                if (label === 'New Post') {
+                    alert('Redirecting to content creation page...');
+                } else if (label === 'Join Class') {
+                    alert('Opening virtual classroom...');
+                } else if (label === 'Upload Work') {
+                    alert('Opening file upload dialog...');
+                } else if (label === 'Browse Courses') {
+                    alert('Redirecting to course catalog...');
+                } else if (label === 'Ask Question') {
+                    alert('Opening question submission form...');
+                } else if (label === 'Resources') {
+                    alert('Opening resource library...');
+                }
+            });
+        });
+        
+        // Assignment Buttons
+        const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
+        assignmentButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent.includes('Submit')) {
+                    alert('Opening assignment submission page...');
+                } else if (this.textContent.includes('Start')) {
+                    alert('Opening document editor...');
+                } else if (this.textContent.includes('View')) {
+                    alert('Showing assignment details...');
+                }
+            });
+        });
+        
+        // Calendar Day Clicks
+        const calendarDays = document.querySelectorAll('.calendar-day');
+        calendarDays.forEach(day => {
+            if (!day.classList.contains('calendar-header')) {
+                day.addEventListener('click', function() {
+                    const date = this.textContent;
+                    const month = 'September';
+                    
+                    if (this.classList.contains('today')) {
+                        alert(`Today is ${month} ${date}. You have:\n- Calculus assignment due\n- Physics class at 2 PM`);
+                    } else if (this.classList.contains('event')) {
+                        alert(`${month} ${date}: You have a scheduled event`);
+                    } else {
+                        alert(`${month} ${date}: No events scheduled`);
+                    }
+                });
+            }
+        });
+        
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!this.href || this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    const label = this.querySelector('span').textContent;
+                    alert(`Navigating to ${label} section...`);
+                }
+            });
+        });
+        
+        // Search Functionality
+        const searchInput = document.querySelector('.search-bar input');
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                alert(`Searching for: "${this.value}"`);
+                this.value = '';
+            }
+        });
+    </script>
+    {% block allcontent %}
+    {% endblock %}
+</body>
+</html>

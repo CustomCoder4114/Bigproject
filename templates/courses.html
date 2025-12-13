@@ -1,0 +1,865 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Content Yet - eSchool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-light: #e0e7ff;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background-color: var(--gray-50);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .empty-content-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .content-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-body {
+            padding: 50px 40px;
+        }
+
+        .empty-state {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .empty-illustration {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .empty-illustration svg {
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .empty-message {
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .message-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+        }
+
+        .message-text {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--primary-light), #e0f2fe);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 40px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .highlight-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight-text {
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .content-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .content-type-card {
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .content-type-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--primary-light);
+        }
+
+        .type-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .type-1 .type-icon {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .type-2 .type-icon {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .type-3 .type-icon {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .type-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .type-description {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: var(--border-radius-sm);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-light);
+        }
+
+        .community-section {
+            background: linear-gradient(135deg, var(--gray-50), var(--light-color));
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .community-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+        }
+
+        .community-description {
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .community-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-header {
+                padding: 30px 20px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .content-body {
+                padding: 30px 20px;
+            }
+            
+            .empty-illustration {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .content-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .community-section {
+                padding: 30px 20px;
+            }
+            
+            .community-stats {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .message-title {
+                font-size: 1.5rem;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="empty-content-container">
+        <!-- Header -->
+        <div class="content-header">
+            <div class="header-content">
+                <div class="page-icon floating">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h1 class="page-title">Content Feed Empty</h1>
+                <p class="page-subtitle">No educational content has been posted yet. Be the first to share!</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-body">
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-illustration">
+                    <!-- SVG Illustration -->
+                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" fill="#E0E7FF" opacity="0.5"/>
+                        <rect x="60" y="60" width="80" height="60" rx="8" fill="#4361ee" opacity="0.8"/>
+                        <rect x="50" y="50" width="80" height="60" rx="8" fill="#4cc9f0" opacity="0.6"/>
+                        <circle cx="80" cy="80" r="15" fill="white" opacity="0.9"/>
+                        <circle cx="120" cy="80" r="15" fill="white" opacity="0.9"/>
+                        <path d="M70 130L130 130" stroke="#4361ee" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M80 140L120 140" stroke="#4cc9f0" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M90 150L110 150" stroke="#3a0ca3" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                
+                <div class="empty-message">
+                    <h2 class="message-title">The content feed is currently empty</h2>
+                    <p class="message-text">
+                        No one has shared any educational content yet. This could be lessons, questions, 
+                        resources, or discussions. You can be the first to contribute and help build 
+                        our learning community!
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <h3 class="highlight-title">
+                        <i class="fas fa-lightbulb"></i> Why share educational content?
+                    </h3>
+                    <p class="highlight-text">
+                        Sharing knowledge helps everyone learn better. When you post educational content, 
+                        you not only reinforce your own understanding but also help peers who might be 
+                        struggling with the same concepts. It's a great way to collaborate and build 
+                        a supportive learning environment.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Content Types -->
+            <div class="content-types">
+                <!-- Lesson Type -->
+                <div class="content-type-card type-1">
+                    <div class="type-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="type-title">Share a Lesson</h3>
+                    <p class="type-description">
+                        Explain a concept you've mastered. Create step-by-step tutorials, 
+                        explain complex topics, or share your unique teaching methods.
+                    </p>
+                    <button class="btn btn-outline" data-type="lesson">
+                        <i class="fas fa-plus"></i> Create Lesson
+                    </button>
+                </div>
+
+                <!-- Question Type -->
+                <div class="content-type-card type-2">
+                    <div class="type-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="type-title">Ask a Question</h3>
+                    <p class="type-description">
+                        Stuck on something? Ask for help! Get explanations from teachers 
+                        and peers. Your question might help others with similar doubts.
+                    </p>
+                    <button class="btn btn-outline" data-type="question">
+                        <i class="fas fa-question"></i> Ask Question
+                    </button>
+                </div>
+
+                <!-- Resource Type -->
+                <div class="content-type-card type-3">
+                    <div class="type-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="type-title">Share Resources</h3>
+                    <p class="type-description">
+                        Upload helpful materials like notes, study guides, practice problems, 
+                        or reference materials that can benefit other learners.
+                    </p>
+                    <button class="btn btn-outline" data-type="resource">
+                        <i class="fas fa-upload"></i> Upload Resource
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="createFirstPost">
+                    <i class="fas fa-feather-alt"></i> Create First Post
+                </button>
+                
+                <button class="btn btn-outline" id="inviteOthers">
+                    <i class="fas fa-user-plus"></i> Invite Others to Post
+                </button>
+                
+                <button class="btn btn-outline" id="viewExamples">
+                    <i class="fas fa-eye"></i> View Example Posts
+                </button>
+            </div>
+
+            <!-- Community Section -->
+            <div class="community-section">
+                <h3 class="community-title">Start the Conversation</h3>
+                <p class="community-description">
+                    Educational content grows when everyone participates. Your first post could 
+                    inspire others to share their knowledge and questions too!
+                </p>
+                
+                <div class="community-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Posts Published</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Comments Made</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">Resources Shared</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; border-radius: var(--border-radius); padding: 40px; max-width: 600px; width: 100%; animation: fadeIn 0.5s ease-out; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;">
+            <button id="closeModal" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--dark-color); margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-plus-circle"></i> Create Your First Post
+            </h2>
+            
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 500; color: var(--gray-700);">Post Type</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="post-type-option active" data-type="lesson" style="flex: 1; padding: 12px; border: 2px solid var(--primary-color); background: var(--primary-light); border-radius: 8px; cursor: pointer; transition: var(--transition);">
+                        <i class="fas fa-chalkboard-teacher"></i> Lesson
+                    </button>
+                    <button class="post-type-option" data-type="question" style="flex: 1; padding: 12px; border: 2px solid var(--gray-200); background: white; border-radius: 8px; cursor: pointer; transition: var(--transition);">
+                        <i class="fas fa-question-circle"></i> Question
+                    </button>
+                    <button class="post-type-option" data-type="resource" style="flex: 1; padding: 12px; border: 2px solid var(--gray-200); background: white; border-radius: 8px; cursor: pointer; transition: var(--transition);">
+                        <i class="fas fa-file-alt"></i> Resource
+                    </button>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--gray-700);">Title</label>
+                    <input type="text" id="postTitle" placeholder="Enter a descriptive title..." style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 1rem; transition: var(--transition);">
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--gray-700);">Content</label>
+                    <textarea id="postContent" placeholder="Describe your lesson, ask your question, or explain your resource..." rows="5" style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 1rem; font-family: 'Inter', sans-serif; resize: vertical; transition: var(--transition);"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 15px;">
+                    <button id="cancelPost" class="btn btn-outline" style="flex: 1;">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button id="submitPost" class="btn btn-primary" style="flex: 2;">
+                        <i class="fas fa-paper-plane"></i> Publish Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; align-items: center; justify-content: center; padding: 20px;">
+        <div style="background: white; border-radius: var(--border-radius); padding: 40px; max-width: 500px; width: 100%; text-align: center; animation: fadeIn 0.5s ease-out; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--success-color), #34d399); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                <i class="fas fa-check" style="color: white; font-size: 2.5rem;"></i>
+            </div>
+            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--dark-color); margin-bottom: 15px;" id="successTitle"></h3>
+            <p style="color: var(--gray-600); margin-bottom: 30px; line-height: 1.6;" id="successMessage"></p>
+            <button class="btn btn-primary" id="closeSuccessModal" style="min-width: 150px;">
+                <i class="fas fa-arrow-right"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const createFirstPostBtn = document.getElementById('createFirstPost');
+        const inviteOthersBtn = document.getElementById('inviteOthers');
+        const viewExamplesBtn = document.getElementById('viewExamples');
+        const contentTypeButtons = document.querySelectorAll('.content-type-card .btn');
+        const createPostModal = document.getElementById('createPostModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelPostBtn = document.getElementById('cancelPost');
+        const submitPostBtn = document.getElementById('submitPost');
+        const postTypeOptions = document.querySelectorAll('.post-type-option');
+        const successModal = document.getElementById('successModal');
+        const closeSuccessModalBtn = document.getElementById('closeSuccessModal');
+
+        // Create First Post Button
+        createFirstPostBtn.addEventListener('click', function() {
+            openCreatePostModal('lesson');
+        });
+
+        // Invite Others Button
+        inviteOthersBtn.addEventListener('click', function() {
+            showSuccess(
+                'Invite Others',
+                'Share the link to invite teachers and students to post content: https://eschool.com/content-feed'
+            );
+        });
+
+        // View Examples Button
+        viewExamplesBtn.addEventListener('click', function() {
+            showSuccess(
+                'Example Posts',
+                'Here are some great examples of educational content:\n1. Calculus lesson with step-by-step examples\n2. Programming question with code snippets\n3. Chemistry resource with interactive diagrams'
+            );
+        });
+
+        // Content Type Buttons
+        contentTypeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                openCreatePostModal(type);
+            });
+        });
+
+        // Open Create Post Modal
+        function openCreatePostModal(type) {
+            createPostModal.style.display = 'flex';
+            
+            // Set active post type
+            postTypeOptions.forEach(option => {
+                option.classList.remove('active');
+                option.style.borderColor = 'var(--gray-200)';
+                option.style.background = 'white';
+                
+                if (option.getAttribute('data-type') === type) {
+                    option.classList.add('active');
+                    option.style.borderColor = 'var(--primary-color)';
+                    option.style.background = 'var(--primary-light)';
+                }
+            });
+            
+            // Set placeholder text based on type
+            const postTitle = document.getElementById('postTitle');
+            const postContent = document.getElementById('postContent');
+            
+            switch(type) {
+                case 'lesson':
+                    postTitle.placeholder = 'Enter lesson title (e.g., "Understanding Quadratic Equations")';
+                    postContent.placeholder = 'Explain your lesson in detail. Include step-by-step instructions, examples, and key takeaways...';
+                    break;
+                case 'question':
+                    postTitle.placeholder = 'What is your question? (e.g., "Help with photosynthesis process")';
+                    postContent.placeholder = 'Describe your question in detail. Include what you\'ve tried, where you\'re stuck, and what you need help with...';
+                    break;
+                case 'resource':
+                    postTitle.placeholder = 'Resource title (e.g., "Python Programming Exercises")';
+                    postContent.placeholder = 'Describe your resource. Explain what it contains, who it\'s for, and how to use it...';
+                    break;
+            }
+            
+            // Clear previous inputs
+            postTitle.value = '';
+            postContent.value = '';
+        }
+
+        // Close Modal
+        closeModalBtn.addEventListener('click', closeCreatePostModal);
+        cancelPostBtn.addEventListener('click', closeCreatePostModal);
+
+        function closeCreatePostModal() {
+            createPostModal.style.display = 'none';
+        }
+
+        // Post Type Selection
+        postTypeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                
+                // Update active state
+                postTypeOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.style.borderColor = 'var(--gray-200)';
+                    opt.style.background = 'white';
+                });
+                
+                this.classList.add('active');
+                this.style.borderColor = 'var(--primary-color)';
+                this.style.background = 'var(--primary-light)';
+                
+                // Update placeholder text
+                const postTitle = document.getElementById('postTitle');
+                const postContent = document.getElementById('postContent');
+                
+                switch(type) {
+                    case 'lesson':
+                        postTitle.placeholder = 'Enter lesson title (e.g., "Understanding Quadratic Equations")';
+                        postContent.placeholder = 'Explain your lesson in detail. Include step-by-step instructions, examples, and key takeaways...';
+                        break;
+                    case 'question':
+                        postTitle.placeholder = 'What is your question? (e.g., "Help with photosynthesis process")';
+                        postContent.placeholder = 'Describe your question in detail. Include what you\'ve tried, where you\'re stuck, and what you need help with...';
+                        break;
+                    case 'resource':
+                        postTitle.placeholder = 'Resource title (e.g., "Python Programming Exercises")';
+                        postContent.placeholder = 'Describe your resource. Explain what it contains, who it\'s for, and how to use it...';
+                        break;
+                }
+            });
+        });
+
+        // Submit Post
+        submitPostBtn.addEventListener('click', function() {
+            const postTitle = document.getElementById('postTitle').value.trim();
+            const postContent = document.getElementById('postContent').value.trim();
+            const activeType = document.querySelector('.post-type-option.active').getAttribute('data-type');
+            
+            if (!postTitle || !postContent) {
+                alert('Please fill in both title and content fields.');
+                return;
+            }
+            
+            // Show loading state
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+            this.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                this.innerHTML = originalHTML;
+                this.disabled = false;
+                
+                closeCreatePostModal();
+                
+                const typeNames = {
+                    'lesson': 'Lesson',
+                    'question': 'Question',
+                    'resource': 'Resource'
+                };
+                
+                showSuccess(
+                    'Post Published Successfully!',
+                    `Your ${typeNames[activeType]} has been published. You are now the first contributor to the content feed! Others will see your post and be encouraged to share their own content.`
+                );
+                
+                // Update community stats
+                updateCommunityStats();
+            }, 1500);
+        });
+
+        // Close Success Modal
+        closeSuccessModalBtn.addEventListener('click', function() {
+            successModal.style.display = 'none';
+        });
+
+        // Show Success Modal
+        function showSuccess(title, message) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successMessage').textContent = message;
+            successModal.style.display = 'flex';
+        }
+
+        // Update Community Stats
+        function updateCommunityStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            if (stats[0].textContent === '0') {
+                stats[0].textContent = '1';
+                
+                // Add animation
+                stats[0].style.transform = 'scale(1.2)';
+                stats[0].style.color = 'var(--success-color)';
+                stats[0].style.transition = 'all 0.3s ease';
+                
+                setTimeout(() => {
+                    stats[0].style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === createPostModal) {
+                closeCreatePostModal();
+            }
+            if (e.target === successModal) {
+                successModal.style.display = 'none';
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + N to create new post
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                openCreatePostModal('lesson');
+            }
+            
+            // Escape to close modals
+            if (e.key === 'Escape') {
+                if (createPostModal.style.display === 'flex') {
+                    closeCreatePostModal();
+                }
+                if (successModal.style.display === 'flex') {
+                    successModal.style.display = 'none';
+                }
+            }
+        });
+
+        // Add hover effects
+        const contentCards = document.querySelectorAll('.content-type-card');
+        contentCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const icon = this.querySelector('.type-icon');
+                icon.style.transform = 'scale(1.1)';
+                icon.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                const icon = this.querySelector('.type-icon');
+                icon.style.transform = 'scale(1)';
+            });
+        });
+
+        // Animate elements on load
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe content cards for animation
+        contentCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+
+        // Observe highlight box
+        const highlightBox = document.querySelector('.highlight-box');
+        if (highlightBox) {
+            highlightBox.style.opacity = '0';
+            highlightBox.style.transform = 'translateY(20px)';
+            highlightBox.style.transition = 'opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s';
+            observer.observe(highlightBox);
+        }
+    </script>
+</body>
+</html>
+{% endblock %}
