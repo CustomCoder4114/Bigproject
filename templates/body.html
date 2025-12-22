@@ -17,7 +17,7 @@
                 <i class="fas fa-graduation-cap logo-icon"></i>
                 <div class="logo-text">E<span>school</span></div>
             </a>
-            
+                
             <div class="search-bar">
                 <i class="fas fa-search"></i>
                 <input type="text" placeholder="Search courses, lessons, or resources...">
@@ -29,7 +29,7 @@
                     <span class="notification-badge">3</span>
                 </button>
                 
-                <div class="user-profile" id="userProfile">
+                <div class="user-profile" id="userProfile" href="/login">
                     <div class="user-avatar">
                 {{ firstname[0] }}{{ lastname[0] }}
                      </div>
@@ -44,27 +44,85 @@
         </div>
     </header>
 
+
     <div class="container">
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+</div>
+<!--///////////////////////////////////////////////-->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="/dashboard" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+    <a href="/courses" class="nav-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Explore Courses</span>
+                </a>
+    <a href="#" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule</span>
+                </a>
+    <a href="#" class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Assignments</span>
+                </a>
+    <a href="#" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </a>
+    <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                    <span style="margin-left: auto; background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">2</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resources</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Classmates</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help & Support</span>
+                </a>
+</nav>
+
+<!--///////////////////////////////////////////////-->
         <div class="dashboard-layout">
             <!-- Sidebar Navigation -->
-            <nav class="sidebar">
-                <a href="#" class="nav-item active">
+            <nav class="sidebar" id="sidebar">
+                <a href="/dashboard" class="nav-item .active">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
                 <a href="/courses" class="nav-item">
                     <i class="fas fa-book-open"></i>
-                    <span>My Courses</span>
+                    <span>Explore Courses</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="/schedule" class="nav-item">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Schedule</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="/assignment" class="nav-item">
                     <i class="fas fa-tasks"></i>
                     <span>Assignments</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="progres" class="nav-item">
                     <i class="fas fa-chart-line"></i>
                     <span>Progress</span>
                 </a>
@@ -96,10 +154,51 @@
                     <span>Help & Support</span>
                 </a>
             </nav>
+<script>
 
-            
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll('.nav-item');
 
-    <script>
+
+    let activeLink = localStorage.getItem("activeNavLink");
+    if (activeLink) {
+        links.forEach(l => l.classList.remove("active"));
+        const linkToActivate = document.querySelector(`.sidebar [href="${activeLink}"]`);
+        if (linkToActivate) {
+            linkToActivate.classList.add("active");
+        }
+    }
+
+
+    links.forEach(link => {
+        link.addEventListener('click', function () {
+            localStorage.setItem("activeNavLink", this.getAttribute("href"));
+        });
+    });
+});
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+// create overlay dynamically
+const overlay = document.createElement('div');
+overlay.classList.add('mobile-menu-overlay');
+document.body.appendChild(overlay);
+
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    overlay.classList.toggle('active');
+});
+
+// clicking overlay closes menu
+overlay.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    overlay.classList.remove('active');
+});
+
+
+
         // User Profile Dropdown
         const userProfile = document.getElementById('userProfile');
         

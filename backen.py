@@ -128,6 +128,19 @@ def body():
 @app.route('/courses')
 def courses():
     return render_template('courses.html')
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+@app.route('/schedule')
+def schedule():
+    return render_template('schedule.html')
+@app.route('/assignment')
+def assignment():
+    return render_template('assignment.html')
+@app.route('/progres')
+def progres():
+    return render_template('progres.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

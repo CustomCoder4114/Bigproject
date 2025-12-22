@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eschool Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --gray-color: #64748b;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .dashboard-header {
+            background-color: white;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .logo-text span {
+            color: var(--accent-color);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--gray-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger-color);
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 25px;
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background-color: #f1f5f9;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        /* Main Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 30px 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px 0;
+            box-shadow: var(--card-shadow);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-divider {
+            height: 1px;
+            background-color: #f1f5f9;
+            margin: 15px 25px;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Content Area for Different Pages */
+        .content-area {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            min-height: 600px;
+        }
+
+        .content-area h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .content-area p {
+            margin-bottom: 15px;
+            color: var(--gray-color);
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .welcome-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .dashboard-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+        }
+
+        .card-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 15px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .action-btn:hover {
+            background-color: #e0e7ff;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .action-btn i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .action-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Courses List */
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .course-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f8fafc;
+            transition: var(--transition);
+        }
+
+        .course-item:hover {
+            background-color: #e0e7ff;
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background-color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .course-info {
+            flex: 1;
+        }
+
+        .course-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .course-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 3px;
+        }
+
+        .course-percent {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            font-weight: 500;
+            min-width: 40px;
+        }
+
+        /* Upcoming Assignments */
+        .assignments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .assignment-item {
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--warning-color);
+            background-color: #f8fafc;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .assignment-title {
+            font-weight: 500;
+        }
+
+        .assignment-due {
+            font-size: 0.85rem;
+            color: var(--danger-color);
+            font-weight: 500;
+        }
+
+        .assignment-course {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 10px;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: #e0e7ff;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        /* Calendar */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 0;
+            color: var(--gray-color);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-day:hover {
+            background-color: #f1f5f9;
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.event {
+            position: relative;
+        }
+
+        .calendar-day.event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none; /* Would be replaced with mobile menu */
+            }
+            
+            .welcome-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .welcome-stats {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+                order: 3;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Glow Effect */
+        .tab-btn.active {
+            background: #4e54c8;
+            color: white;
+            box-shadow:
+                0 0 10px rgba(78, 84, 200, 0.6),
+                0 0 20px rgba(78, 84, 200, 0.4),
+                0 0 30px rgba(78, 84, 200, 0.2);
+            animation: glowPulse 1.8s infinite alternate;
+        }
+
+        @keyframes glowPulse {
+            0% {
+                box-shadow:
+                    0 0 8px rgba(78, 84, 200, 0.5),
+                    0 0 16px rgba(78, 84, 200, 0.3);
+            }
+            100% {
+                box-shadow:
+                    0 0 14px rgba(78, 84, 200, 0.8),
+                    0 0 28px rgba(78, 84, 200, 0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">E<span>school</span></div>
+            </a>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search courses, lessons, or resources...">
+            </div>
+            
+            <div class="header-actions">
+                <button class="notification-btn">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">
+                        JS
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">John Smith</div>
+                        <div class="user-role">Learner</div>
+                    </div>
+                    <i class="fas fa-chevron-down" style="font-size: 0.9rem;"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-layout">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <a href="#" class="nav-item active" data-content="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-content="courses">
+                    <i class="fas fa-book-open"></i>
+                    <span>My Courses</span>
+                </a>
+                <a href="#" class="nav-item" data-content="schedule">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Schedule</span>
+                </a>
+                <a href="#" class="nav-item" data-content="assignments">
+                    <i class="fas fa-tasks"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="#" class="nav-item" data-content="progress">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Progress</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item" data-content="messages">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                    <span style="margin-left: auto; background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">2</span>
+                </a>
+                <a href="#" class="nav-item" data-content="resources">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resources</span>
+                </a>
+                <a href="#" class="nav-item" data-content="classmates">
+                    <i class="fas fa-users"></i>
+                    <span>Classmates</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item" data-content="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item" data-content="help">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help & Support</span>
+                </a>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-content">
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <div class="welcome-content">
+                        <div class="welcome-text">
+                            <h1>Welcome back, John!</h1>
+                            <p>You have 3 new notifications, 2 pending assignments, and 1 upcoming class today.</p>
+                        </div>
+                        <div class="welcome-stats">
+                            <div class="stat-box">
+                                <div class="stat-number">5</div>
+                                <div class="stat-label">Active Courses</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">87%</div>
+                                <div class="stat-label">Avg. Grade</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Days Streak</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dynamic Content Area -->
+                <div id="contentArea" class="content-area">
+                    <!-- Dashboard content will be loaded here -->
+                    <h2>Dashboard Overview</h2>
+                    <p>Welcome to your learning dashboard. Here's what's happening today:</p>
+                    
+                    <div class="dashboard-grid">
+                        <!-- Quick Actions -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Quick Actions</h3>
+                                <a href="#" class="card-link">See all <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="quick-actions">
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span class="action-label">New Post</span>
+                                </a>
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-video"></i>
+                                    <span class="action-label">Join Class</span>
+                                </a>
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-upload"></i>
+                                    <span class="action-label">Upload Work</span>
+                                </a>
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-search"></i>
+                                    <span class="action-label">Browse Courses</span>
+                                </a>
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span class="action-label">Ask Question</span>
+                                </a>
+                                <a href="#" class="action-btn">
+                                    <i class="fas fa-book"></i>
+                                    <span class="action-label">Resources</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- My Courses -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">My Courses</h3>
+                                <a href="#" class="card-link">View all <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="courses-list">
+                                <div class="course-item">
+                                    <div class="course-icon">
+                                        <i class="fas fa-calculator"></i>
+                                    </div>
+                                    <div class="course-info">
+                                        <div class="course-title">Calculus 101</div>
+                                        <div class="course-progress">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 75%"></div>
+                                            </div>
+                                            <span class="course-percent">75%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-item">
+                                    <div class="course-icon">
+                                        <i class="fas fa-flask"></i>
+                                    </div>
+                                    <div class="course-info">
+                                        <div class="course-title">Physics Fundamentals</div>
+                                        <div class="course-progress">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 60%"></div>
+                                            </div>
+                                            <span class="course-percent">60%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-item">
+                                    <div class="course-icon">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="course-info">
+                                        <div class="course-title">Web Development</div>
+                                        <div class="course-progress">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 90%"></div>
+                                            </div>
+                                            <span class="course-percent">90%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Assignments -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Upcoming Assignments</h3>
+                                <a href="#" class="card-link">See all <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="assignments-list">
+                                <div class="assignment-item">
+                                    <div class="assignment-header">
+                                        <div class="assignment-title">Calculus Homework #5</div>
+                                        <div class="assignment-due">Due Tomorrow</div>
+                                    </div>
+                                    <div class="assignment-course">Calculus 101</div>
+                                    <div class="assignment-actions">
+                                        <button class="btn btn-primary">Submit</button>
+                                        <button class="btn btn-outline">Start</button>
+                                    </div>
+                                </div>
+                                <div class="assignment-item">
+                                    <div class="assignment-header">
+                                        <div class="assignment-title">Physics Lab Report</div>
+                                        <div class="assignment-due">Due in 3 days</div>
+                                    </div>
+                                    <div class="assignment-course">Physics Fundamentals</div>
+                                    <div class="assignment-actions">
+                                        <button class="btn btn-outline">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Activity</h3>
+                                <a href="#" class="card-link">See all <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Completed "Functions & Graphs" quiz with 95% score</div>
+                                        <div class="activity-time">2 hours ago</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-comment"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Commented on "Newton's Laws" discussion thread</div>
+                                        <div class="activity-time">Yesterday, 3:45 PM</div>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Attended live session "Web Development Best Practices"</div>
+                                        <div class="activity-time">2 days ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calendar -->
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3 class="card-title">September 2024</h3>
+                                <a href="#" class="card-link">Full Calendar <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="calendar">
+                                <div class="calendar-header">Sun</div>
+                                <div class="calendar-header">Mon</div>
+                                <div class="calendar-header">Tue</div>
+                                <div class="calendar-header">Wed</div>
+                                <div class="calendar-header">Thu</div>
+                                <div class="calendar-header">Fri</div>
+                                <div class="calendar-header">Sat</div>
+                                
+                                <div class="calendar-day">1</div>
+                                <div class="calendar-day">2</div>
+                                <div class="calendar-day">3</div>
+                                <div class="calendar-day">4</div>
+                                <div class="calendar-day">5</div>
+                                <div class="calendar-day">6</div>
+                                <div class="calendar-day event">7</div>
+                                <div class="calendar-day">8</div>
+                                <div class="calendar-day event">9</div>
+                                <div class="calendar-day">10</div>
+                                <div class="calendar-day today">11</div>
+                                <div class="calendar-day">12</div>
+                                <div class="calendar-day">13</div>
+                                <div class="calendar-day event">14</div>
+                                <div class="calendar-day">15</div>
+                                <div class="calendar-day">16</div>
+                                <div class="calendar-day">17</div>
+                                <div class="calendar-day">18</div>
+                                <div class="calendar-day event">19</div>
+                                <div class="calendar-day">20</div>
+                                <div class="calendar-day">21</div>
+                                <div class="calendar-day">22</div>
+                                <div class="calendar-day">23</div>
+                                <div class="calendar-day event">24</div>
+                                <div class="calendar-day">25</div>
+                                <div class="calendar-day">26</div>
+                                <div class="calendar-day">27</div>
+                                <div class="calendar-day">28</div>
+                                <div class="calendar-day event">29</div>
+                                <div class="calendar-day">30</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar Navigation Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const contentArea = document.getElementById('contentArea');
+            
+            // Content templates for different sections
+            const contentTemplates = {
+                dashboard: {
+                    title: 'Dashboard Overview',
+                    content: `
+                        <h2>Dashboard Overview</h2>
+                        <p>Welcome to your learning dashboard. Here's what's happening today:</p>
+                        ${document.querySelector('.dashboard-grid').outerHTML}
+                    `
+                },
+                courses: {
+                    title: 'My Courses',
+                    content: `
+                        <h2>My Courses</h2>
+                        <p>Manage and access all your enrolled courses here.</p>
+                        <div style="display: grid; gap: 20px; margin-top: 30px;">
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <h3>Enrolled Courses (5)</h3>
+                                <p>Calculus 101, Physics Fundamentals, Web Development, English Literature, Data Science</p>
+                            </div>
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <h3>Course Recommendations</h3>
+                                <p>Based on your progress, we recommend: Machine Learning Basics, Advanced Statistics</p>
+                            </div>
+                        </div>
+                    `
+                },
+                schedule: {
+                    title: 'Schedule',
+                    content: `
+                        <h2>My Schedule</h2>
+                        <p>Your upcoming classes and events for the week.</p>
+                        <div style="display: grid; gap: 15px; margin-top: 30px;">
+                            <div style="background: #f0f9ff; padding: 15px; border-radius: 10px; border-left: 4px solid #4361ee;">
+                                <h3>Calculus Class</h3>
+                                <p>Today, 10:00 AM - 11:30 AM</p>
+                                <p>Room: Virtual Classroom A</p>
+                            </div>
+                            <div style="background: #f0f9ff; padding: 15px; border-radius: 10px; border-left: 4px solid #4cc9f0;">
+                                <h3>Physics Lab Session</h3>
+                                <p>Tomorrow, 2:00 PM - 4:00 PM</p>
+                                <p>Room: Lab 3B</p>
+                            </div>
+                        </div>
+                    `
+                },
+                assignments: {
+                    title: 'Assignments',
+                    content: `
+                        <h2>My Assignments</h2>
+                        <p>Track and submit all your assignments here.</p>
+                        <div style="display: grid; gap: 15px; margin-top: 30px;">
+                            <div style="background: #fef3c7; padding: 15px; border-radius: 10px;">
+                                <h3>Pending (2)</h3>
+                                <p>Calculus Homework #5 - Due Tomorrow</p>
+                                <p>Physics Lab Report - Due in 3 days</p>
+                            </div>
+                            <div style="background: #d1fae5; padding: 15px; border-radius: 10px;">
+                                <h3>Completed (8)</h3>
+                                <p>Web Development Project - Submitted</p>
+                                <p>English Essay - Graded: A</p>
+                            </div>
+                        </div>
+                    `
+                },
+                progress: {
+                    title: 'Progress',
+                    content: `
+                        <h2>Learning Progress</h2>
+                        <p>Track your learning journey and achievements.</p>
+                        <div style="display: grid; gap: 20px; margin-top: 30px;">
+                            <div style="background: linear-gradient(135deg, #4361ee, #4cc9f0); color: white; padding: 20px; border-radius: 10px;">
+                                <h3>Overall Progress: 78%</h3>
+                                <p>You're ahead of schedule! Keep up the good work.</p>
+                            </div>
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <h3>Course Progress</h3>
+                                <p>Calculus: 75% | Physics: 60% | Web Development: 90%</p>
+                            </div>
+                        </div>
+                    `
+                },
+                messages: {
+                    title: 'Messages',
+                    content: `
+                        <h2>Messages</h2>
+                        <p>Connect with your instructors and classmates.</p>
+                        <div style="display: grid; gap: 15px; margin-top: 30px;">
+                            <div style="background: #e0e7ff; padding: 15px; border-radius: 10px;">
+                                <h3>Dr. Johnson (Calculus)</h3>
+                                <p>"Great work on the last assignment! Let me know if you need help with chapter 5."</p>
+                                <small>Received: 2 hours ago</small>
+                            </div>
+                            <div style="background: #e0e7ff; padding: 15px; border-radius: 10px;">
+                                <h3>Study Group</h3>
+                                <p>"Physics study session tomorrow at 3 PM in the library"</p>
+                                <small>Received: Yesterday</small>
+                            </div>
+                        </div>
+                    `
+                },
+                resources: {
+                    title: 'Resources',
+                    content: `
+                        <h2>Learning Resources</h2>
+                        <p>Access study materials, textbooks, and additional resources.</p>
+                        <div style="display: grid; gap: 15px; margin-top: 30px;">
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                                <h3>Textbooks & Readings</h3>
+                                <p>• Calculus Early Transcendentals (PDF)</p>
+                                <p>• Physics for Scientists and Engineers</p>
+                            </div>
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                                <h3>Video Lectures</h3>
+                                <p>• Calculus: Limits and Continuity</p>
+                                <p>• Physics: Newton's Laws Explained</p>
+                            </div>
+                        </div>
+                    `
+                },
+                classmates: {
+                    title: 'Classmates',
+                    content: `
+                        <h2>Classmates</h2>
+                        <p>Connect with other students in your courses.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 30px;">
+                            <div style="text-align: center; background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <div style="width: 50px; height: 50px; background: #4361ee; border-radius: 50%; margin: 0 auto 10px; color: white; display: flex; align-items: center; justify-content: center;">SA</div>
+                                <h4>Sarah Anderson</h4>
+                                <p>Calculus, Physics</p>
+                            </div>
+                            <div style="text-align: center; background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <div style="width: 50px; height: 50px; background: #4cc9f0; border-radius: 50%; margin: 0 auto 10px; color: white; display: flex; align-items: center; justify-content: center;">MJ</div>
+                                <h4>Mike Johnson</h4>
+                                <p>Web Development</p>
+                            </div>
+                        </div>
+                    `
+                },
+                settings: {
+                    title: 'Settings',
+                    content: `
+                        <h2>Account Settings</h2>
+                        <p>Manage your account preferences and notifications.</p>
+                        <div style="display: grid; gap: 20px; margin-top: 30px;">
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <h3>Profile Settings</h3>
+                                <p>Update your personal information, profile picture, and contact details.</p>
+                            </div>
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px;">
+                                <h3>Notification Preferences</h3>
+                                <p>Choose how and when you want to receive notifications about courses and assignments.</p>
+                            </div>
+                        </div>
+                    `
+                },
+                help: {
+                    title: 'Help & Support',
+                    content: `
+                        <h2>Help & Support Center</h2>
+                        <p>Get help with technical issues or learning support.</p>
+                        <div style="display: grid; gap: 15px; margin-top: 30px;">
+                            <div style="background: #f0f9ff; padding: 20px; border-radius: 10px;">
+                                <h3>Technical Support</h3>
+                                <p>Email: support@eschool.com</p>
+                                <p>Phone: 1-800-555-1234</p>
+                            </div>
+                            <div style="background: #f0f9ff; padding: 20px; border-radius: 10px;">
+                                <h3>FAQs</h3>
+                                <p>• How to submit assignments?</p>
+                                <p>• How to join live classes?</p>
+                                <p>• How to access course materials?</p>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+
+            // Function to update active nav item
+            function setActiveNavItem(clickedItem) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                clickedItem.classList.add('active');
+            }
+
+            // Function to update content area
+            function updateContent(section) {
+                const template = contentTemplates[section];
+                if (template) {
+                    contentArea.innerHTML = template.content;
+                }
+            }
+
+            // Add click event listeners to nav items
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-content');
+                    
+                    // Update active state
+                    setActiveNavItem(this);
+                    
+                    // Update content
+                    updateContent(section);
+                    
+                    // Update page title
+                    document.title = `${contentTemplates[section].title} - Eschool`;
+                });
+            });
+
+            // User Profile Dropdown
+            const userProfile = document.getElementById('userProfile');
+            
+            userProfile.addEventListener('click', function() {
+                alert('Profile menu would open with options: View Profile, Settings, Log Out');
+            });
+            
+            // Notification Button
+            const notificationBtn = document.querySelector('.notification-btn');
+            notificationBtn.addEventListener('click', function() {
+                alert('Notifications panel would open showing:\n1. New assignment posted\n2. Class announcement\n3. Message from Sarah');
+            });
+            
+            // Quick Actions
+            const actionButtons = document.querySelectorAll('.action-btn');
+            actionButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const label = this.querySelector('.action-label').textContent;
+                    
+                    if (label === 'New Post') {
+                        alert('Redirecting to content creation page...');
+                    } else if (label === 'Join Class') {
+                        alert('Opening virtual classroom...');
+                    } else if (label === 'Upload Work') {
+                        alert('Opening file upload dialog...');
+                    } else if (label === 'Browse Courses') {
+                        alert('Redirecting to course catalog...');
+                    } else if (label === 'Ask Question') {
+                        alert('Opening question submission form...');
+                    } else if (label === 'Resources') {
+                        alert('Opening resource library...');
+                    }
+                });
+            });
+            
+            // Assignment Buttons
+            const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
+            assignmentButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (this.textContent.includes('Submit')) {
+                        alert('Opening assignment submission page...');
+                    } else if (this.textContent.includes('Start')) {
+                        alert('Opening document editor...');
+                    } else if (this.textContent.includes('View')) {
+                        alert('Showing assignment details...');
+                    }
+                });
+            });
+            
+            // Calendar Day Clicks
+            const calendarDays = document.querySelectorAll('.calendar-day');
+            calendarDays.forEach(day => {
+                if (!day.classList.contains('calendar-header')) {
+                    day.addEventListener('click', function() {
+                        const date = this.textContent;
+                        const month = 'September';
+                        
+                        if (this.classList.contains('today')) {
+                            alert(`Today is ${month} ${date}. You have:\n- Calculus assignment due\n- Physics class at 2 PM`);
+                        } else if (this.classList.contains('event')) {
+                            alert(`${month} ${date}: You have a scheduled event`);
+                        } else {
+                            alert(`${month} ${date}: No events scheduled`);
+                        }
+                    });
+                }
+            });
+            
+            // Search Functionality
+            const searchInput = document.querySelector('.search-bar input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    alert(`Searching for: "${this.value}"`);
+                    this.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

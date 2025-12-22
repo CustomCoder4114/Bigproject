@@ -74,7 +74,7 @@ body {
 }
 
 .hamburger.active div:nth-child(1) {
-  transform: rotate(45deg) translate(6px, 6px);
+  transform: rotate(45deg) translate(6px, 7px);
 }
 
 .hamburger.active div:nth-child(2) {
@@ -82,7 +82,7 @@ body {
 }
 
 .hamburger.active div:nth-child(3) {
-  transform: rotate(-45deg) translate(6px, -6px);
+  transform: rotate(-45deg) translate(6px, -7.2px);
 }
 
 .hamburger i {

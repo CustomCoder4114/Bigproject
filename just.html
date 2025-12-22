@@ -1,0 +1,1646 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<main class="dashboard-content">
+    <!-- Messages Header -->
+    <section class="messages-header">
+        <div class="header-content">
+            <h1><i class="fas fa-comments"></i> Messages</h1>
+            <p class="subtitle">Communicate with instructors and classmates</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="newMessageBtn">
+                <i class="fas fa-plus"></i> New Message
+            </button>
+            <div class="dropdown">
+                <button class="btn btn-outline dropdown-toggle" type="button" id="filterDropdown">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#" data-filter="all">All Messages</a>
+                    <a class="dropdown-item" href="#" data-filter="unread">Unread</a>
+                    <a class="dropdown-item" href="#" data-filter="instructors">Instructors</a>
+                    <a class="dropdown-item" href="#" data-filter="classmates">Classmates</a>
+                    <a class="dropdown-item" href="#" data-filter="archived">Archived</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Messages Container -->
+    <div class="messages-container">
+        <!-- Conversations Sidebar -->
+        <div class="conversations-sidebar">
+            <div class="search-conversations">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search conversations..." id="searchConversations">
+            </div>
+            
+            <div class="conversations-list">
+                <!-- Conversation Item - Active -->
+                <div class="conversation-item active" data-id="1">
+                    <div class="conversation-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                        <span class="online-status online"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h4>Dr. Smith</h4>
+                            <span class="conversation-time">10:30 AM</span>
+                        </div>
+                        <p class="conversation-preview">Regarding your calculus assignment question...</p>
+                        <div class="conversation-meta">
+                            <span class="conversation-course">Advanced Mathematics</span>
+                            <span class="unread-count">2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Item -->
+                <div class="conversation-item" data-id="2">
+                    <div class="conversation-avatar">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Johnson">
+                        <span class="online-status offline"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h4>Sarah Johnson</h4>
+                            <span class="conversation-time">Yesterday</span>
+                        </div>
+                        <p class="conversation-preview">Can you share the physics notes from yesterday?</p>
+                        <div class="conversation-meta">
+                            <span class="conversation-course">Physics Fundamentals</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Item -->
+                <div class="conversation-item" data-id="3">
+                    <div class="conversation-avatar">
+                        <div class="avatar-initials">CS</div>
+                        <span class="online-status away"></span>
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h4>Class Study Group</h4>
+                            <span class="conversation-time">2 days ago</span>
+                        </div>
+                        <p class="conversation-preview">Mike: Let's meet tomorrow at 3 PM for the project...</p>
+                        <div class="conversation-meta">
+                            <span class="conversation-course">Python Programming</span>
+                            <span class="unread-count">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Item -->
+                <div class="conversation-item" data-id="4">
+                    <div class="conversation-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Prof. Johnson">
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h4>Prof. Johnson</h4>
+                            <span class="conversation-time">Sep 12</span>
+                        </div>
+                        <p class="conversation-preview">Your lab report has been graded. Good work!</p>
+                        <div class="conversation-meta">
+                            <span class="conversation-course">Physics Fundamentals</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversation Item -->
+                <div class="conversation-item" data-id="5">
+                    <div class="conversation-avatar">
+                        <div class="avatar-initials">AD</div>
+                    </div>
+                    <div class="conversation-info">
+                        <div class="conversation-header">
+                            <h4>Academic Department</h4>
+                            <span class="conversation-time">Sep 10</span>
+                        </div>
+                        <p class="conversation-preview">Important announcement about the upcoming exams...</p>
+                        <div class="conversation-meta">
+                            <span class="conversation-course">System Notification</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-user-info">
+                    <div class="chat-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                        <span class="online-status online"></span>
+                    </div>
+                    <div>
+                        <h3>Dr. Smith</h3>
+                        <p class="chat-user-details">Advanced Mathematics Instructor • Online</p>
+                    </div>
+                </div>
+                <div class="chat-actions">
+                    <button class="icon-btn" title="Voice call">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="icon-btn" title="Video call">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="icon-btn" title="Conversation info">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                    <div class="dropdown">
+                        <button class="icon-btn dropdown-toggle" title="More options">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#"><i class="fas fa-archive"></i> Archive</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-bell-slash"></i> Mute</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-ban"></i> Block</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="messages-area" id="messagesArea">
+                <!-- Date Separator -->
+                <div class="date-separator">
+                    <span>Today</span>
+                </div>
+
+                <!-- Received Message -->
+                <div class="message received">
+                    <div class="message-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-sender">Dr. Smith</div>
+                        <div class="message-text">
+                            Hi {{ firstname }}, I reviewed your calculus assignment and noticed you had some questions about problem #4.
+                        </div>
+                        <div class="message-time">10:15 AM</div>
+                    </div>
+                </div>
+
+                <!-- Received Message -->
+                <div class="message received">
+                    <div class="message-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            The key is to apply L'Hopital's rule correctly. Remember that you need to differentiate both numerator and denominator separately.
+                        </div>
+                        <div class="message-time">10:18 AM</div>
+                    </div>
+                </div>
+
+                <!-- Sent Message -->
+                <div class="message sent">
+                    <div class="message-content">
+                        <div class="message-text">
+                            Thank you, Dr. Smith! I was confused about when to apply the rule. Should I try solving it again and send you my work?
+                        </div>
+                        <div class="message-time">10:22 AM • <i class="fas fa-check-double read"></i></div>
+                    </div>
+                </div>
+
+                <!-- Received Message -->
+                <div class="message received">
+                    <div class="message-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Yes, please do. I'll be available for the next hour if you need immediate feedback. Also, don't forget about the office hours tomorrow at 2 PM.
+                        </div>
+                        <div class="message-time">10:30 AM</div>
+                    </div>
+                </div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span>Dr. Smith is typing...</span>
+                </div>
+            </div>
+
+            <!-- Message Input -->
+            <div class="message-input-container">
+                <div class="input-tools">
+                    <button class="input-tool" title="Attach file">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <button class="input-tool" title="Insert image">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button class="input-tool" title="Record audio">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="input-tool" title="Format text">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                </div>
+                <div class="message-input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Type your message here..." 
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendMessageBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-hints">
+                    <span>Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Sidebar (User/Group Info) -->
+        <div class="chat-sidebar">
+            <div class="sidebar-section">
+                <h4>Conversation Details</h4>
+                <div class="user-details">
+                    <div class="detail-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. Smith">
+                    </div>
+                    <h3>Dr. Michael Smith</h3>
+                    <p class="user-title">Mathematics Instructor</p>
+                    
+                    <div class="user-stats">
+                        <div class="stat">
+                            <div class="stat-value">4.9</div>
+                            <div class="stat-label">Rating</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Students</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Response Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4>Shared Files <span class="badge">3</span></h4>
+                <div class="shared-files">
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">Calculus_Assignment_Feedback.pdf</div>
+                            <div class="file-meta">2.4 MB • Sep 15</div>
+                        </div>
+                        <button class="file-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">Chapter_5_Examples.docx</div>
+                            <div class="file-meta">1.1 MB • Sep 14</div>
+                        </div>
+                        <button class="file-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">Problem_Solution.png</div>
+                            <div class="file-meta">540 KB • Sep 13</div>
+                        </div>
+                        <button class="file-action">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4>Shared Courses</h4>
+                <div class="shared-courses">
+                    <div class="course-badge">
+                        <i class="fas fa-calculator"></i>
+                        <span>Advanced Mathematics</span>
+                    </div>
+                    <div class="course-badge">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Statistics 101</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h4>Quick Actions</h4>
+                <div class="quick-actions-list">
+                    <button class="action-btn">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>Schedule Meeting</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share Screen</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-tasks"></i>
+                        <span>Assign Task</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Message Modal -->
+    <div class="modal" id="newMessageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Message</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="recipientSelect">To:</label>
+                    <select id="recipientSelect" class="form-control">
+                        <option value="">Select recipient...</option>
+                        <optgroup label="Instructors">
+                            <option value="1">Dr. Smith (Mathematics)</option>
+                            <option value="2">Prof. Johnson (Physics)</option>
+                            <option value="3">Ms. Davis (Programming)</option>
+                        </optgroup>
+                        <optgroup label="Classmates">
+                            <option value="4">Sarah Johnson</option>
+                            <option value="5">Mike Chen</option>
+                            <option value="6">Alex Rodriguez</option>
+                            <option value="7">Class Study Group</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="messageSubject">Subject:</label>
+                    <input type="text" id="messageSubject" class="form-control" placeholder="Enter subject...">
+                </div>
+                <div class="form-group">
+                    <label for="messageContent">Message:</label>
+                    <textarea id="messageContent" class="form-control" rows="6" placeholder="Type your message here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked>
+                        <span>Also send as email notification</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline modal-cancel">Cancel</button>
+                <button class="btn btn-primary modal-send">Send Message</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Add CSS for messages page -->
+<style>
+    /* Messages Page Specific Styles */
+    .messages-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .messages-header h1 {
+        font-size: 1.8rem;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .messages-header h1 i {
+        color: var(--primary-color);
+        margin-right: 10px;
+    }
+
+    .subtitle {
+        color: var(--text-light);
+        font-size: 0.95rem;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    /* Messages Container Layout */
+    .messages-container {
+        display: grid;
+        grid-template-columns: 320px 1fr 280px;
+        gap: 1.5rem;
+        height: calc(100vh - 200px);
+        min-height: 600px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    /* Conversations Sidebar */
+    .conversations-sidebar {
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .search-conversations {
+        padding: 1.2rem;
+        position: relative;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .search-conversations i {
+        position: absolute;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-light);
+    }
+
+    .search-conversations input {
+        width: 100%;
+        padding: 0.8rem 1rem 0.8rem 2.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-conversations input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .conversations-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem;
+    }
+
+    .conversation-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 0.5rem;
+    }
+
+    .conversation-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .conversation-item.active {
+        background-color: rgba(67, 97, 238, 0.1);
+        border-left: 3px solid var(--primary-color);
+    }
+
+    .conversation-avatar {
+        position: relative;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .conversation-avatar img,
+    .avatar-initials {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .avatar-initials {
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+    }
+
+    .online-status {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+
+    .online-status.online {
+        background-color: #4ade80;
+    }
+
+    .online-status.offline {
+        background-color: #9ca3af;
+    }
+
+    .online-status.away {
+        background-color: #f59e0b;
+    }
+
+    .conversation-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .conversation-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+
+    .conversation-header h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .conversation-time {
+        font-size: 0.75rem;
+        color: var(--text-light);
+        white-space: nowrap;
+    }
+
+    .conversation-preview {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .conversation-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .conversation-course {
+        font-size: 0.75rem;
+        color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.1);
+        padding: 2px 8px;
+        border-radius: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 70%;
+    }
+
+    .unread-count {
+        background-color: var(--primary-color);
+        color: white;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 50%;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Chat Area */
+    .chat-area {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-header {
+        padding: 1.2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+    }
+
+    .chat-user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .chat-avatar {
+        position: relative;
+    }
+
+    .chat-avatar img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .chat-user-info h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--text-dark);
+    }
+
+    .chat-user-details {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin: 0;
+    }
+
+    .chat-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        background-color: white;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-btn:hover {
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    /* Messages Area */
+    .messages-area {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        background-color: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .date-separator {
+        text-align: center;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .date-separator::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 1px;
+        background-color: var(--border-color);
+        z-index: 1;
+    }
+
+    .date-separator span {
+        background-color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--text-light);
+        position: relative;
+        z-index: 2;
+        border: 1px solid var(--border-color);
+    }
+
+    .message {
+        display: flex;
+        max-width: 80%;
+        animation: messageAppear 0.3s ease;
+    }
+
+    @keyframes messageAppear {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .message.received {
+        align-self: flex-start;
+    }
+
+    .message.sent {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    .message-avatar img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 4px;
+    }
+
+    .message.received .message-avatar {
+        margin-right: 10px;
+    }
+
+    .message.sent .message-avatar {
+        margin-left: 10px;
+    }
+
+    .message-content {
+        background-color: white;
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        position: relative;
+    }
+
+    .message.received .message-content {
+        border-top-left-radius: 4px;
+        background-color: white;
+    }
+
+    .message.sent .message-content {
+        border-top-right-radius: 4px;
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .message-sender {
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+        color: var(--text-dark);
+    }
+
+    .message.sent .message-sender {
+        color: rgba(255,255,255,0.9);
+    }
+
+    .message-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    .message-time {
+        font-size: 0.75rem;
+        margin-top: 4px;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .message.sent .message-time {
+        color: rgba(255,255,255,0.9);
+    }
+
+    .read {
+        color: #4ade80;
+    }
+
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background-color: white;
+        border-radius: 12px;
+        border-top-left-radius: 4px;
+        max-width: 120px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        align-self: flex-start;
+    }
+
+    .typing-indicator span {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    .typing-dots {
+        display: flex;
+        gap: 3px;
+    }
+
+    .typing-dots span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        animation: typing 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 60%, 100% {
+            transform: translateY(0);
+        }
+        30% {
+            transform: translateY(-4px);
+        }
+    }
+
+    /* Message Input */
+    .message-input-container {
+        border-top: 1px solid var(--border-color);
+        padding: 1.2rem;
+        background-color: white;
+    }
+
+    .input-tools {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .input-tool {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background-color: white;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .input-tool:hover {
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+    }
+
+    .message-input-wrapper {
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+
+    .message-input-wrapper textarea {
+        width: 100%;
+        padding: 12px 50px 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 0.95rem;
+        resize: none;
+        min-height: 46px;
+        max-height: 120px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .message-input-wrapper textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .send-btn {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .send-btn:hover {
+        background-color: #3054d6;
+        transform: scale(1.05);
+    }
+
+    .input-hints {
+        font-size: 0.75rem;
+        color: var(--text-light);
+        text-align: right;
+    }
+
+    .input-hints kbd {
+        background-color: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid #d1d5db;
+        font-size: 0.7rem;
+    }
+
+    /* Chat Sidebar */
+    .chat-sidebar {
+        border-left: 1px solid var(--border-color);
+        padding: 1.5rem;
+        overflow-y: auto;
+        background-color: white;
+    }
+
+    .sidebar-section {
+        margin-bottom: 2rem;
+    }
+
+    .sidebar-section h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .badge {
+        background-color: var(--primary-color);
+        color: white;
+        font-size: 0.7rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+
+    .user-details {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .detail-avatar img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1rem;
+        display: block;
+        border: 3px solid var(--primary-color);
+    }
+
+    .user-details h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .user-title {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .user-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    /* Shared Files */
+    .shared-files {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .file-item {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .file-item:hover {
+        border-color: var(--primary-color);
+        background-color: #f8f9fa;
+    }
+
+    .file-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+
+    .file-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .file-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-meta {
+        font-size: 0.75rem;
+        color: var(--text-light);
+    }
+
+    .file-action {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background-color: white;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .file-action:hover {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    /* Shared Courses */
+    .shared-courses {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .course-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border-radius: 20px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .course-badge i {
+        font-size: 0.8rem;
+    }
+
+    /* Quick Actions */
+    .quick-actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: white;
+        color: var(--text-dark);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        text-align: left;
+        width: 100%;
+    }
+
+    .action-btn:hover {
+        border-color: var(--primary-color);
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+    }
+
+    .action-btn i {
+        font-size: 0.9rem;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background-color: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        animation: modalFadeIn 0.3s ease;
+    }
+
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        color: var(--text-dark);
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-light);
+        transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+        color: var(--text-dark);
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-dark);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .form-control::placeholder {
+        color: #9ca3af;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+    }
+
+    .modal-footer {
+        padding: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    /* Dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle::after {
+        display: inline-block;
+        margin-left: 0.5rem;
+        content: "▼";
+        font-size: 0.7rem;
+        vertical-align: middle;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        min-width: 160px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 100;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    .dropdown-menu.show {
+        display: block;
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 0.8rem 1rem;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .dropdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+    }
+
+    .dropdown-item i {
+        margin-right: 8px;
+        width: 16px;
+        text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .messages-container {
+            grid-template-columns: 280px 1fr 250px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .messages-container {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+        
+        .conversations-sidebar,
+        .chat-sidebar {
+            display: none;
+        }
+        
+        .conversations-sidebar.active,
+        .chat-sidebar.active {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background-color: white;
+            z-index: 1000;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .chat-area {
+            min-height: 500px;
+        }
+        
+        .messages-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .header-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .message {
+            max-width: 90%;
+        }
+        
+        .messages-header h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .messages-container {
+            border-radius: 0;
+            box-shadow: none;
+        }
+        
+        .chat-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .chat-actions {
+            width: 100%;
+            justify-content: flex-end;
+        }
+        
+        .modal-content {
+            width: 95%;
+            margin: 1rem;
+        }
+    }
+</style>
+
+<!-- JavaScript for messages functionality -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* =========================
+       ELEMENT REFERENCES
+    ========================= */
+    const conversations = document.querySelectorAll('.conversation-item');
+    const messagesArea = document.getElementById('chatHistory');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    const searchInput = document.querySelector('.messages-search input');
+
+    const filterDropdown = document.getElementById('filterDropdown');
+    const filterMenu = filterDropdown?.nextElementSibling;
+    const filterItems = filterMenu?.querySelectorAll('.dropdown-item') || [];
+
+    const newMessageModal = document.getElementById('newMessageModal');
+    const newMessageBtn = document.getElementById('newMessageBtn');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+
+    /* =========================
+       UTILITIES
+    ========================= */
+    function scrollToBottom(force = false) {
+        const nearBottom =
+            messagesArea.scrollTop + messagesArea.clientHeight >=
+            messagesArea.scrollHeight - 100;
+
+        if (force || nearBottom) {
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+    }
+
+    function hideTyping() {
+        typingIndicator.style.display = 'none';
+    }
+
+    function showTyping() {
+        typingIndicator.style.display = 'flex';
+    }
+
+    /* =========================
+       MESSAGE SENDING
+    ========================= */
+    function sendMessage() {
+        const text = messageInput.value.trim();
+        if (!text) return;
+
+        const message = document.createElement('div');
+        message.className = 'message sent';
+        message.innerHTML = `
+            <div class="bubble">${text}</div>
+            <span class="time">Just now</span>
+        `;
+
+        messagesArea.appendChild(message);
+        messageInput.value = '';
+        scrollToBottom(true);
+
+        hideTyping();
+
+        // Simulated reply (remove when backend added)
+        setTimeout(() => {
+            showTyping();
+        }, 600);
+
+        setTimeout(() => {
+            hideTyping();
+        }, 1800);
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    messageInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        } else {
+            showTyping();
+        }
+    });
+
+    /* =========================
+       CONVERSATION SELECTION
+    ========================= */
+    conversations.forEach(conv => {
+        conv.addEventListener('click', () => {
+            conversations.forEach(c => c.classList.remove('active'));
+            conv.classList.add('active');
+
+            // remove unread badge
+            conv.classList.remove('unread');
+            const badge = conv.querySelector('.unread-badge');
+            if (badge) badge.remove();
+
+            messageInput.focus();
+            scrollToBottom(true);
+        });
+    });
+
+    /* =========================
+       SEARCH FUNCTION
+    ========================= */
+    searchInput?.addEventListener('input', () => {
+        const value = searchInput.value.toLowerCase();
+
+        conversations.forEach(conv => {
+            const name = conv.querySelector('.conv-name')?.textContent.toLowerCase() || '';
+            const preview = conv.querySelector('.conv-preview')?.textContent.toLowerCase() || '';
+
+            conv.style.display =
+                name.includes(value) || preview.includes(value)
+                    ? 'flex'
+                    : 'none';
+        });
+    });
+
+    /* =========================
+       FILTER DROPDOWN
+    ========================= */
+    if (filterDropdown) {
+        filterDropdown.addEventListener('click', e => {
+            e.stopPropagation();
+            filterMenu.classList.toggle('show');
+        });
+    }
+
+    filterItems.forEach(item => {
+        item.addEventListener('click', e => {
+            e.preventDefault();
+            const filter = item.dataset.filter;
+
+            filterItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+
+            conversations.forEach(conv => {
+                const type = conv.dataset.type || 'student';
+                const unread = conv.classList.contains('unread');
+
+                if (filter === 'all') {
+                    conv.style.display = 'flex';
+                } else if (filter === 'unread') {
+                    conv.style.display = unread ? 'flex' : 'none';
+                } else {
+                    conv.style.display = type === filter ? 'flex' : 'none';
+                }
+            });
+
+            filterMenu.classList.remove('show');
+        });
+    });
+
+    document.addEventListener('click', () => {
+        filterMenu?.classList.remove('show');
+    });
+
+    /* =========================
+       NEW MESSAGE MODAL
+    ========================= */
+    function openModal() {
+        newMessageModal.classList.add('open');
+    }
+
+    function closeModal() {
+        newMessageModal.classList.remove('open');
+    }
+
+    newMessageBtn?.addEventListener('click', openModal);
+    closeModalBtn?.addEventListener('click', closeModal);
+
+    newMessageModal?.addEventListener('click', e => {
+        if (e.target === newMessageModal) closeModal();
+    });
+
+    /* =========================
+       INITIAL STATE
+    ========================= */
+    hideTyping();
+    scrollToBottom(true);
+
+});
+</script>
+
+{% endblock %}

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>No Content Yet - eSchool</title>
+    <title>Course Videos - eSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -41,34 +41,17 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--gray-800);
-            background-color: var(--gray-50);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+        
 
-        .empty-content-container {
-            width: 100%;
-            max-width: 900px;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .content-header {
+        /* Header Styles */
+        .page-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 40px;
-            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
             position: relative;
+            overflow: hidden;
         }
 
         .header-content {
@@ -94,6 +77,7 @@
             font-size: 2.5rem;
             margin-bottom: 15px;
             font-weight: 700;
+            text-align: center;
         }
 
         .page-subtitle {
@@ -101,152 +85,455 @@
             opacity: 0.9;
             max-width: 600px;
             margin: 0 auto;
-        }
-
-        .content-body {
-            padding: 50px 40px;
-        }
-
-        .empty-state {
             text-align: center;
-            margin-bottom: 50px;
         }
 
-        .empty-illustration {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 30px;
-            position: relative;
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--border-radius-sm);
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            flex-wrap: wrap;
         }
 
-        .empty-illustration svg {
-            width: 100%;
-            height: 100%;
-            opacity: 0.8;
-        }
-
-        .empty-message {
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        .message-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            color: var(--dark-color);
-            margin-bottom: 15px;
-        }
-
-        .message-text {
+        .tab-btn {
+            flex: 1;
+            padding: 18px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
             color: var(--gray-600);
-            font-size: 1.1rem;
-            line-height: 1.7;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, var(--primary-light), #e0f2fe);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin: 40px 0;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .highlight-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.3rem;
-            color: var(--dark-color);
-            margin-bottom: 15px;
+            transition: var(--transition);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            min-width: 200px;
         }
 
-        .highlight-text {
-            color: var(--gray-700);
-            line-height: 1.6;
-        }
-
-        .content-types {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .content-type-card {
+        .tab-btn:hover {
             background: var(--gray-50);
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* YouTube Style Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        /* Video Card (YouTube Style) */
+        .video-card {
+            background: white;
             border-radius: var(--border-radius);
-            padding: 30px;
-            text-align: center;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .content-type-card:hover {
-            transform: translateY(-5px);
+            overflow: hidden;
             box-shadow: var(--card-shadow);
-            border-color: var(--primary-light);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--gray-200);
+            height: 100%;
         }
 
-        .type-icon {
-            width: 70px;
-            height: 70px;
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: var(--gray-200);
+            overflow: hidden;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .video-card:hover .video-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .thumbnail-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .video-card:hover .thumbnail-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 1.8rem;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .duration-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .video-details {
+            padding: 15px;
+            flex: 1;
+        }
+
+        .video-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            height: 2.8em;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .video-owner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .owner-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .owner-name {
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .action-btn.download:hover {
+            background: var(--success-color);
             color: white;
         }
 
-        .type-1 .type-icon {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .action-btn.delete:hover {
+            background: var(--danger-color);
+            color: white;
         }
 
-        .type-2 .type-icon {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
+        /* Course Cards */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
         }
 
-        .type-3 .type-icon {
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        .course-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .type-title {
-            font-family: 'Poppins', sans-serif;
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-light);
+        }
+
+        .course-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .math { background: #4361ee; }
+        .physics { background: #ff6b6b; }
+        .cs { background: #1dd1a1; }
+        .english { background: #feca57; }
+
+        .course-info h3 {
+            font-family: 'Inter', sans-serif;
             font-size: 1.3rem;
+            font-weight: 600;
             color: var(--dark-color);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        .type-description {
+        .course-code {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .course-description {
             color: var(--gray-600);
             font-size: 0.95rem;
             line-height: 1.6;
             margin-bottom: 20px;
         }
 
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
+        .course-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            max-width: 400px;
-            margin: 40px auto;
+            margin: 20px 0;
+            text-align: center;
         }
 
+        .stat-box {
+            padding: 10px;
+        }
+
+        .stat-number {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Video Player Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .video-modal-content {
+            width: 90%;
+            max-width: 1000px;
+            background: var(--dark-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 500px;
+            background: #000;
+        }
+
+        .video-info {
+            padding: 20px;
+            background: var(--gray-800);
+            color: white;
+        }
+
+        .video-info h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .video-meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--gray-400);
+            margin-bottom: 15px;
+        }
+
+        .video-description {
+            color: var(--gray-300);
+            line-height: 1.6;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-700);
+        }
+
+        .close-video-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            transition: var(--transition);
+        }
+
+        .close-video-btn:hover {
+            background: var(--danger-color);
+        }
+
+        /* Buttons */
         .btn {
-            padding: 14px 30px;
+            padding: 12px 24px;
             border-radius: var(--border-radius-sm);
             border: none;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            display: flex;
+            font-size: 0.95rem;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             text-decoration: none;
         }
 
@@ -256,8 +543,8 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
 
         .btn-outline {
@@ -270,72 +557,141 @@
             background-color: var(--primary-light);
         }
 
-        .community-section {
-            background: linear-gradient(135deg, var(--gray-50), var(--light-color));
-            border-radius: var(--border-radius);
-            padding: 40px;
-            margin-top: 50px;
-            text-align: center;
+        .btn-danger {
+            background: transparent;
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
         }
 
-        .community-title {
+        .btn-danger:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2.5rem;
+            color: var(--gray-400);
+        }
+
+        .empty-title {
             font-family: 'Poppins', sans-serif;
             font-size: 1.8rem;
-            color: var(--dark-color);
-            margin-bottom: 20px;
+            color: var(--gray-600);
+            margin-bottom: 15px;
         }
 
-        .community-description {
-            color: var(--gray-600);
-            max-width: 600px;
+        .empty-text {
+            color: var(--gray-500);
+            max-width: 500px;
             margin: 0 auto 30px;
             font-size: 1.1rem;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
-        .community-stats {
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
             display: flex;
-            justify-content: center;
-            gap: 40px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-top: 30px;
+            align-items: center;
         }
 
-        .stat-item {
-            text-align: center;
+        .search-box {
+            flex: 1;
+            min-width: 250px;
         }
 
-        .stat-number {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 5px;
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
         }
 
-        .stat-label {
-            color: var(--gray-600);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .select-control {
+            padding: 10px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
             font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            min-width: 180px;
+            transition: var(--transition);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .floating {
-            animation: float 3s ease-in-out infinite;
+        .select-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .content-header {
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .tab-btn {
+                min-width: 150px;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box, .select-control {
+                width: 100%;
+            }
+            
+            .video-player {
+                height: 300px;
+            }
+            
+            .video-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
                 padding: 30px 20px;
             }
             
@@ -343,523 +699,751 @@
                 font-size: 2rem;
             }
             
-            .content-body {
-                padding: 30px 20px;
-            }
-            
-            .empty-illustration {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .content-types {
+            .video-grid, .courses-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .community-section {
-                padding: 30px 20px;
-            }
-            
-            .community-stats {
-                gap: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-title {
-                font-size: 1.8rem;
-            }
-            
-            .message-title {
-                font-size: 1.5rem;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            .stat-number {
-                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="empty-content-container">
+    <div class="container">
         <!-- Header -->
-        <div class="content-header">
+        <header class="page-header">
             <div class="header-content">
-                <div class="page-icon floating">
-                    <i class="fas fa-newspaper"></i>
+                <div class="page-icon">
+                    <i class="fas fa-video"></i>
                 </div>
-                <h1 class="page-title">Content Feed Empty</h1>
-                <p class="page-subtitle">No educational content has been posted yet. Be the first to share!</p>
+                <h1 class="page-title">Course Videos and notes</h1>
+                <p class="page-subtitle">Watch and share educational videos and with your classmates</p>
             </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('allvideos')">
+                <i class="fas fa-play-circle"></i> All Videos
+            </button>
+            <button class="tab-btn" onclick="switchTab('courses')">
+                <i class="fas fa-graduation-cap"></i> By Course
+            </button>
+            <button class="tab-btn" onclick="switchTab('myuploads')">
+                <i class="fas fa-cloud-upload-alt"></i> My Uploads
+            </button>
         </div>
 
-        <!-- Main Content -->
-        <div class="content-body">
-            <!-- Empty State -->
-            <div class="empty-state">
-                <div class="empty-illustration">
-                    <!-- SVG Illustration -->
-                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="100" r="80" fill="#E0E7FF" opacity="0.5"/>
-                        <rect x="60" y="60" width="80" height="60" rx="8" fill="#4361ee" opacity="0.8"/>
-                        <rect x="50" y="50" width="80" height="60" rx="8" fill="#4cc9f0" opacity="0.6"/>
-                        <circle cx="80" cy="80" r="15" fill="white" opacity="0.9"/>
-                        <circle cx="120" cy="80" r="15" fill="white" opacity="0.9"/>
-                        <path d="M70 130L130 130" stroke="#4361ee" stroke-width="4" stroke-linecap="round"/>
-                        <path d="M80 140L120 140" stroke="#4cc9f0" stroke-width="3" stroke-linecap="round"/>
-                        <path d="M90 150L110 150" stroke="#3a0ca3" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                
-                <div class="empty-message">
-                    <h2 class="message-title">The content feed is currently empty</h2>
-                    <p class="message-text">
-                        No one has shared any educational content yet. This could be lessons, questions, 
-                        resources, or discussions. You can be the first to contribute and help build 
-                        our learning community!
-                    </p>
-                </div>
-
-                <div class="highlight-box">
-                    <h3 class="highlight-title">
-                        <i class="fas fa-lightbulb"></i> Why share educational content?
-                    </h3>
-                    <p class="highlight-text">
-                        Sharing knowledge helps everyone learn better. When you post educational content, 
-                        you not only reinforce your own understanding but also help peers who might be 
-                        struggling with the same concepts. It's a great way to collaborate and build 
-                        a supportive learning environment.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Content Types -->
-            <div class="content-types">
-                <!-- Lesson Type -->
-                <div class="content-type-card type-1">
-                    <div class="type-icon">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                    <h3 class="type-title">Share a Lesson</h3>
-                    <p class="type-description">
-                        Explain a concept you've mastered. Create step-by-step tutorials, 
-                        explain complex topics, or share your unique teaching methods.
-                    </p>
-                    <button class="btn btn-outline" data-type="lesson">
-                        <i class="fas fa-plus"></i> Create Lesson
-                    </button>
-                </div>
-
-                <!-- Question Type -->
-                <div class="content-type-card type-2">
-                    <div class="type-icon">
-                        <i class="fas fa-question-circle"></i>
-                    </div>
-                    <h3 class="type-title">Ask a Question</h3>
-                    <p class="type-description">
-                        Stuck on something? Ask for help! Get explanations from teachers 
-                        and peers. Your question might help others with similar doubts.
-                    </p>
-                    <button class="btn btn-outline" data-type="question">
-                        <i class="fas fa-question"></i> Ask Question
-                    </button>
-                </div>
-
-                <!-- Resource Type -->
-                <div class="content-type-card type-3">
-                    <div class="type-icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <h3 class="type-title">Share Resources</h3>
-                    <p class="type-description">
-                        Upload helpful materials like notes, study guides, practice problems, 
-                        or reference materials that can benefit other learners.
-                    </p>
-                    <button class="btn btn-outline" data-type="resource">
-                        <i class="fas fa-upload"></i> Upload Resource
-                    </button>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" id="createFirstPost">
-                    <i class="fas fa-feather-alt"></i> Create First Post
-                </button>
-                
-                <button class="btn btn-outline" id="inviteOthers">
-                    <i class="fas fa-user-plus"></i> Invite Others to Post
-                </button>
-                
-                <button class="btn btn-outline" id="viewExamples">
-                    <i class="fas fa-eye"></i> View Example Posts
-                </button>
-            </div>
-
-            <!-- Community Section -->
-            <div class="community-section">
-                <h3 class="community-title">Start the Conversation</h3>
-                <p class="community-description">
-                    Educational content grows when everyone participates. Your first post could 
-                    inspire others to share their knowledge and questions too!
+        <!-- All Videos Tab (YouTube Style) -->
+        <div id="allvideos-tab" class="tab-content active">
+            <section class="content-section">
+                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
+                    <i class="fas fa-play-circle"></i> All Course Videos
+                </h2>
+                <p style="color: var(--gray-600); margin-bottom: 30px;">
+                    Browse all videos uploaded by everyone in your classes. All videos are visible to everyone.
                 </p>
-                
-                <div class="community-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Posts Published</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Comments Made</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Resources Shared</div>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <div class="search-box">
+                            <input type="text" id="searchVideos" class="form-control" placeholder="Search videos...">
+                        </div>
+                        <select id="filterCourseVideos" class="select-control">
+                            <option value="">All Courses</option>
+                            <option value="math101">Mathematics 101</option>
+                            <option value="physics201">Physics 201</option>
+                            <option value="cs301">Computer Science 301</option>
+                            <option value="english101">English Literature 101</option>
+                        </select>
+                        <select id="sortVideos" class="select-control">
+                            <option value="recent">Most Recent</option>
+                            <option value="views">Most Viewed</option>
+                            <option value="downloads">Most Downloaded</option>
+                        </select>
                     </div>
                 </div>
-            </div>
+
+                <!-- YouTube Style Grid -->
+                <div class="video-grid" id="videosContainer">
+                    <!-- Video cards will be dynamically loaded here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="videosEmpty" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-video-slash"></i>
+                    </div>
+                    <h3 class="empty-title">No Videos and notes Yet</h3>
+                    <p class="empty-text">No videos and notes have been uploaded yet. Be the first to share educational videos!</p>
+                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- Courses Tab -->
+        <div id="courses-tab" class="tab-content">
+            <section class="content-section">
+                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
+                    <i class="fas fa-graduation-cap"></i> Videos by Course
+                </h2>
+                <p style="color: var(--gray-600); margin-bottom: 30px;">
+                    View uploaded videos organized by course. Everyone can see all videos.
+                </p>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <div class="search-box">
+                            <input type="text" id="courseSearch" class="form-control" placeholder="Search courses...">
+                        </div>
+                        <button class="btn btn-outline" onclick="refreshVideos()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Courses Grid -->
+                <div class="courses-grid" id="coursesContainer">
+                    <!-- Course cards will be dynamically loaded here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="coursesEmpty" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="empty-title">No Course Videos Yet</h3>
+                    <p class="empty-text">No videos have been uploaded to courses yet.</p>
+                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- My Uploads Tab -->
+        <div id="myuploads-tab" class="tab-content">
+            <section class="content-section">
+                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
+                    <i class="fas fa-cloud-upload-alt"></i> My Uploaded Videos
+                </h2>
+                <p style="color: var(--gray-600); margin-bottom: 30px;">
+                    Manage videos that you have uploaded. You can delete your own videos.
+                </p>
+
+                <!-- My Uploads Grid -->
+                <div class="video-grid" id="myUploadsGrid">
+                    <!-- My uploads will be loaded here -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="myUploadsEmpty" style="display: none;">
+                    <div class="empty-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3 class="empty-title">No Uploads Yet</h3>
+                    <p class="empty-text">You haven't uploaded any videos yet.</p>
+                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
+                    </button>
+                </div>
+            </section>
         </div>
     </div>
 
-    <!-- Create Post Modal -->
-    <div id="createPostModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: white; border-radius: var(--border-radius); padding: 40px; max-width: 600px; width: 100%; animation: fadeIn 0.5s ease-out; box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;">
-            <button id="closeModal" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: var(--gray-400); cursor: pointer;">
+    <!-- Video Player Modal -->
+    <div id="videoModal" class="video-modal">
+        <div class="video-modal-content">
+            <button class="close-video-btn" onclick="closeVideoModal()">
                 <i class="fas fa-times"></i>
             </button>
-            
-            <h2 style="font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--dark-color); margin-bottom: 25px; display: flex; align-items: center; gap: 10px;">
-                <i class="fas fa-plus-circle"></i> Create Your First Post
-            </h2>
-            
-            <div style="margin-bottom: 30px;">
-                <label style="display: block; margin-bottom: 10px; font-weight: 500; color: var(--gray-700);">Post Type</label>
-                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <button class="post-type-option active" data-type="lesson" style="flex: 1; padding: 12px; border: 2px solid var(--primary-color); background: var(--primary-light); border-radius: 8px; cursor: pointer; transition: var(--transition);">
-                        <i class="fas fa-chalkboard-teacher"></i> Lesson
-                    </button>
-                    <button class="post-type-option" data-type="question" style="flex: 1; padding: 12px; border: 2px solid var(--gray-200); background: white; border-radius: 8px; cursor: pointer; transition: var(--transition);">
-                        <i class="fas fa-question-circle"></i> Question
-                    </button>
-                    <button class="post-type-option" data-type="resource" style="flex: 1; padding: 12px; border: 2px solid var(--gray-200); background: white; border-radius: 8px; cursor: pointer; transition: var(--transition);">
-                        <i class="fas fa-file-alt"></i> Resource
-                    </button>
+            <div class="video-player" id="videoPlayer">
+                <video id="videoElement" controls style="width: 100%; height: 100%;">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-info">
+                <h3 id="videoTitle"></h3>
+                <div class="video-meta-info">
+                    <span id="videoCourse"></span>
+                    <span id="videoOwner"></span>
+                    <span id="videoStats"></span>
                 </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--gray-700);">Title</label>
-                    <input type="text" id="postTitle" placeholder="Enter a descriptive title..." style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 1rem; transition: var(--transition);">
-                </div>
-                
-                <div style="margin-bottom: 25px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: var(--gray-700);">Content</label>
-                    <textarea id="postContent" placeholder="Describe your lesson, ask your question, or explain your resource..." rows="5" style="width: 100%; padding: 12px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 1rem; font-family: 'Inter', sans-serif; resize: vertical; transition: var(--transition);"></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 15px;">
-                    <button id="cancelPost" class="btn btn-outline" style="flex: 1;">
-                        <i class="fas fa-times"></i> Cancel
-                    </button>
-                    <button id="submitPost" class="btn btn-primary" style="flex: 2;">
-                        <i class="fas fa-paper-plane"></i> Publish Post
-                    </button>
-                </div>
+                <div class="video-description" id="videoDescription"></div>
             </div>
         </div>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: white; border-radius: var(--border-radius); padding: 40px; max-width: 500px; width: 100%; text-align: center; animation: fadeIn 0.5s ease-out; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--success-color), #34d399); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
-                <i class="fas fa-check" style="color: white; font-size: 2.5rem;"></i>
+    <!-- Replace the existing JavaScript section with this corrected version -->
+<script>
+/* =========================
+   GLOBAL STATE
+========================= */
+let allUploads = [];
+let currentUser = "{{ firstname }} {{ lastname }}" || "Test User";
+
+/* =========================
+   COURSE DATA
+========================= */
+const courseData = {
+    math101: { 
+        name: "Mathematics 101", 
+        code: "MATH101", 
+        icon: "fa-calculator", 
+        class: "math",
+        description: "Introduction to calculus and algebra"
+    },
+    physics201: { 
+        name: "Physics 201", 
+        code: "PHY201", 
+        icon: "fa-atom", 
+        class: "physics",
+        description: "Classical mechanics and thermodynamics"
+    },
+    cs301: { 
+        name: "Computer Science 301", 
+        code: "CS301", 
+        icon: "fa-laptop-code", 
+        class: "cs",
+        description: "Data structures and algorithms"
+    },
+    english101: { 
+        name: "English Literature 101", 
+        code: "ENG101", 
+        icon: "fa-book-open", 
+        class: "english",
+        description: "Introduction to English literature"
+    }
+};
+
+/* =========================
+   HELPER FUNCTIONS
+========================= */
+function getFileType(filename) {
+    if (!filename) return "file";
+    const ext = filename.split(".").pop().toLowerCase();
+    if (["mp4", "mov", "avi", "webm", "mkv"].includes(ext)) return "video";
+    if (["pdf"].includes(ext)) return "pdf";
+    if (["doc", "docx"].includes(ext)) return "word";
+    if (["ppt", "pptx"].includes(ext)) return "powerpoint";
+    if (["jpg", "jpeg", "png", "gif"].includes(ext)) return "image";
+    if (["txt", "md"].includes(ext)) return "notes";
+    return "file";
+}
+
+function getFileIcon(filename) {
+    const type = getFileType(filename);
+    switch(type) {
+        case "video": return "fa-video";
+        case "pdf": return "fa-file-pdf";
+        case "word": return "fa-file-word";
+        case "powerpoint": return "fa-file-powerpoint";
+        case "image": return "fa-image";
+        case "notes": return "fa-file-alt";
+        default: return "fa-file";
+    }
+}
+
+function getInitials(name) {
+    if (!name) return "??";
+    const parts = name.split(" ");
+    if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+    } else if (parts.length === 1) {
+        return parts[0].substring(0, 2).toUpperCase();
+    }
+    return "??";
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
+
+/* =========================
+   INITIALIZATION
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Course page loaded");
+    loadFromStorage();
+    loadAllFiles(); // Changed from loadVideos()
+    loadCourses();
+    loadMyUploads();
+});
+
+/* =========================
+   STORAGE FUNCTIONS
+========================= */
+function loadFromStorage() {
+    try {
+        const stored = localStorage.getItem("eschool_uploads");
+        if (stored) {
+            allUploads = JSON.parse(stored);
+            console.log("Loaded uploads:", allUploads.length);
+            
+            // Ensure all files have required properties
+            allUploads.forEach((file, index) => {
+                if (!file.id) file.id = Date.now() + index;
+                if (!file.views) file.views = 0;
+                if (!file.downloads) file.downloads = 0;
+                if (!file.owner) file.owner = "Unknown User";
+                if (!file.privacy) file.privacy = "class";
+                if (!file.fileType) file.fileType = getFileType(file.name);
+            });
+        } else {
+            allUploads = [];
+            console.log("No uploads found in storage");
+        }
+    } catch (error) {
+        console.error("Error loading from storage:", error);
+        allUploads = [];
+    }
+}
+
+function saveToStorage() {
+    localStorage.setItem("eschool_uploads", JSON.stringify(allUploads));
+}
+
+/* =========================
+   LOAD ALL FILES (VIDEOS & NOTES)
+========================= */
+function loadAllFiles() {
+    const container = document.getElementById("videosContainer");
+    const empty = document.getElementById("videosEmpty");
+
+    // Filter files that are shared with class
+    const sharedFiles = allUploads.filter(file => 
+        file.privacy === "class" && 
+        (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
+    );
+
+    console.log("Shared files to display:", sharedFiles.length);
+
+    if (sharedFiles.length === 0) {
+        container.innerHTML = "";
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+    
+    // Sort by most recent
+    const sortedFiles = [...sharedFiles].sort((a, b) => 
+        (b.timestamp || b.id) - (a.timestamp || a.id)
+    );
+    
+    container.innerHTML = sortedFiles.map(file => createFileCard(file, false)).join("");
+}
+
+/* =========================
+   CREATE FILE CARD (FOR VIDEOS & NOTES)
+========================= */
+function createFileCard(file, isMyUpload) {
+    const course = courseData[file.course] || {};
+    const fileType = getFileType(file.name);
+    const fileIcon = getFileIcon(file.name);
+    
+    // Different colors for different file types
+    const colors = {
+        video: '#4361ee',
+        pdf: '#ef4444',
+        notes: '#10b981',
+        word: '#2b579a',
+        powerpoint: '#d24726',
+        image: '#ec4899',
+        default: '#6b7280'
+    };
+    
+    const color = colors[fileType] || colors.default;
+    
+    return `
+        <div class="video-card" data-file-id="${file.id}">
+            <div class="thumbnail-container">
+                <div class="video-thumbnail" 
+                     style="background:${color}; display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">
+                    <i class="fas ${fileIcon}"></i>
+                </div>
+                <div class="thumbnail-overlay">
+                    <div class="play-btn" onclick="${fileType === 'video' ? `playVideo(${file.id})` : `previewFile(${file.id})`}">
+                        <i class="fas ${fileType === 'video' ? 'fa-play' : 'fa-eye'}"></i>
+                    </div>
+                </div>
+                ${fileType === 'video' ? '<div class="duration-badge">--:--</div>' : ''}
             </div>
-            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--dark-color); margin-bottom: 15px;" id="successTitle"></h3>
-            <p style="color: var(--gray-600); margin-bottom: 30px; line-height: 1.6;" id="successMessage"></p>
-            <button class="btn btn-primary" id="closeSuccessModal" style="min-width: 150px;">
-                <i class="fas fa-arrow-right"></i> Continue
-            </button>
+            
+            <div class="video-details">
+                <h3 class="video-title" title="${file.name}">
+                    ${file.name}
+                </h3>
+                
+                <div class="video-meta">
+                    <div class="video-owner">
+                        <div class="owner-avatar" style="background: ${stringToColor(file.owner)}">
+                            ${getInitials(file.owner)}
+                        </div>
+                        <span class="owner-name">${file.owner}</span>
+                    </div>
+                    <div class="video-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <span>${file.views || 0}</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-download"></i>
+                            <span>${file.downloads || 0}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-badge">
+                    ${course.name || "No Course"}
+                    <span style="margin-left: 8px; font-size: 0.7em; opacity: 0.8;">
+                        <i class="fas ${fileIcon}"></i> ${fileType.toUpperCase()}
+                    </span>
+                </div>
+                
+                <div class="video-actions">
+                    <button class="action-btn" onclick="${fileType === 'video' ? `playVideo(${file.id})` : `previewFile(${file.id})`}">
+                        <i class="fas ${fileType === 'video' ? 'fa-play' : 'fa-eye'}"></i> ${fileType === 'video' ? 'Play' : 'View'}
+                    </button>
+                    <button class="action-btn download" onclick="downloadFile(${file.id})">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    ${isMyUpload ? `
+                    <button class="action-btn delete" onclick="deleteFile(${file.id})">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>` : ""}
+                </div>
+            </div>
         </div>
-    </div>
+    `;
+}
 
-    <script>
-        // DOM Elements
-        const createFirstPostBtn = document.getElementById('createFirstPost');
-        const inviteOthersBtn = document.getElementById('inviteOthers');
-        const viewExamplesBtn = document.getElementById('viewExamples');
-        const contentTypeButtons = document.querySelectorAll('.content-type-card .btn');
-        const createPostModal = document.getElementById('createPostModal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const cancelPostBtn = document.getElementById('cancelPost');
-        const submitPostBtn = document.getElementById('submitPost');
-        const postTypeOptions = document.querySelectorAll('.post-type-option');
-        const successModal = document.getElementById('successModal');
-        const closeSuccessModalBtn = document.getElementById('closeSuccessModal');
+/* =========================
+   LOAD MY UPLOADS
+========================= */
+function loadMyUploads() {
+    const container = document.getElementById("myUploadsGrid");
+    const empty = document.getElementById("myUploadsEmpty");
 
-        // Create First Post Button
-        createFirstPostBtn.addEventListener('click', function() {
-            openCreatePostModal('lesson');
-        });
+    const myFiles = allUploads.filter(file => 
+        file.owner === currentUser && 
+        (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
+    );
 
-        // Invite Others Button
-        inviteOthersBtn.addEventListener('click', function() {
-            showSuccess(
-                'Invite Others',
-                'Share the link to invite teachers and students to post content: https://eschool.com/content-feed'
-            );
-        });
+    console.log("My uploads:", myFiles.length);
 
-        // View Examples Button
-        viewExamplesBtn.addEventListener('click', function() {
-            showSuccess(
-                'Example Posts',
-                'Here are some great examples of educational content:\n1. Calculus lesson with step-by-step examples\n2. Programming question with code snippets\n3. Chemistry resource with interactive diagrams'
-            );
-        });
+    if (!myFiles.length) {
+        container.innerHTML = "";
+        empty.style.display = "block";
+        return;
+    }
 
-        // Content Type Buttons
-        contentTypeButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const type = this.getAttribute('data-type');
-                openCreatePostModal(type);
-            });
-        });
+    empty.style.display = "none";
+    container.innerHTML = myFiles.map(file => createFileCard(file, true)).join("");
+}
 
-        // Open Create Post Modal
-        function openCreatePostModal(type) {
-            createPostModal.style.display = 'flex';
-            
-            // Set active post type
-            postTypeOptions.forEach(option => {
-                option.classList.remove('active');
-                option.style.borderColor = 'var(--gray-200)';
-                option.style.background = 'white';
+/* =========================
+   LOAD COURSES
+========================= */
+function loadCourses() {
+    const container = document.getElementById("coursesContainer");
+    const empty = document.getElementById("coursesEmpty");
+
+    // Get courses that have videos or notes
+    const coursesWithFiles = Object.keys(courseData).filter(courseId => {
+        return allUploads.some(file => 
+            file.course === courseId && 
+            file.privacy === "class" &&
+            (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
+        );
+    });
+
+    if (!coursesWithFiles.length) {
+        container.innerHTML = "";
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+    container.innerHTML = coursesWithFiles.map(courseId => {
+        const course = courseData[courseId];
+        const courseFiles = allUploads.filter(file => 
+            file.course === courseId && 
+            file.privacy === "class" &&
+            (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
+        );
+        
+        const videos = courseFiles.filter(f => getFileType(f.name) === "video");
+        const notes = courseFiles.filter(f => getFileType(f.name) === "notes");
+        
+        return `
+            <div class="course-card" data-course-id="${courseId}">
+                <div class="course-card-header">
+                    <div class="course-icon ${course.class}">
+                        <i class="fas ${course.icon}"></i>
+                    </div>
+                    <div class="course-info">
+                        <h3>${course.name}</h3>
+                        <div class="course-code">${course.code}</div>
+                    </div>
+                </div>
                 
-                if (option.getAttribute('data-type') === type) {
-                    option.classList.add('active');
-                    option.style.borderColor = 'var(--primary-color)';
-                    option.style.background = 'var(--primary-light)';
-                }
-            });
+                <p class="course-description">${course.description || "Course materials and resources"}</p>
+                
+                <div class="course-stats">
+                    <div class="stat-box">
+                        <div class="stat-number">${videos.length}</div>
+                        <div class="stat-label">Videos</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${notes.length}</div>
+                        <div class="stat-label">Notes</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${getCourseDownloads(courseId)}</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="viewCourseFiles('${courseId}')" style="width: 100%;">
+                        <i class="fas fa-folder-open"></i> View ${courseFiles.length} Files
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+/* =========================
+   FILE OPERATIONS
+========================= */
+function playVideo(id) {
+    const file = allUploads.find(f => f.id == id);
+    if (!file) return alert("File not found");
+
+    // Update views
+    file.views = (file.views || 0) + 1;
+    saveToStorage();
+
+    const course = courseData[file.course] || {};
+    
+    // Update modal content
+    document.getElementById("videoTitle").textContent = file.name;
+    document.getElementById("videoCourse").textContent = course.name || "No Course";
+    document.getElementById("videoOwner").textContent = "Uploaded by: " + file.owner;
+    document.getElementById("videoStats").textContent = 
+        `${file.views} views • ${file.downloads} downloads`;
+    document.getElementById("videoDescription").textContent = 
+        file.description || file.assignment || "No description available";
+
+    const video = document.getElementById("videoElement");
+    
+    // For video files
+    if (getFileType(file.name) === "video") {
+        video.src = file.data || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+        video.style.display = "block";
+    } else {
+        video.style.display = "none";
+    }
+
+    document.getElementById("videoModal").style.display = "flex";
+
+    // Refresh displays
+    loadAllFiles();
+    loadMyUploads();
+    loadCourses();
+}
+
+function previewFile(id) {
+    const file = allUploads.find(f => f.id == id);
+    if (!file) return;
+
+    file.views = (file.views || 0) + 1;
+    saveToStorage();
+
+    const fileType = getFileType(file.name);
+    
+    if (fileType === "notes") {
+        // For text files, show in modal
+        const course = courseData[file.course] || {};
+        
+        document.getElementById("videoTitle").textContent = file.name;
+        document.getElementById("videoCourse").textContent = course.name || "No Course";
+        document.getElementById("videoOwner").textContent = "Uploaded by: " + file.owner;
+        document.getElementById("videoStats").textContent = 
+            `${file.views} views • ${file.downloads} downloads`;
+        document.getElementById("videoDescription").textContent = 
+            file.description || file.assignment || "No description available";
+        
+        // Hide video element for notes
+        document.getElementById("videoElement").style.display = "none";
+        document.getElementById("videoModal").style.display = "flex";
+        
+        // Add text content if available
+        if (file.data && file.data.startsWith("data:text")) {
+            const textContent = atob(file.data.split(",")[1]);
+            const textElement = document.createElement("pre");
+            textElement.style.color = "white";
+            textElement.style.padding = "20px";
+            textElement.style.whiteSpace = "pre-wrap";
+            textElement.textContent = textContent.substring(0, 1000) + "...";
             
-            // Set placeholder text based on type
-            const postTitle = document.getElementById('postTitle');
-            const postContent = document.getElementById('postContent');
-            
-            switch(type) {
-                case 'lesson':
-                    postTitle.placeholder = 'Enter lesson title (e.g., "Understanding Quadratic Equations")';
-                    postContent.placeholder = 'Explain your lesson in detail. Include step-by-step instructions, examples, and key takeaways...';
-                    break;
-                case 'question':
-                    postTitle.placeholder = 'What is your question? (e.g., "Help with photosynthesis process")';
-                    postContent.placeholder = 'Describe your question in detail. Include what you\'ve tried, where you\'re stuck, and what you need help with...';
-                    break;
-                case 'resource':
-                    postTitle.placeholder = 'Resource title (e.g., "Python Programming Exercises")';
-                    postContent.placeholder = 'Describe your resource. Explain what it contains, who it\'s for, and how to use it...';
-                    break;
-            }
-            
-            // Clear previous inputs
-            postTitle.value = '';
-            postContent.value = '';
+            // Replace or add to video description
+            const description = document.getElementById("videoDescription");
+            description.innerHTML = `<h4>Content Preview:</h4>` + textElement.outerHTML;
         }
+    } else {
+        // For other files, download or show message
+        alert(`Previewing ${file.name}\n\nFile type: ${fileType}\nSize: ${formatFileSize(file.size)}`);
+    }
 
-        // Close Modal
-        closeModalBtn.addEventListener('click', closeCreatePostModal);
-        cancelPostBtn.addEventListener('click', closeCreatePostModal);
+    // Refresh displays
+    loadAllFiles();
+    loadMyUploads();
+    loadCourses();
+}
 
-        function closeCreatePostModal() {
-            createPostModal.style.display = 'none';
+function downloadFile(id) {
+    const file = allUploads.find(f => f.id == id);
+    if (!file) return alert("File not found");
+
+    // Update downloads
+    file.downloads = (file.downloads || 0) + 1;
+    saveToStorage();
+
+    // Create download link
+    const a = document.createElement("a");
+    a.href = file.data;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // Refresh displays
+    loadAllFiles();
+    loadMyUploads();
+    loadCourses();
+    
+    alert(`Downloading ${file.name}...`);
+}
+
+function deleteFile(id) {
+    const file = allUploads.find(f => f.id == id);
+    if (!file) return;
+
+    if (file.owner !== currentUser) {
+        alert("You can only delete your own files");
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete "${file.name}"?`)) {
+        return;
+    }
+
+    allUploads = allUploads.filter(f => f.id != id);
+    saveToStorage();
+
+    // Refresh displays
+    loadAllFiles();
+    loadMyUploads();
+    loadCourses();
+    
+    alert("File deleted successfully!");
+}
+
+/* =========================
+   HELPER FUNCTIONS
+========================= */
+function stringToColor(str) {
+    if (!str) return "#4361ee";
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const colors = [
+        "#4361ee", "#3a0ca3", "#4cc9f0", "#f72585",
+        "#7209b7", "#3a86ff", "#fb5607", "#8338ec",
+        "#ff006e", "#ffbe0b", "#06d6a0", "#118ab2"
+    ];
+    return colors[Math.abs(hash) % colors.length];
+}
+
+function getCourseDownloads(courseId) {
+    return allUploads
+        .filter(file => file.course === courseId && file.privacy === "class")
+        .reduce((total, file) => total + (file.downloads || 0), 0);
+}
+
+function viewCourseFiles(courseId) {
+    const course = courseData[courseId];
+    if (!course) return;
+    
+    // Switch to all files tab and filter
+    switchTab("allvideos");
+    const filterSelect = document.getElementById("filterCourseVideos");
+    if (filterSelect) {
+        filterSelect.value = courseId;
+    }
+    
+    // Reload with filtered view
+    loadAllFiles();
+    
+    // Apply filter to current display
+    const cards = document.querySelectorAll("#videosContainer .video-card");
+    cards.forEach(card => {
+        const fileId = parseInt(card.dataset.fileId);
+        const file = allUploads.find(f => f.id === fileId);
+        if (file && file.course !== courseId) {
+            card.style.display = "none";
         }
+    });
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
 
-        // Post Type Selection
-        postTypeOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const type = this.getAttribute('data-type');
-                
-                // Update active state
-                postTypeOptions.forEach(opt => {
-                    opt.classList.remove('active');
-                    opt.style.borderColor = 'var(--gray-200)';
-                    opt.style.background = 'white';
-                });
-                
-                this.classList.add('active');
-                this.style.borderColor = 'var(--primary-color)';
-                this.style.background = 'var(--primary-light)';
-                
-                // Update placeholder text
-                const postTitle = document.getElementById('postTitle');
-                const postContent = document.getElementById('postContent');
-                
-                switch(type) {
-                    case 'lesson':
-                        postTitle.placeholder = 'Enter lesson title (e.g., "Understanding Quadratic Equations")';
-                        postContent.placeholder = 'Explain your lesson in detail. Include step-by-step instructions, examples, and key takeaways...';
-                        break;
-                    case 'question':
-                        postTitle.placeholder = 'What is your question? (e.g., "Help with photosynthesis process")';
-                        postContent.placeholder = 'Describe your question in detail. Include what you\'ve tried, where you\'re stuck, and what you need help with...';
-                        break;
-                    case 'resource':
-                        postTitle.placeholder = 'Resource title (e.g., "Python Programming Exercises")';
-                        postContent.placeholder = 'Describe your resource. Explain what it contains, who it\'s for, and how to use it...';
-                        break;
-                }
-            });
-        });
+function closeVideoModal() {
+    const video = document.getElementById("videoElement");
+    video.pause();
+    video.src = "";
+    video.style.display = "block";
+    document.getElementById("videoModal").style.display = "none";
+}
 
-        // Submit Post
-        submitPostBtn.addEventListener('click', function() {
-            const postTitle = document.getElementById('postTitle').value.trim();
-            const postContent = document.getElementById('postContent').value.trim();
-            const activeType = document.querySelector('.post-type-option.active').getAttribute('data-type');
-            
-            if (!postTitle || !postContent) {
-                alert('Please fill in both title and content fields.');
-                return;
-            }
-            
-            // Show loading state
-            const originalHTML = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
-            this.disabled = true;
-            
-            // Simulate API call
-            setTimeout(() => {
-                this.innerHTML = originalHTML;
-                this.disabled = false;
-                
-                closeCreatePostModal();
-                
-                const typeNames = {
-                    'lesson': 'Lesson',
-                    'question': 'Question',
-                    'resource': 'Resource'
-                };
-                
-                showSuccess(
-                    'Post Published Successfully!',
-                    `Your ${typeNames[activeType]} has been published. You are now the first contributor to the content feed! Others will see your post and be encouraged to share their own content.`
-                );
-                
-                // Update community stats
-                updateCommunityStats();
-            }, 1500);
-        });
+function switchTab(tab) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-        // Close Success Modal
-        closeSuccessModalBtn.addEventListener('click', function() {
-            successModal.style.display = 'none';
-        });
+    const activeTabBtn = document.querySelector(`[onclick="switchTab('${tab}')"]`);
+    if (activeTabBtn) {
+        activeTabBtn.classList.add("active");
+    }
 
-        // Show Success Modal
-        function showSuccess(title, message) {
-            document.getElementById('successTitle').textContent = title;
-            document.getElementById('successMessage').textContent = message;
-            successModal.style.display = 'flex';
-        }
+    const activeTabContent = document.getElementById(`${tab}-tab`);
+    if (activeTabContent) {
+        activeTabContent.classList.add("active");
+    }
 
-        // Update Community Stats
-        function updateCommunityStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            if (stats[0].textContent === '0') {
-                stats[0].textContent = '1';
-                
-                // Add animation
-                stats[0].style.transform = 'scale(1.2)';
-                stats[0].style.color = 'var(--success-color)';
-                stats[0].style.transition = 'all 0.3s ease';
-                
-                setTimeout(() => {
-                    stats[0].style.transform = 'scale(1)';
-                }, 300);
-            }
-        }
+    if (tab === "allvideos") loadAllFiles();
+    if (tab === "courses") loadCourses();
+    if (tab === "myuploads") loadMyUploads();
+}
 
-        // Close modals when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === createPostModal) {
-                closeCreatePostModal();
-            }
-            if (e.target === successModal) {
-                successModal.style.display = 'none';
-            }
-        });
+function refreshVideos() {
+    loadFromStorage();
+    loadAllFiles();
+    loadCourses();
+    loadMyUploads();
+    alert("Content refreshed!");
+}
+</script>
 
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            // Ctrl/Cmd + N to create new post
-            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-                e.preventDefault();
-                openCreatePostModal('lesson');
-            }
-            
-            // Escape to close modals
-            if (e.key === 'Escape') {
-                if (createPostModal.style.display === 'flex') {
-                    closeCreatePostModal();
-                }
-                if (successModal.style.display === 'flex') {
-                    successModal.style.display = 'none';
-                }
-            }
-        });
-
-        // Add hover effects
-        const contentCards = document.querySelectorAll('.content-type-card');
-        contentCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                const icon = this.querySelector('.type-icon');
-                icon.style.transform = 'scale(1.1)';
-                icon.style.transition = 'transform 0.3s ease';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                const icon = this.querySelector('.type-icon');
-                icon.style.transform = 'scale(1)';
-            });
-        });
-
-        // Animate elements on load
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe content cards for animation
-        contentCards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(card);
-        });
-
-        // Observe highlight box
-        const highlightBox = document.querySelector('.highlight-box');
-        if (highlightBox) {
-            highlightBox.style.opacity = '0';
-            highlightBox.style.transform = 'translateY(20px)';
-            highlightBox.style.transition = 'opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s';
-            observer.observe(highlightBox);
-        }
-    </script>
 </body>
 </html>
 {% endblock %}
