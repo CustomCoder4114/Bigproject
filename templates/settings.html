@@ -1,0 +1,1586 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<style>
+    /* Settings-specific styles that won't conflict with existing dashboard */
+    .settings-container {
+        background-color: #f5f7fa;
+        min-height: calc(100vh - 80px);
+        padding: 20px;
+        margin-left: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-container {
+            padding: 15px;
+            min-height: calc(100vh - 70px);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .settings-container {
+            padding: 12px;
+        }
+    }
+    
+    .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e2e8f0;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+        }
+    }
+    
+    .settings-title h1 {
+        color: #1e293b;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-title h1 {
+            font-size: 24px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .settings-title h1 {
+            font-size: 22px;
+        }
+    }
+    
+    .settings-title p {
+        color: #64748b;
+        font-size: 15px;
+        max-width: 600px;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-title p {
+            font-size: 14px;
+        }
+    }
+    
+    .save-btn {
+        background-color: #4a6cf7;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 15px;
+        min-width: 140px;
+        height: 48px;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .save-btn {
+            width: 100%;
+            padding: 14px 28px;
+        }
+    }
+    
+    .save-btn:hover {
+        background-color: #3a5ce5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(74, 108, 247, 0.25);
+    }
+    
+    .settings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+        gap: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+        .settings-grid {
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        }
+    }
+    
+    @media (max-width: 900px) {
+        .settings-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+    }
+    
+    .settings-card {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        transition: transform 0.3s;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-card {
+            padding: 20px;
+            border-radius: 10px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .settings-card {
+            padding: 16px;
+            border-radius: 8px;
+        }
+    }
+    
+    .settings-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    @media (max-width: 480px) {
+        .card-header {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+        }
+    }
+    
+    .card-header i {
+        background-color: #edf2ff;
+        color: #4a6cf7;
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 480px) {
+        .card-header i {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+    }
+    
+    .card-header h3 {
+        color: #1e293b;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+    
+    @media (max-width: 480px) {
+        .card-header h3 {
+            font-size: 18px;
+        }
+    }
+    
+    /* Form Elements */
+    .form-group {
+        margin-bottom: 22px;
+    }
+    
+    @media (max-width: 480px) {
+        .form-group {
+            margin-bottom: 18px;
+        }
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+        min-width: 0; /* Prevents flex items from overflowing */
+    }
+    
+    @media (max-width: 768px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+        
+        .form-row .form-group {
+            width: 100%;
+        }
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #475569;
+        font-size: 14px;
+    }
+    
+    @media (max-width: 480px) {
+        .form-label {
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.2s;
+        background-color: white;
+        box-sizing: border-box;
+    }
+    
+    @media (max-width: 480px) {
+        .form-control {
+            padding: 10px 14px;
+            font-size: 14px;
+        }
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #4a6cf7;
+        box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+    }
+    
+    .form-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        padding-right: 40px;
+    }
+    
+    /* Toggle Switch */
+    .toggle-group {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #f1f5f9;
+        gap: 15px;
+    }
+    
+    @media (max-width: 480px) {
+        .toggle-group {
+            padding: 12px 0;
+            gap: 12px;
+        }
+    }
+    
+    .toggle-group:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    
+    .toggle-group:first-child {
+        padding-top: 0;
+    }
+    
+    .toggle-label {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .toggle-label .label-text {
+        font-weight: 500;
+        margin-bottom: 4px;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    @media (max-width: 480px) {
+        .toggle-label .label-text {
+            font-size: 13px;
+        }
+    }
+    
+    .toggle-label .label-desc {
+        font-size: 13px;
+        color: #94a3b8;
+        line-height: 1.4;
+    }
+    
+    @media (max-width: 480px) {
+        .toggle-label .label-desc {
+            font-size: 12px;
+        }
+    }
+    
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 54px;
+        height: 28px;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 480px) {
+        .toggle-switch {
+            width: 48px;
+            height: 24px;
+        }
+    }
+    
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #cbd5e1;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    @media (max-width: 480px) {
+        .toggle-slider:before {
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+        }
+    }
+    
+    input:checked + .toggle-slider {
+        background-color: #4a6cf7;
+    }
+    
+    input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+    }
+    
+    @media (max-width: 480px) {
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+    }
+    
+    /* Radio and Checkbox Groups */
+    .radio-group, .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    @media (max-width: 480px) {
+        .radio-group, .checkbox-group {
+            gap: 12px;
+        }
+    }
+    
+    .radio-option, .checkbox-option {
+        display: flex;
+        align-items: center;
+    }
+    
+    .radio-option input, .checkbox-option input {
+        margin-right: 12px;
+        width: 18px;
+        height: 18px;
+        accent-color: #4a6cf7;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 480px) {
+        .radio-option input, .checkbox-option input {
+            width: 16px;
+            height: 16px;
+            margin-right: 10px;
+        }
+    }
+    
+    .radio-option label, .checkbox-option label {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    @media (max-width: 480px) {
+        .radio-option label, .checkbox-option label {
+            font-size: 13px;
+        }
+    }
+    
+    /* Theme Selector */
+    .theme-selector {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+    
+    @media (max-width: 480px) {
+        .theme-selector {
+            gap: 12px;
+        }
+    }
+    
+    .theme-option {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .theme-option {
+            width: 55px;
+            height: 55px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .theme-option {
+            width: 50px;
+            height: 50px;
+        }
+    }
+    
+    .theme-option:hover {
+        transform: scale(1.05);
+    }
+    
+    .theme-option.active {
+        border-color: #4a6cf7;
+    }
+    
+    .theme-blue {
+        background: linear-gradient(135deg, #4a6cf7 0%, #3a5ce5 100%);
+    }
+    
+    .theme-green {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .theme-purple {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    }
+    
+    .theme-dark {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+    
+    .theme-check {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 20px;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    
+    @media (max-width: 480px) {
+        .theme-check {
+            font-size: 18px;
+        }
+    }
+    
+    .theme-option.active .theme-check {
+        opacity: 1;
+    }
+    
+    /* Danger Zone */
+    .danger-zone {
+        border: 2px solid #fee2e2;
+        background-color: #fef2f2;
+    }
+    
+    .danger-zone .card-header i {
+        background-color: #fee2e2;
+        color: #ef4444;
+    }
+    
+    .danger-btn {
+        background-color: white;
+        color: #ef4444;
+        border: 1px solid #fca5a5;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    @media (max-width: 480px) {
+        .danger-btn {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+    }
+    
+    .danger-btn:hover {
+        background-color: #ef4444;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+    }
+    
+    /* Profile Image Upload */
+    .profile-image-container {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-image-container {
+            gap: 20px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .profile-image-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+    
+    .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #e2e8f0;
+        background-color: #4a6cf7;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-image {
+            width: 90px;
+            height: 90px;
+            font-size: 32px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            font-size: 28px;
+        }
+    }
+    
+    .upload-btn {
+        background-color: #f1f5f9;
+        color: #475569;
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 14px;
+        min-width: 180px;
+    }
+    
+    @media (max-width: 480px) {
+        .upload-btn {
+            width: 100%;
+            padding: 10px 20px;
+            min-width: auto;
+        }
+    }
+    
+    .upload-btn:hover {
+        background-color: #e2e8f0;
+    }
+    
+    /* Success Message */
+    .success-message {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        background-color: #10b981;
+        color: white;
+        padding: 14px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        z-index: 1000;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.4s;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    @media (max-width: 768px) {
+        .success-message {
+            max-width: calc(100% - 40px);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .success-message {
+            bottom: 15px;
+            right: 15px;
+            left: 15px;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+    }
+    
+    .success-message.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    /* Range Slider */
+    .range-container {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    @media (max-width: 480px) {
+        .range-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
+    
+    .range-value {
+        font-weight: 600;
+        color: #4a6cf7;
+        min-width: 70px;
+        text-align: right;
+    }
+    
+    @media (max-width: 480px) {
+        .range-value {
+            text-align: left;
+            min-width: auto;
+        }
+    }
+    
+    input[type="range"] {
+        width: 100%;
+        height: 8px;
+        border-radius: 4px;
+        background: #e2e8f0;
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #4a6cf7;
+        cursor: pointer;
+    }
+    
+    @media (max-width: 480px) {
+        input[type="range"]::-webkit-slider-thumb {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    
+    /* Settings Tabs */
+    .settings-tabs {
+        display: flex;
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 25px;
+        overflow-x: auto;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        scrollbar-width: thin;
+        scrollbar-color: #cbd5e1 transparent;
+        -webkit-overflow-scrolling: touch;
+        gap: 5px;
+    }
+    
+    .settings-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .settings-tabs::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .settings-tabs::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-tabs {
+            margin-bottom: 20px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .settings-tabs {
+            padding: 8px;
+            margin-bottom: 15px;
+        }
+    }
+    
+    .settings-tab {
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        color: #64748b;
+        transition: all 0.2s;
+        white-space: nowrap;
+        border: none;
+        background: none;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-tab {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .settings-tab {
+            padding: 8px 12px;
+            gap: 6px;
+        }
+        
+        .settings-tab span {
+            display: none;
+        }
+        
+        .settings-tab i {
+            font-size: 16px;
+        }
+    }
+    
+    .settings-tab:hover {
+        background-color: #f1f5f9;
+        color: #4a6cf7;
+    }
+    
+    .settings-tab.active {
+        background-color: #edf2ff;
+        color: #4a6cf7;
+    }
+    
+    /* Show text on hover for mobile */
+    @media (max-width: 480px) {
+        .settings-tab:hover span,
+        .settings-tab.active span {
+            display: inline;
+            margin-left: 6px;
+        }
+    }
+    
+    .settings-tab i {
+        font-size: 16px;
+    }
+    
+    /* Hide sections by default */
+    .settings-section {
+        display: none;
+    }
+    
+    .settings-section.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Mobile menu adjustments */
+    @media (max-width: 768px) {
+        .settings-container {
+            margin-top: 60px; /* Account for mobile menu */
+        }
+    }
+    
+    /* Improve textarea responsiveness */
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    @media (max-width: 480px) {
+        textarea.form-control {
+            min-height: 80px;
+        }
+    }
+    
+    /* Add loading animation for save button */
+    .save-btn.loading {
+        position: relative;
+        color: transparent;
+    }
+    
+    .save-btn.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-top: -10px;
+        margin-left: -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Add touch-friendly hit targets */
+    @media (max-width: 768px) {
+        .form-control,
+        .settings-tab,
+        .save-btn,
+        .danger-btn,
+        .upload-btn,
+        .toggle-switch {
+            min-height: 44px; /* Minimum touch target size */
+        }
+        
+        .toggle-switch {
+            min-height: 28px;
+        }
+        
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+    }
+</style>
+
+<div class="settings-container">
+    <!-- Settings Header -->
+    <div class="settings-header">
+        <div class="settings-title">
+            <h1 id="pageTitle">Profile Settings</h1>
+            <p id="pageDescription">Manage your personal information and how others see you</p>
+        </div>
+        
+        <button class="save-btn" id="saveSettings">
+            <i class="fas fa-save"></i>
+            <span>Save Changes</span>
+        </button>
+    </div>
+    
+    <!-- Settings Tabs -->
+    <div class="settings-tabs">
+        <button class="settings-tab active" data-section="profile" title="Profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </button>
+        <button class="settings-tab" data-section="account" title="Account & Security">
+            <i class="fas fa-shield-alt"></i>
+            <span>Account & Security</span>
+        </button>
+        <button class="settings-tab" data-section="notifications" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+        </button>
+        <button class="settings-tab" data-section="privacy" title="Privacy">
+            <i class="fas fa-lock"></i>
+            <span>Privacy</span>
+        </button>
+        <button class="settings-tab" data-section="appearance" title="Appearance">
+            <i class="fas fa-palette"></i>
+            <span>Appearance</span>
+        </button>
+        <button class="settings-tab" data-section="advanced" title="Advanced">
+            <i class="fas fa-sliders-h"></i>
+            <span>Advanced</span>
+        </button>
+    </div>
+    
+    <!-- Settings Sections -->
+    <div class="settings-grid">
+        <!-- Profile Settings -->
+        <section class="settings-section active" id="profile">
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-user-edit"></i>
+                    <h3>Personal Information</h3>
+                </div>
+                
+                <div class="profile-image-container">
+                    <div class="profile-image" id="profileImage">
+                        {{ firstname[0] }}{{ lastname[0] }}
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <button class="upload-btn" id="uploadImageBtn">
+                            <i class="fas fa-upload"></i>
+                            <span>Upload New Photo</span>
+                        </button>
+                        <p style="margin-top: 8px; font-size: 13px; color: #94a3b8; line-height: 1.4;">JPG, PNG or GIF, max 2MB</p>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 25px;">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" value="{{ firstname }} {{ lastname }}">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-control" value="student@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" value="+1 (555) 123-4567">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bio" class="form-label">Bio</label>
+                    <textarea id="bio" class="form-control" rows="4" placeholder="Tell us about yourself...">Passionate learner interested in technology and science.</textarea>
+                </div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Location</h3>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="country" class="form-label">Country</label>
+                        <select id="country" class="form-control form-select">
+                            <option value="us" selected>United States</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="ca">Canada</option>
+                            <option value="au">Australia</option>
+                            <option value="de">Germany</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="timezone" class="form-label">Timezone</label>
+                        <select id="timezone" class="form-control form-select">
+                            <option value="est" selected>Eastern Time (ET)</option>
+                            <option value="cst">Central Time (CT)</option>
+                            <option value="mst">Mountain Time (MT)</option>
+                            <option value="pst">Pacific Time (PT)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" id="address" class="form-control" placeholder="Enter your address">
+                </div>
+            </div>
+        </section>
+        
+        <!-- Account & Security Settings -->
+        <section class="settings-section" id="account">
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-key"></i>
+                    <h3>Login & Security</h3>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Two-Factor Authentication</span>
+                        <span class="label-desc">Add an extra layer of security to your account</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="twoFactor" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Login Notifications</span>
+                        <span class="label-desc">Get notified when someone logs into your account</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="loginNotifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Remember Devices</span>
+                        <span class="label-desc">Don't ask for password on trusted devices</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="rememberDevices">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <button class="danger-btn" id="changePasswordBtn">
+                        <i class="fas fa-lock"></i>
+                        <span>Change Password</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>Session Management</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sessionTimeout" class="form-label">Session Timeout</label>
+                    <div class="range-container">
+                        <input type="range" id="sessionTimeout" min="5" max="120" value="30">
+                        <span class="range-value" id="timeoutValue">30 minutes</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <button class="danger-btn" id="logoutAllBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Log Out From All Devices</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Notification Settings -->
+        <section class="settings-section" id="notifications">
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email Notifications</h3>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Course Announcements</span>
+                        <span class="label-desc">Get notified about new course announcements</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="courseAnnouncements" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Assignment Deadlines</span>
+                        <span class="label-desc">Reminders about upcoming assignment deadlines</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="assignmentDeadlines" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Course Updates</span>
+                        <span class="label-desc">Get news about course updates and new materials</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="courseUpdates" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-bell"></i>
+                    <h3>Push Notifications</h3>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Desktop Notifications</span>
+                        <span class="label-desc">Show notifications on your desktop</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="desktopNotifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Sound Alerts</span>
+                        <span class="label-desc">Play a sound when receiving notifications</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundAlerts">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Privacy Settings -->
+        <section class="settings-section" id="privacy">
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-eye"></i>
+                    <h3>Visibility</h3>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Profile Visibility</span>
+                        <span class="label-desc">Allow other students to find and view your profile</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="profileVisibility" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-label">
+                        <span class="label-text">Show Online Status</span>
+                        <span class="label-desc">Let others see when you're online</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="onlineStatus" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Who can see your activity?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="activityEveryone" name="activity" checked>
+                            <label for="activityEveryone">Everyone in class</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="activityFriends" name="activity">
+                            <label for="activityFriends">Only my connections</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="activityPrivate" name="activity">
+                            <label for="activityPrivate">Only me</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Appearance Settings -->
+        <section class="settings-section" id="appearance">
+            <div class="settings-card">
+                <div class="card-header">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Theme & Colors</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Theme Color</label>
+                    <div class="theme-selector">
+                        <div class="theme-option theme-blue active" data-color="blue">
+                            <i class="fas fa-check theme-check"></i>
+                        </div>
+                        <div class="theme-option theme-green" data-color="green">
+                            <i class="fas fa-check theme-check"></i>
+                        </div>
+                        <div class="theme-option theme-purple" data-color="purple">
+                            <i class="fas fa-check theme-check"></i>
+                        </div>
+                        <div class="theme-option theme-dark" data-color="dark">
+                            <i class="fas fa-check theme-check"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="themeMode" class="form-label">Theme Mode</label>
+                    <select id="themeMode" class="form-control form-select">
+                        <option value="light" selected>Light Mode</option>
+                        <option value="dark">Dark Mode</option>
+                        <option value="auto">Auto (Follow System)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Font Size</label>
+                    <div class="range-container">
+                        <input type="range" id="fontSize" min="12" max="20" value="16">
+                        <span class="range-value" id="fontValue">16px</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Advanced Settings -->
+        <section class="settings-section" id="advanced">
+            <div class="settings-card danger-zone">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Danger Zone</h3>
+                </div>
+                
+                <p style="margin-bottom: 20px; color: #64748b; line-height: 1.5;">These actions are irreversible. Please proceed with caution.</p>
+                
+                <div>
+                    <button class="danger-btn" id="deactivateAccountBtn">
+                        <i class="fas fa-user-slash"></i>
+                        <span>Deactivate Account</span>
+                    </button>
+                    <button class="danger-btn" id="deleteAccountBtn" style="margin-top: 15px;">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Delete Account Permanently</span>
+                    </button>
+                </div>
+                
+                <p style="margin-top: 20px; font-size: 13px; color: #94a3b8; line-height: 1.5;">
+                    <i class="fas fa-info-circle"></i>
+                    Deleting your account will remove all your data from our servers. This action cannot be undone.
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">
+    <i class="fas fa-check-circle"></i>
+    <span>Settings saved successfully!</span>
+</div>
+
+<script>
+    // DOM Elements
+    const settingsTabs = document.querySelectorAll('.settings-tab');
+    const settingsSections = document.querySelectorAll('.settings-section');
+    const saveButton = document.getElementById('saveSettings');
+    const successMessage = document.getElementById('successMessage');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageDescription = document.getElementById('pageDescription');
+    
+    // Section titles and descriptions
+    const sectionData = {
+        profile: {
+            title: "Profile Settings",
+            description: "Manage your personal information and how others see you"
+        },
+        account: {
+            title: "Account & Security",
+            description: "Secure your account and manage login settings"
+        },
+        notifications: {
+            title: "Notification Settings",
+            description: "Control how and when you receive notifications"
+        },
+        privacy: {
+            title: "Privacy Settings",
+            description: "Manage your privacy and data sharing preferences"
+        },
+        appearance: {
+            title: "Appearance Settings",
+            description: "Customize the look and feel of the interface"
+        },
+        advanced: {
+            title: "Advanced Settings",
+            description: "Account management and options"
+        }
+    };
+    
+    // Navigation between sections
+    settingsTabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get the target section ID
+            const targetSection = this.getAttribute('data-section');
+            
+            // Update active tab
+            settingsTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update page title and description
+            if (sectionData[targetSection]) {
+                pageTitle.textContent = sectionData[targetSection].title;
+                pageDescription.textContent = sectionData[targetSection].description;
+            }
+            
+            // Show the selected section and hide others
+            settingsSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetElement = document.getElementById(targetSection);
+            if (targetElement) {
+                targetElement.classList.add('active');
+            }
+            
+            // Scroll to top on mobile
+            if (window.innerWidth <= 768) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    });
+    
+    // Save settings button with loading state
+    saveButton.addEventListener('click', function() {
+        // Add loading state
+        this.classList.add('loading');
+        this.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Remove loading state
+            this.classList.remove('loading');
+            this.disabled = false;
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Hide success message after 3 seconds
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+            
+            // In a real app, you would send the settings to a server here
+            console.log("Settings saved!");
+            
+            // Reset unsaved changes indicator
+            unsavedChanges = false;
+            saveButton.innerHTML = '<i class="fas fa-save"></i><span>Save Changes</span>';
+            saveButton.style.backgroundColor = '';
+        }, 1000);
+    });
+    
+    // Theme selector
+    const themeOptions = document.querySelectorAll('.theme-option');
+    themeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            themeOptions.forEach(opt => opt.classList.remove('active'));
+            this.classList.add('active');
+            
+            // In a real app, you would apply the selected theme
+            const selectedColor = this.getAttribute('data-color');
+            console.log(`Theme changed to: ${selectedColor}`);
+        });
+    });
+    
+    // Range sliders
+    const sessionTimeout = document.getElementById('sessionTimeout');
+    const timeoutValue = document.getElementById('timeoutValue');
+    const fontSize = document.getElementById('fontSize');
+    const fontValue = document.getElementById('fontValue');
+    
+    if (sessionTimeout && timeoutValue) {
+        sessionTimeout.addEventListener('input', function() {
+            timeoutValue.textContent = `${this.value} minutes`;
+        });
+    }
+    
+    if (fontSize && fontValue) {
+        fontSize.addEventListener('input', function() {
+            fontValue.textContent = `${this.value}px`;
+        });
+    }
+    
+    // Profile image upload
+    const uploadImageBtn = document.getElementById('uploadImageBtn');
+    if (uploadImageBtn) {
+        uploadImageBtn.addEventListener('click', function() {
+            // In a real app, this would open a file dialog
+            alert("In a real application, this would open a file dialog to select an image.");
+        });
+    }
+    
+    // Danger zone buttons
+    const dangerButtons = [
+        'changePasswordBtn',
+        'logoutAllBtn',
+        'deactivateAccountBtn',
+        'deleteAccountBtn'
+    ];
+    
+    dangerButtons.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                
+                // Show confirmation dialog for destructive actions
+                if (btnId.includes('delete') || btnId.includes('Deactivate') || btnId.includes('Log Out')) {
+                    const confirmed = confirm(`Are you sure you want to ${action}?`);
+                    
+                    if (confirmed) {
+                        alert(`Action "${action}" would be performed in a real application.`);
+                    }
+                } else {
+                    alert(`Action "${action}" would be performed in a real application.`);
+                }
+            });
+        }
+    });
+    
+    // Form elements change tracking (optional feature)
+    const formElements = document.querySelectorAll('.form-control, input[type="checkbox"], input[type="radio"], select');
+    let unsavedChanges = false;
+    
+    formElements.forEach(element => {
+        element.addEventListener('change', function() {
+            unsavedChanges = true;
+            
+            // Optional: Add visual indicator for unsaved changes
+            saveButton.innerHTML = '<i class="fas fa-save"></i><span>Save Changes •</span>';
+            saveButton.style.backgroundColor = '#f59e0b';
+        });
+    });
+    
+    // Warn user about unsaved changes if they try to leave
+    window.addEventListener('beforeunload', function(e) {
+        if (unsavedChanges) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        }
+    });
+    
+    // Mobile-specific enhancements
+    function handleMobileLayout() {
+        if (window.innerWidth <= 480) {
+            // Add swipe support for tabs on mobile
+            let startX = 0;
+            const settingsTabsContainer = document.querySelector('.settings-tabs');
+            
+            if (settingsTabsContainer) {
+                settingsTabsContainer.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                settingsTabsContainer.addEventListener('touchend', (e) => {
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) { // Minimum swipe distance
+                        const activeTab = document.querySelector('.settings-tab.active');
+                        const tabs = Array.from(settingsTabs);
+                        const currentIndex = tabs.indexOf(activeTab);
+                        
+                        if (diff > 0 && currentIndex < tabs.length - 1) {
+                            // Swipe left - go to next tab
+                            tabs[currentIndex + 1].click();
+                        } else if (diff < 0 && currentIndex > 0) {
+                            // Swipe right - go to previous tab
+                            tabs[currentIndex - 1].click();
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    // Initialize mobile layout
+    handleMobileLayout();
+    
+    // Re-check on resize
+    window.addEventListener('resize', handleMobileLayout);
+</script>
+{% endblock %}

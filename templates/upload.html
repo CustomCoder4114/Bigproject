@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eSchool - Upload Videos & Files</title>
+    <title>eSchool - Upload Any File</title>
     <style>
         * {
             margin: 0;
@@ -155,6 +155,13 @@
             box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
         }
 
+        .upload-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .file-input {
             display: none;
         }
@@ -255,7 +262,7 @@
             margin-top: 10px;
         }
 
-        /* Success Message */
+        /* Success/Error Messages */
         .success-message {
             background: #d1ecf1;
             color: #0c5460;
@@ -265,6 +272,85 @@
             display: none;
             border-left: 4px solid #0c5460;
         }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            border-left: 4px solid #721c24;
+        }
+
+        /* Uploaded Files Preview */
+        .uploaded-preview {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .preview-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .preview-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .preview-icon {
+            width: 40px;
+            height: 40px;
+            background: #4361ee;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-info h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .preview-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* File Type Colors */
+        .file-type-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-video { background: #ff6b6b; color: white; }
+        .badge-pdf { background: #ff9f43; color: white; }
+        .badge-doc { background: #48dbfb; color: white; }
+        .badge-image { background: #1dd1a1; color: white; }
+        .badge-zip { background: #f368e0; color: white; }
+        .badge-code { background: #54a0ff; color: white; }
+        .badge-audio { background: #5f27cd; color: white; }
+        .badge-other { background: #8395a7; color: white; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -284,10 +370,115 @@
                 font-size: 2rem;
             }
         }
+
+        /* File Size Warning */
+        .size-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .size-limit-warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        /* Chunk Upload Progress */
+        .chunk-progress {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .chunk-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .chunk-progress-fill {
+            height: 100%;
+            background: #4361ee;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4361ee;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* User info badge */
+        .user-info-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- User Info Badge -->
+    <div class="user-info-badge">
+        <div class="user-avatar">
+            {{ firstname[0] }}{{ lastname[0] }}
+        </div>
+        <div>
+            <div style="font-weight: bold; font-size: 0.9rem;">{{ firstname }} {{ lastname }}</div>
+            <div style="font-size: 0.8rem; color: #666;">ID: {{ user_id }}</div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header class="page-header">
@@ -295,8 +486,8 @@
                 <div class="page-icon">
                     <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; margin-bottom: 15px;"></i>
                 </div>
-                <h1 class="page-title">Upload Videos & Files</h1>
-                <p class="page-subtitle">Share educational materials with your classmates. Uploaded files appear in the Courses page.</p>
+                <h1 class="page-title">Upload Any File</h1>
+                <p class="page-subtitle">Share any type of educational material with your classmates. Uploaded files appear in the Resources page immediately.</p>
             </div>
         </header>
 
@@ -308,17 +499,25 @@
             <button class="tab-btn" onclick="switchTab('instructions')">
                 <i class="fas fa-info-circle"></i> Instructions
             </button>
+            <button class="tab-btn" onclick="switchTab('preview')">
+                <i class="fas fa-eye"></i> Preview Uploads
+            </button>
         </div>
 
         <!-- Upload Tab -->
         <div id="upload-tab" class="tab-content active">
             <section class="upload-section">
                 <h2 style="margin-bottom: 20px; color: #333;">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload New Files
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Any File Type
                 </h2>
                 <p style="color: #666; margin-bottom: 30px;">
-                    Submit assignments, projects, or share educational materials with classmates
+                    Upload documents, videos, images, code files, presentations, and any other educational materials
                 </p>
+
+                <div class="size-limit-warning" id="sizeWarning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Note:</strong> Large files are uploaded in chunks for better reliability.</span>
+                </div>
 
                 <div class="upload-area" id="dropArea">
                     <div class="upload-icon">
@@ -326,62 +525,109 @@
                     </div>
                     <h3>Drag & Drop Files Here</h3>
                     <p>or click to browse files</p>
-                    <p class="file-types">Supported: MP4, AVI, MOV, PDF, DOC, PPT, JPG, PNG (Max 100MB)</p>
+                    <p class="file-types">All file types are supported - No restrictions!</p>
+                    <div class="size-warning">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Files are stored on server in: <code>/static/uploads/{{ user_id }}/</code></span>
+                    </div>
                     <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-folder-open"></i> Browse Files
+                        <i class="fas fa-folder-open"></i> Browse All Files
                     </button>
-                    <input type="file" id="fileInput" class="file-input" multiple
-                        accept=".mp4,.avi,.mov,.pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.zip,.rar">
+                    <input type="file" id="fileInput" class="file-input" multiple>
                 </div>
 
                 <div id="fileInfo" class="file-info">
                     <h4>Selected Files:</h4>
                     <ul id="fileList" class="file-list"></ul>
+                    <div id="chunkProgress" class="chunk-progress" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Upload Progress:</span>
+                            <span id="chunkStatus">0%</span>
+                        </div>
+                        <div class="chunk-progress-bar">
+                            <div class="chunk-progress-fill" id="chunkProgressFill"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="course"><i class="fas fa-book"></i> Select Course</label>
+                    <label for="course"><i class="fas fa-book"></i> Select Course/Category</label>
                     <select id="course" class="select-control">
-                        <option value="">Choose a course...</option>
-                        <option value="math101">Mathematics 101</option>
-                        <option value="physics201">Physics 201</option>
-                        <option value="cs301">Computer Science 301</option>
-                        <option value="english101">English Literature 101</option>
+                        <option value="">Choose a category...</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="programming">Programming</option>
+                        <option value="business">Business</option>
+                        <option value="arts">Arts & Humanities</option>
+                        <option value="languages">Languages</option>
+                        <option value="general">General</option>
+                        <option value="projects">Projects</option>
+                        <option value="assignments">Assignments</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="assignment"><i class="fas fa-tasks"></i> Assignment/Project Name</label>
-                    <input type="text" id="assignment" class="form-control"
-                        placeholder="Enter assignment or project name">
+                    <label for="resourceType"><i class="fas fa-tag"></i> Resource Type</label>
+                    <select id="resourceType" class="select-control">
+                        <option value="document">Document</option>
+                        <option value="video">Video</option>
+                        <option value="note">Study Notes</option>
+                        <option value="presentation">Presentation</option>
+                        <option value="code">Code Files</option>
+                        <option value="image">Images</option>
+                        <option value="audio">Audio</option>
+                        <option value="archive">Archive/Zip</option>
+                        <option value="other">Other</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="description"><i class="fas fa-align-left"></i> Description (Optional)</label>
-                    <textarea id="description" class="form-control" rows="3"
-                        placeholder="Add any additional notes or comments about this file..."></textarea>
+                    <label for="title"><i class="fas fa-heading"></i> Title *</label>
+                    <input type="text" id="title" class="form-control" placeholder="Enter a descriptive title for your file(s)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-align-left"></i> Description *</label>
+                    <textarea id="description" class="form-control" rows="3" placeholder="Describe what this file contains, its purpose, or any special instructions..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty"><i class="fas fa-chart-line"></i> Difficulty Level</label>
+                    <select id="difficulty" class="select-control">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                        <option value="all">All Levels</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label><i class="fas fa-shield-alt"></i> Privacy Settings</label>
                     <div style="display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;">
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="privacy" value="class" checked>
-                            <i class="fas fa-users"></i> Share with Class (Everyone can see)
+                            <input type="radio" name="privacy" value="public" checked>
+                            <i class="fas fa-globe"></i> Public (Everyone can view)
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="privacy" value="private">
-                            <i class="fas fa-lock"></i> Private (Only You)
+                            <input type="radio" name="privacy" value="class">
+                            <i class="fas fa-users"></i> Class Only
                         </label>
                     </div>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">
+                        <i class="fas fa-info-circle"></i> Public resources are visible to everyone in the system
+                    </p>
                 </div>
 
-                <button class="upload-btn" onclick="uploadFiles()" style="width: 100%; padding: 15px;">
-                    <i class="fas fa-paper-plane"></i> Upload Files
+                <button class="upload-btn" onclick="uploadFiles()" style="width: 100%; padding: 15px;" id="uploadButton">
+                    <i class="fas fa-paper-plane"></i> Upload & Share Resources
                 </button>
 
                 <div id="successMessage" class="success-message">
-                    <i class="fas fa-check-circle"></i> Files uploaded successfully! They will appear in the Courses page.
+                    <i class="fas fa-check-circle"></i> <span id="successText">Files uploaded successfully! They will appear in the Resources page.</span>
+                </div>
+
+                <div id="errorMessage" class="error-message">
+                    <i class="fas fa-exclamation-circle"></i> <span id="errorText">Error uploading files. Please try again.</span>
                 </div>
             </section>
         </div>
@@ -395,282 +641,588 @@
                 
                 <div style="margin-bottom: 30px;">
                     <h3 style="color: #4361ee; margin-bottom: 15px;">
-                        <i class="fas fa-video"></i> For Videos
+                        <i class="fas fa-file-alt"></i> Supported File Types
                     </h3>
                     <ul style="color: #666; line-height: 1.8; padding-left: 20px;">
-                        <li>Supported formats: MP4, AVI, MOV, MKV</li>
-                        <li>Maximum file size: 100MB</li>
-                        <li>Videos will appear in the "Courses" page under the selected course</li>
-                        <li>All videos are visible to everyone in the class</li>
-                        <li>Videos can be played directly on the website without downloading</li>
+                        <li><strong>Documents:</strong> PDF, DOC, DOCX, TXT, RTF, ODT, EPUB</li>
+                        <li><strong>Presentations:</strong> PPT, PPTX, KEY, ODP</li>
+                        <li><strong>Spreadsheets:</strong> XLS, XLSX, CSV, ODS</li>
+                        <li><strong>Images:</strong> JPG, JPEG, PNG, GIF, SVG, BMP, TIFF</li>
+                        <li><strong>Videos:</strong> MP4, AVI, MOV, WMV, FLV, MKV, WEBM</li>
+                        <li><strong>Audio:</strong> MP3, WAV, AAC, FLAC, M4A</li>
+                        <li><strong>Code Files:</strong> JS, HTML, CSS, PY, JAVA, C, CPP, PHP, SQL</li>
+                        <li><strong>Archives:</strong> ZIP, RAR, 7Z, TAR, GZ</li>
+                        <li><strong>And many more...</strong> Almost any file type is accepted!</li>
                     </ul>
                 </div>
 
                 <div style="margin-bottom: 30px;">
                     <h3 style="color: #4361ee; margin-bottom: 15px;">
-                        <i class="fas fa-file"></i> For Documents
+                        <i class="fas fa-exclamation-triangle"></i> Important Notes
                     </h3>
                     <ul style="color: #666; line-height: 1.8; padding-left: 20px;">
-                        <li>Supported formats: PDF, DOC, DOCX, PPT, PPTX</li>
-                        <li>Maximum file size: 50MB</li>
-                        <li>Documents will appear in the "Courses" page</li>
-                        <li>All shared documents are visible to everyone</li>
+                        <li>There is <strong>NO file type restriction</strong> - upload any educational material</li>
+                        <li>Files will appear in the "Resources" page immediately</li>
+                        <li>Files are stored on the server in your personal folder</li>
+                        <li><strong>Maximum file size: 2GB</strong></li>
+                        <li>Large files (>10MB) are uploaded in chunks for reliability</li>
+                        <li>Make sure files don't contain sensitive personal information</li>
+                        <li>All uploaded files are visible to everyone by default (unless marked as private)</li>
                     </ul>
                 </div>
 
                 <div style="background: #f8f9ff; padding: 20px; border-radius: 8px; border-left: 4px solid #4361ee;">
                     <h4 style="color: #333; margin-bottom: 10px;">
-                        <i class="fas fa-lightbulb"></i> Tips for Best Results
+                        <i class="fas fa-lightbulb"></i> Best Practices
                     </h4>
                     <ul style="color: #666; line-height: 1.8; padding-left: 20px;">
-                        <li>Use clear, descriptive file names</li>
-                        <li>Add a helpful description to help classmates understand the content</li>
-                        <li>Select the correct course for better organization</li>
-                        <li>Check file size before uploading</li>
-                        <li>For videos, use MP4 format for best compatibility</li>
+                        <li>Use clear, descriptive titles for easy searching</li>
+                        <li>Add detailed descriptions to help classmates understand the content</li>
+                        <li>Select appropriate category and resource type for better organization</li>
+                        <li>For multiple related files, consider zipping them together</li>
+                        <li>Check file names for any typos before uploading</li>
+                        <li>Public resources become available to everyone immediately</li>
+                        <li>Videos and images can be viewed directly in the Resources page</li>
                     </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Preview Tab -->
+        <div id="preview-tab" class="tab-content">
+            <section class="upload-section">
+                <h2 style="margin-bottom: 20px; color: #333;">
+                    <i class="fas fa-eye"></i> Preview Uploaded Resources
+                </h2>
+                
+                <div id="uploadedResources">
+                    <!-- Uploaded resources will be displayed here -->
+                </div>
+                
+                <div id="noUploadsMessage" style="text-align: center; padding: 40px; color: #666;">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+                    <h3>No Uploads Yet</h3>
+                    <p>Upload some resources to see them here and in the Resources page</p>
                 </div>
             </section>
         </div>
     </div>
 
-   <script>
-/* =========================
-   GLOBAL STATE
-========================= */
-let filesToUpload = [];
-let currentUser = "{{ firstname }} {{ lastname }}" || "John Doe";
-let currentUserInitials = "{{ firstname[0] }}{{ lastname[0] }}" || "JD";
+    <script>
+        /* =========================
+           GLOBAL STATE
+        ========================= */
+        let filesToUpload = [];
+        const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB max
+        const currentUser = "{{ firstname }} {{ lastname }}" || "John Doe";
+        const currentUserInitials = "{{ firstname[0] }}{{ lastname[0] }}" || "JD";
+        const userId = "{{ user_id }}" || "anonymous";
 
-/* =========================
-   DOM ELEMENTS
-========================= */
-const dropArea = document.getElementById("dropArea");
-const fileInput = document.getElementById("fileInput");
-const fileList = document.getElementById("fileList");
-const fileInfo = document.getElementById("fileInfo");
-const successMessage = document.getElementById("successMessage");
+        /* =========================
+           DOM ELEMENTS
+        ========================= */
+        const dropArea = document.getElementById("dropArea");
+        const fileInput = document.getElementById("fileInput");
+        const fileList = document.getElementById("fileList");
+        const fileInfo = document.getElementById("fileInfo");
+        const successMessage = document.getElementById("successMessage");
+        const errorMessage = document.getElementById("errorMessage");
+        const uploadedResources = document.getElementById("uploadedResources");
+        const noUploadsMessage = document.getElementById("noUploadsMessage");
+        const sizeWarning = document.getElementById("sizeWarning");
+        const chunkProgress = document.getElementById("chunkProgress");
+        const chunkProgressFill = document.getElementById("chunkProgressFill");
+        const chunkStatus = document.getElementById("chunkStatus");
+        const uploadButton = document.getElementById("uploadButton");
 
-/* =========================
-   INITIALIZATION
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-    if (!currentUser || currentUser.trim() === "") {
-        currentUser = "Test User";
-        currentUserInitials = "TU";
-    }
-    setupEventListeners();
-});
-
-/* =========================
-   EVENT LISTENERS
-========================= */
-function setupEventListeners() {
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false);
-    });
-
-    ["dragenter", "dragover"].forEach(eventName => {
-        dropArea.addEventListener(eventName, () => dropArea.classList.add("dragover"));
-    });
-
-    ["dragleave", "drop"].forEach(eventName => {
-        dropArea.addEventListener(eventName, () => dropArea.classList.remove("dragover"));
-    });
-
-    dropArea.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
-    dropArea.addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", e => handleFiles(e.target.files));
-}
-
-function preventDefaults(e) {
-    e.preventDefault();
-    e.stopPropagation();
-}
-
-/* =========================
-   FILE HANDLING
-========================= */
-function handleFiles(files) {
-    const maxSize = 100 * 1024 * 1024; // 100MB
-
-    const validFiles = Array.from(files).filter(file => {
-        if (file.size > maxSize) {
-            alert(`"${file.name}" exceeds 100MB`);
-            return false;
-        }
-        return true;
-    });
-
-    filesToUpload.push(...validFiles);
-    updateFileList();
-}
-
-function updateFileList() {
-    fileList.innerHTML = "";
-
-    if (!filesToUpload.length) {
-        fileInfo.style.display = "none";
-        return;
-    }
-
-    fileInfo.style.display = "block";
-
-    filesToUpload.forEach((file, index) => {
-        const icon = getFileIcon(file.name);
-        const size = formatFileSize(file.size);
-
-        const li = document.createElement("li");
-        li.className = "file-item";
-        li.innerHTML = `
-            <div>
-                <div style="display:flex;gap:10px;align-items:center">
-                    <i class="fas ${icon}" style="color:#4361ee"></i>
-                    <strong>${file.name}</strong>
-                    <span style="font-size:0.8rem;color:#666">${size}</span>
-                </div>
-                <div class="file-progress">
-                    <div class="progress-bar" id="progress-${index}"></div>
-                </div>
-            </div>
-            <button onclick="removeFile(${index})" style="border:none;background:none;color:red">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-        fileList.appendChild(li);
-    });
-}
-
-function removeFile(index) {
-    filesToUpload.splice(index, 1);
-    updateFileList();
-}
-
-/* =========================
-   FILE TYPES
-========================= */
-function getFileType(filename) {
-    const ext = filename.split(".").pop().toLowerCase();
-
-    if (["mp4","mov","avi","mkv","webm"].includes(ext)) return "video";
-    if (["pdf"].includes(ext)) return "pdf";
-    if (["doc","docx"].includes(ext)) return "word";
-    if (["ppt","pptx"].includes(ext)) return "powerpoint";
-    if (["txt","md","rtf"].includes(ext)) return "notes";
-    if (["jpg","jpeg","png","gif"].includes(ext)) return "image";
-    return "file";
-}
-
-function getFileIcon(filename) {
-    const type = getFileType(filename);
-    return {
-        video: "fa-video",
-        pdf: "fa-file-pdf",
-        word: "fa-file-word",
-        powerpoint: "fa-file-powerpoint",
-        notes: "fa-file-alt",
-        image: "fa-image"
-    }[type] || "fa-file";
-}
-
-function formatFileSize(bytes) {
-    const sizes = ["Bytes","KB","MB","GB"];
-    if (!bytes) return "0 Bytes";
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return (bytes / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
-}
-
-/* =========================
-   UPLOAD LOGIC (FINAL)
-========================= */
-async function uploadFiles() {
-    if (!filesToUpload.length) {
-        alert("Select files first");
-        return;
-    }
-
-    const course = document.getElementById("course").value;
-    const assignment = document.getElementById("assignment").value;
-    const description = document.getElementById("description").value;
-    const privacy = document.querySelector("input[name='privacy']:checked")?.value || "class";
-
-    if (!course || !assignment) {
-        alert("Course and assignment required");
-        return;
-    }
-
-    const btn = document.querySelector(".upload-btn[onclick='uploadFiles()']");
-    const original = btn.innerHTML;
-    btn.innerHTML = "Uploading...";
-    btn.disabled = true;
-
-    let allUploads = JSON.parse(localStorage.getItem("eschool_uploads") || "[]");
-
-    const uploads = await Promise.all(filesToUpload.map((file, index) => {
-        simulateUpload(index);
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve({
-                id: Date.now() + index,
-                name: file.name,
-                course,
-                assignment,
-                description,
-                owner: currentUser,
-                ownerInitials: currentUserInitials,
-                fileType: getFileType(file.name),
-                size: file.size,
-                privacy,
-                data: reader.result,
-                date: new Date().toLocaleDateString(),
-                timestamp: Date.now(),
-                views: 0,
-                downloads: 0,
-                comments: []
-            });
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+        /* =========================
+           INITIALIZATION
+        ========================= */
+        document.addEventListener("DOMContentLoaded", () => {
+            setupEventListeners();
+            loadUploadedResources();
         });
-    }));
 
-    allUploads = [...uploads, ...allUploads];
-    localStorage.setItem("eschool_uploads", JSON.stringify(allUploads));
+        /* =========================
+           EVENT LISTENERS
+        ========================= */
+        function setupEventListeners() {
+            ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
 
-    successMessage.style.display = "block";
-    filesToUpload = [];
-    updateFileList();
+            ["dragenter", "dragover"].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add("dragover"));
+            });
 
-    btn.innerHTML = original;
-    btn.disabled = false;
+            ["dragleave", "drop"].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove("dragover"));
+            });
 
-    setTimeout(() => window.location.href = "/courses", 2000);
-}
+            dropArea.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
+            dropArea.addEventListener("click", () => fileInput.click());
+            fileInput.addEventListener("change", e => handleFiles(e.target.files));
+        }
 
-/* =========================
-   PROGRESS BAR
-========================= */
-function simulateUpload(index) {
-    let p = 0;
-    const bar = document.getElementById(`progress-${index}`);
-    const i = setInterval(() => {
-        p += Math.random() * 20;
-        bar.style.width = Math.min(p, 100) + "%";
-        if (p >= 100) clearInterval(i);
-    }, 150);
-}
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
-/* =========================
-   TAB SWITCH
-========================= */
-function switchTab(tab) {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-    event.target.classList.add("active");
-    document.getElementById(`${tab}-tab`).classList.add("active");
-}
-</script>
+        /* =========================
+           FILE HANDLING - ACCEPTS ALL FILES
+        ========================= */
+        function handleFiles(files) {
+            const validFiles = Array.from(files);
+            
+            // Check file sizes
+            let oversizedFiles = [];
+            validFiles.forEach(file => {
+                if (file.size > MAX_FILE_SIZE) {
+                    oversizedFiles.push(file);
+                }
+            });
+            
+            if (oversizedFiles.length > 0) {
+                showError(`The following files exceed the 2GB limit:\n\n${
+                    oversizedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join('\n')
+                }\n\nPlease upload smaller files.`);
+                return;
+            }
+            
+            // Show warning if any file is large
+            const hasLargeFiles = validFiles.some(file => file.size > 10 * 1024 * 1024);
+            if (hasLargeFiles) {
+                sizeWarning.style.display = 'block';
+                sizeWarning.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Note:</strong> Large files detected. They will be uploaded in chunks for better reliability.</span>
+                `;
+            } else {
+                sizeWarning.style.display = 'none';
+            }
+            
+            filesToUpload.push(...validFiles);
+            updateFileList();
+        }
 
+        function updateFileList() {
+            fileList.innerHTML = "";
 
+            if (!filesToUpload.length) {
+                fileInfo.style.display = "none";
+                return;
+            }
+
+            fileInfo.style.display = "block";
+
+            filesToUpload.forEach((file, index) => {
+                const icon = getFileIcon(file.name);
+                const size = formatFileSize(file.size);
+                const fileType = getFileTypeCategory(file.name);
+                const badgeClass = `badge-${fileType}`;
+                const badgeText = getFileTypeText(fileType);
+                
+                // Show warning for large files
+                const isLargeFile = file.size > 10 * 1024 * 1024;
+                const warningIcon = isLargeFile ? 
+                    '<i class="fas fa-exclamation-circle" style="color: #ff6b6b; margin-left: 5px;" title="Large file - will be uploaded in chunks"></i>' : '';
+
+                const li = document.createElement("li");
+                li.className = "file-item";
+                li.innerHTML = `
+                    <div>
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+                            <i class="fas ${icon}" style="color:#4361ee"></i>
+                            <strong style="flex:1;min-width:200px;word-break:break-all">${file.name}</strong>
+                            ${warningIcon}
+                            <span style="font-size:0.8rem;color:#666">${size}</span>
+                            <span class="file-type-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="file-progress">
+                            <div class="progress-bar" id="progress-${index}"></div>
+                        </div>
+                    </div>
+                    <button onclick="removeFile(${index})" style="border:none;background:none;color:red;cursor:pointer;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                fileList.appendChild(li);
+            });
+        }
+
+        function removeFile(index) {
+            filesToUpload.splice(index, 1);
+            updateFileList();
+            
+            // Hide warning if no large files left
+            const hasLargeFiles = filesToUpload.some(file => file.size > 10 * 1024 * 1024);
+            if (!hasLargeFiles) {
+                sizeWarning.style.display = 'none';
+            }
+        }
+
+        /* =========================
+           UPLOAD FUNCTION - USES FLASK BACKEND
+        ========================= */
+        async function uploadFiles() {
+            if (!filesToUpload.length) {
+                showError("Please select files to upload");
+                return;
+            }
+
+            const course = document.getElementById("course").value;
+            const resourceType = document.getElementById("resourceType").value;
+            const title = document.getElementById("title").value;
+            const description = document.getElementById("description").value;
+            const difficulty = document.getElementById("difficulty").value;
+            const privacy = document.querySelector("input[name='privacy']:checked")?.value || "public";
+
+            if (!course || !title || !description) {
+                showError("Please fill in all required fields: Category, Title, and Description");
+                return;
+            }
+
+            const btn = uploadButton;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner"></span> Uploading...';
+            btn.disabled = true;
+
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            // Show overall progress
+            chunkProgress.style.display = 'block';
+            chunkProgressFill.style.width = '0%';
+            chunkStatus.textContent = '0%';
+
+            // Upload each file
+            for (let i = 0; i < filesToUpload.length; i++) {
+                const file = filesToUpload[i];
+                
+                try {
+                    // Create FormData
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('title', filesToUpload.length > 1 ? `${title} - ${file.name}` : title);
+                    formData.append('description', description);
+                    formData.append('category', course);
+                    formData.append('resourceType', resourceType);
+                    formData.append('difficulty', difficulty);
+                    formData.append('privacy', privacy);
+
+                    // Send to server
+                    const response = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        successCount++;
+                        
+                        // Update individual progress bar
+                        const progressBar = document.getElementById(`progress-${i}`);
+                        if (progressBar) {
+                            progressBar.style.width = '100%';
+                            progressBar.style.background = '#10b981';
+                        }
+                    } else {
+                        errorCount++;
+                        console.error(`Failed to upload ${file.name}:`, result.message);
+                        
+                        // Mark as failed
+                        const progressBar = document.getElementById(`progress-${i}`);
+                        if (progressBar) {
+                            progressBar.style.width = '100%';
+                            progressBar.style.background = '#ef4444';
+                        }
+                    }
+                } catch (error) {
+                    errorCount++;
+                    console.error(`Error uploading ${file.name}:`, error);
+                    
+                    // Mark as failed
+                    const progressBar = document.getElementById(`progress-${i}`);
+                    if (progressBar) {
+                        progressBar.style.width = '100%';
+                        progressBar.style.background = '#ef4444';
+                    }
+                }
+
+                // Update overall progress
+                const progress = Math.round(((i + 1) / filesToUpload.length) * 100);
+                chunkProgressFill.style.width = progress + '%';
+                chunkStatus.textContent = progress + '%';
+            }
+
+            // Show result message
+            if (successCount > 0) {
+                showSuccess(`${successCount} file${successCount > 1 ? 's' : ''} uploaded successfully! They are now available in the Resources page.`);
+            }
+            
+            if (errorCount > 0) {
+                showError(`${errorCount} file${errorCount > 1 ? 's' : ''} failed to upload. Please try again.`);
+            }
+
+            // Clear form
+            filesToUpload = [];
+            updateFileList();
+            document.getElementById("title").value = "";
+            document.getElementById("description").value = "";
+            sizeWarning.style.display = "none";
+
+            // Reset button
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                chunkProgress.style.display = 'none';
+            }, 1000);
+
+            // Load uploaded resources preview
+            setTimeout(() => {
+                loadUploadedResources();
+                switchTab('preview');
+            }, 1500);
+        }
+
+        /* =========================
+           LOAD UPLOADED RESOURCES FROM BACKEND
+        ========================= */
+        async function loadUploadedResources() {
+            try {
+                const response = await fetch(`/api/resources/user/${userId}`);
+                const result = await response.json();
+
+                if (result.success && result.resources && result.resources.length > 0) {
+                    noUploadsMessage.style.display = "none";
+                    
+                    // Sort by upload date (newest first)
+                    const sortedResources = result.resources.sort((a, b) => 
+                        new Date(b.upload_date) - new Date(a.upload_date)
+                    );
+                    
+                    uploadedResources.innerHTML = `
+                        <h3 style="color: #333; margin-bottom: 15px;">
+                            <i class="fas fa-history"></i> Your Recent Uploads (${sortedResources.length})
+                        </h3>
+                        <p style="color: #666; margin-bottom: 20px;">
+                            These resources are stored on the server and available in the Resources page
+                        </p>
+                    `;
+
+                    // Show only recent 10 uploads
+                    const recentResources = sortedResources.slice(0, 10);
+                    
+                    recentResources.forEach(resource => {
+                        const uploadDate = new Date(resource.upload_date).toLocaleDateString();
+                        const fileSize = formatFileSize(resource.file_size);
+                        const icon = getFileIcon(resource.file_category);
+                        const fileTypeBadge = getFileTypeText(resource.file_category || 'other');
+                        const badgeClass = `badge-${resource.file_category || 'other'}`;
+                        
+                        // Add warning for large files
+                        const warningBadge = resource.is_large_file ? 
+                            '<span style="background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 5px;">Large File</span>' : '';
+                        
+                        const previewItem = document.createElement("div");
+                        previewItem.className = "preview-item";
+                        previewItem.innerHTML = `
+                            <div class="preview-icon">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div class="preview-info">
+                                <h4>${resource.title} ${warningBadge}</h4>
+                                <p>
+                                    <strong>Category:</strong> ${resource.category} | 
+                                    <strong>Type:</strong> ${resource.type} |
+                                    <span class="file-type-badge ${badgeClass}" style="font-size:0.7rem;">${fileTypeBadge}</span>
+                                </p>
+                                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                    <strong>Uploaded:</strong> ${uploadDate} | 
+                                    <strong>Size:</strong> ${fileSize} |
+                                    <strong>Views:</strong> ${resource.views || 0}
+                                </p>
+                                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                    ${resource.description ? resource.description.substring(0, 100) + '...' : 'No description'}
+                                </p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="background: #4361ee; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
+                                    ${resource.privacy === 'public' ? 'Public' : 'Private'}
+                                </span>
+                            </div>
+                        `;
+                        uploadedResources.appendChild(previewItem);
+                    });
+
+                    // Add link to resources page
+                    const linkDiv = document.createElement("div");
+                    linkDiv.style.marginTop = "20px";
+                    linkDiv.innerHTML = `
+                        <a href="/resourses" style="display: inline-flex; align-items: center; gap: 8px; color: #4361ee; text-decoration: none; font-weight: 600;">
+                            <i class="fas fa-external-link-alt"></i>
+                            View all resources in Resources page
+                        </a>
+                    `;
+                    uploadedResources.appendChild(linkDiv);
+                } else {
+                    uploadedResources.innerHTML = `
+                        <div style="text-align: center; padding: 30px; color: #666;">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #ccc; margin-bottom: 10px;"></i>
+                            <h3>No Uploads Yet</h3>
+                            <p>You haven't uploaded any resources yet</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading uploaded resources:', error);
+                uploadedResources.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #666;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #ff6b6b; margin-bottom: 10px;"></i>
+                        <h3>Error Loading Uploads</h3>
+                        <p>Failed to load your uploaded resources. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        /* =========================
+           HELPER FUNCTIONS
+        ========================= */
+        function getFileExtension(filename) {
+            return filename.split('.').pop().toLowerCase() || 'unknown';
+        }
+
+        function getFileTypeCategory(filename) {
+            const ext = getFileExtension(filename);
+            
+            // Video files
+            const videoExts = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'm4v', 'mpg', 'mpeg'];
+            if (videoExts.includes(ext)) return 'video';
+            
+            // Audio files
+            const audioExts = ['mp3', 'wav', 'aac', 'flac', 'm4a', 'wma', 'ogg'];
+            if (audioExts.includes(ext)) return 'audio';
+            
+            // Image files
+            const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'bmp', 'tiff', 'ico', 'webp'];
+            if (imageExts.includes(ext)) return 'image';
+            
+            // PDF files
+            if (ext === 'pdf') return 'pdf';
+            
+            // Document files
+            const docExts = ['doc', 'docx', 'txt', 'rtf', 'odt', 'epub', 'md'];
+            if (docExts.includes(ext)) return 'doc';
+            
+            // Presentation files
+            const pptExts = ['ppt', 'pptx', 'key', 'odp'];
+            if (pptExts.includes(ext)) return 'presentation';
+            
+            // Spreadsheet files
+            const sheetExts = ['xls', 'xlsx', 'csv', 'ods'];
+            if (sheetExts.includes(ext)) return 'spreadsheet';
+            
+            // Code files
+            const codeExts = ['js', 'html', 'css', 'py', 'java', 'c', 'cpp', 'php', 'sql', 'json', 'xml', 'yml', 'yaml', 'sh', 'bat'];
+            if (codeExts.includes(ext)) return 'code';
+            
+            // Archive files
+            const archiveExts = ['zip', 'rar', '7z', 'tar', 'gz', 'bz2'];
+            if (archiveExts.includes(ext)) return 'zip';
+            
+            // Default to 'other'
+            return 'other';
+        }
+
+        function getFileIcon(filename) {
+            const type = getFileTypeCategory(filename);
+            const icons = {
+                video: "fa-video",
+                audio: "fa-music",
+                image: "fa-image",
+                pdf: "fa-file-pdf",
+                doc: "fa-file-word",
+                presentation: "fa-file-powerpoint",
+                spreadsheet: "fa-file-excel",
+                code: "fa-file-code",
+                zip: "fa-file-archive",
+                other: "fa-file"
+            };
+            return icons[type] || "fa-file";
+        }
+
+        function getFileTypeText(type) {
+            const texts = {
+                video: "Video",
+                audio: "Audio",
+                image: "Image",
+                pdf: "PDF",
+                doc: "Document",
+                presentation: "Presentation",
+                spreadsheet: "Spreadsheet",
+                code: "Code",
+                zip: "Archive",
+                other: "File"
+            };
+            return texts[type] || "File";
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return "0 Bytes";
+            const k = 1024;
+            const sizes = ["Bytes", "KB", "MB", "GB"];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+        }
+
+        function simulateUpload(index) {
+            let p = 0;
+            const bar = document.getElementById(`progress-${index}`);
+            const interval = setInterval(() => {
+                p += Math.random() * 20;
+                bar.style.width = Math.min(p, 100) + "%";
+                if (p >= 100) clearInterval(interval);
+            }, 150);
+        }
+
+        function showSuccess(message) {
+            document.getElementById("successText").textContent = message;
+            successMessage.style.display = "block";
+            errorMessage.style.display = "none";
+        }
+
+        function showError(message) {
+            document.getElementById("errorText").textContent = message;
+            errorMessage.style.display = "block";
+            successMessage.style.display = "none";
+        }
+
+        /* =========================
+           TAB SWITCHING
+        ========================= */
+        function switchTab(tab) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+            
+            // Update active tab button
+            document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add("active");
+            
+            // Show active content
+            document.getElementById(`${tab}-tab`).classList.add("active");
+            
+            // Load data for preview tab
+            if (tab === 'preview') {
+                loadUploadedResources();
+            }
+        }
+    </script>
 </body>
 </html>
 {% endblock %}
