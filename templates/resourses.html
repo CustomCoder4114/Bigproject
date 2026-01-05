@@ -85,6 +85,7 @@
         gap: 30px;
         margin-top: 20px;
         flex-wrap: wrap;
+        display: none;
     }
 
     .stat-card {
@@ -95,6 +96,7 @@
         min-width: 120px;
         text-align: center;
         transition: var(--transition);
+        display: none;
     }
 
     .stat-card:hover {
@@ -847,24 +849,7 @@
             <h1 class="page-title">All Uploaded Resources</h1>
             <p class="page-subtitle">Access all educational materials shared by everyone in your classes. Watch videos, view images, and download files directly.</p>
             
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalResources">0</div>
-                    <div class="stat-label">Total Resources</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalVideos">0</div>
-                    <div class="stat-label">Videos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalDocuments">0</div>
-                    <div class="stat-label">Documents</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalCourses">0</div>
-                    <div class="stat-label">Courses</div>
-                </div>
-            </div>
+            
         </div>
     </header>
 
@@ -980,7 +965,6 @@
 
     // Load all resources from backend
     async function loadAllResources() {
-        showLoading(true);
         try {
             const response = await fetch('/api/resources');
             const result = await response.json();
@@ -1158,7 +1142,6 @@
 
     async function previewResource(resourceId) {
         try {
-            showLoading(true);
             const response = await fetch(`/api/resources/${resourceId}`);
             const result = await response.json();
             if (!result.success) {

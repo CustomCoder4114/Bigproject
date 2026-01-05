@@ -21,12 +21,6 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
         /* Header */
         .page-header {
             background: linear-gradient(135deg, #4361ee, #3a0ca3);
@@ -305,6 +299,13 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .preview-item:hover {
+            background: #eef1ff;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
         .preview-icon {
@@ -464,20 +465,202 @@
             justify-content: center;
             font-weight: bold;
         }
+
+        /* DELETE BUTTON STYLES */
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .delete-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .confirm-delete-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            display: none;
+        }
+
+        .confirm-delete-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .confirm-delete-box h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .confirm-delete-box p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .confirm-delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-delete-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Statistics */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4361ee;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        /* Action buttons for uploaded files */
+        .file-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .view-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .view-btn:hover {
+            background: #3a0ca3;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- User Info Badge -->
-    <div class="user-info-badge">
-        <div class="user-avatar">
-            {{ firstname[0] }}{{ lastname[0] }}
-        </div>
-        <div>
-            <div style="font-weight: bold; font-size: 0.9rem;">{{ firstname }} {{ lastname }}</div>
-            <div style="font-size: 0.8rem; color: #666;">ID: {{ user_id }}</div>
-        </div>
-    </div>
 
     <div class="container">
         <!-- Header -->
@@ -486,8 +669,8 @@
                 <div class="page-icon">
                     <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; margin-bottom: 15px;"></i>
                 </div>
-                <h1 class="page-title">Upload Any File</h1>
-                <p class="page-subtitle">Share any type of educational material with your classmates. Uploaded files appear in the Resources page immediately.</p>
+                <h1 class="page-title">Upload & Manage Files</h1>
+                <p class="page-subtitle">Share educational materials and manage all your uploaded files in one place.</p>
             </div>
         </header>
 
@@ -496,11 +679,11 @@
             <button class="tab-btn active" onclick="switchTab('upload')">
                 <i class="fas fa-cloud-upload-alt"></i> Upload Files
             </button>
+            <button class="tab-btn" onclick="switchTab('myuploads')">
+                <i class="fas fa-folder"></i> My Uploads
+            </button>
             <button class="tab-btn" onclick="switchTab('instructions')">
                 <i class="fas fa-info-circle"></i> Instructions
-            </button>
-            <button class="tab-btn" onclick="switchTab('preview')">
-                <i class="fas fa-eye"></i> Preview Uploads
             </button>
         </div>
 
@@ -601,23 +784,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label><i class="fas fa-shield-alt"></i> Privacy Settings</label>
-                    <div style="display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;">
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="privacy" value="public" checked>
-                            <i class="fas fa-globe"></i> Public (Everyone can view)
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="radio" name="privacy" value="class">
-                            <i class="fas fa-users"></i> Class Only
-                        </label>
-                    </div>
-                    <p style="color: #666; font-size: 0.9rem; margin-top: 5px;">
-                        <i class="fas fa-info-circle"></i> Public resources are visible to everyone in the system
-                    </p>
-                </div>
-
                 <button class="upload-btn" onclick="uploadFiles()" style="width: 100%; padding: 15px;" id="uploadButton">
                     <i class="fas fa-paper-plane"></i> Upload & Share Resources
                 </button>
@@ -628,6 +794,76 @@
 
                 <div id="errorMessage" class="error-message">
                     <i class="fas fa-exclamation-circle"></i> <span id="errorText">Error uploading files. Please try again.</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- My Uploads Tab -->
+        <div id="myuploads-tab" class="tab-content">
+            <section class="upload-section">
+                <h2 style="margin-bottom: 20px; color: #333;">
+                    <i class="fas fa-folder"></i> My Uploaded Files
+                </h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    Manage all files you've uploaded. You can view, download, or delete them here.
+                </p>
+
+                <!-- Statistics -->
+                <div class="stats-container" id="userStats">
+                    <!-- Stats will be loaded dynamically -->
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="filter-controls">
+                    <input type="text" id="searchUploads" class="search-input" placeholder="Search your uploads..." oninput="filterMyUploads()">
+                    <select id="filterCategory" class="filter-select" onchange="filterMyUploads()">
+                        <option value="">All Categories</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="science">Science</option>
+                        <option value="programming">Programming</option>
+                        <option value="business">Business</option>
+                        <option value="arts">Arts & Humanities</option>
+                        <option value="languages">Languages</option>
+                        <option value="general">General</option>
+                    </select>
+                    <select id="filterType" class="filter-select" onchange="filterMyUploads()">
+                        <option value="">All Types</option>
+                        <option value="video">Video</option>
+                        <option value="document">Document</option>
+                        <option value="image">Image</option>
+                        <option value="audio">Audio</option>
+                        <option value="code">Code</option>
+                        <option value="archive">Archive</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select id="filterSort" class="filter-select" onchange="filterMyUploads()">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="largest">Largest First</option>
+                        <option value="smallest">Smallest First</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+
+                <!-- Uploaded Files List -->
+                <div id="myUploadsList">
+                    <!-- Uploaded files will be displayed here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="noUploadsMessage" class="empty-state" style="display: none;">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>No Uploads Found</h3>
+                    <p>You haven't uploaded any files yet. Start by uploading some resources!</p>
+                    <button class="upload-btn" onclick="switchTab('upload')" style="margin-top: 15px;">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload Files
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loadingUploads" style="text-align: center; padding: 40px;">
+                    <div class="spinner" style="width: 40px; height: 40px; margin: 0 auto 15px;"></div>
+                    <p>Loading your uploads...</p>
                 </div>
             </section>
         </div>
@@ -687,24 +923,19 @@
                 </div>
             </section>
         </div>
+    </div>
 
-        <!-- Preview Tab -->
-        <div id="preview-tab" class="tab-content">
-            <section class="upload-section">
-                <h2 style="margin-bottom: 20px; color: #333;">
-                    <i class="fas fa-eye"></i> Preview Uploaded Resources
-                </h2>
-                
-                <div id="uploadedResources">
-                    <!-- Uploaded resources will be displayed here -->
-                </div>
-                
-                <div id="noUploadsMessage" style="text-align: center; padding: 40px; color: #666;">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
-                    <h3>No Uploads Yet</h3>
-                    <p>Upload some resources to see them here and in the Resources page</p>
-                </div>
-            </section>
+    <!-- Delete Confirmation Dialog -->
+    <div class="confirm-delete-dialog" id="deleteDialog">
+        <div class="confirm-delete-box">
+            <h3><i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i> Confirm Deletion</h3>
+            <p id="deleteMessage">Are you sure you want to delete this file? This action cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="cancel-btn" onclick="cancelDelete()">Cancel</button>
+                <button class="confirm-delete-btn" onclick="confirmDelete()" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i> Delete File
+                </button>
+            </div>
         </div>
     </div>
 
@@ -717,6 +948,10 @@
         const currentUser = "{{ firstname }} {{ lastname }}" || "John Doe";
         const currentUserInitials = "{{ firstname[0] }}{{ lastname[0] }}" || "JD";
         const userId = "{{ user_id }}" || "anonymous";
+        
+        // For delete functionality
+        let resourceToDelete = null;
+        let allUserResources = [];
 
         /* =========================
            DOM ELEMENTS
@@ -727,20 +962,23 @@
         const fileInfo = document.getElementById("fileInfo");
         const successMessage = document.getElementById("successMessage");
         const errorMessage = document.getElementById("errorMessage");
-        const uploadedResources = document.getElementById("uploadedResources");
-        const noUploadsMessage = document.getElementById("noUploadsMessage");
         const sizeWarning = document.getElementById("sizeWarning");
         const chunkProgress = document.getElementById("chunkProgress");
         const chunkProgressFill = document.getElementById("chunkProgressFill");
         const chunkStatus = document.getElementById("chunkStatus");
         const uploadButton = document.getElementById("uploadButton");
+        const myUploadsList = document.getElementById("myUploadsList");
+        const noUploadsMessage = document.getElementById("noUploadsMessage");
+        const loadingUploads = document.getElementById("loadingUploads");
+        const deleteDialog = document.getElementById("deleteDialog");
+        const deleteMessage = document.getElementById("deleteMessage");
+        const userStats = document.getElementById("userStats");
 
         /* =========================
            INITIALIZATION
         ========================= */
         document.addEventListener("DOMContentLoaded", () => {
             setupEventListeners();
-            loadUploadedResources();
         });
 
         /* =========================
@@ -876,7 +1114,6 @@
             const title = document.getElementById("title").value;
             const description = document.getElementById("description").value;
             const difficulty = document.getElementById("difficulty").value;
-            const privacy = document.querySelector("input[name='privacy']:checked")?.value || "public";
 
             if (!course || !title || !description) {
                 showError("Please fill in all required fields: Category, Title, and Description");
@@ -913,7 +1150,7 @@
                     formData.append('category', course);
                     formData.append('resourceType', resourceType);
                     formData.append('difficulty', difficulty);
-                    formData.append('privacy', privacy);
+                    formData.append('privacy', 'public');
 
                     // Send to server
                     const response = await fetch('/api/upload', {
@@ -964,6 +1201,12 @@
             // Show result message
             if (successCount > 0) {
                 showSuccess(`${successCount} file${successCount > 1 ? 's' : ''} uploaded successfully! They are now available in the Resources page.`);
+                
+                // IMPORTANT: Redirect with success parameter to trigger resource reload
+                // This ensures uploaded files appear immediately in Resources page
+                setTimeout(() => {
+                    window.location.href = '/resources?upload=success';
+                }, 1500);
             }
             
             if (errorCount > 0) {
@@ -983,113 +1226,276 @@
                 btn.disabled = false;
                 chunkProgress.style.display = 'none';
             }, 1000);
-
-            // Load uploaded resources preview
-            setTimeout(() => {
-                loadUploadedResources();
-                switchTab('preview');
-            }, 1500);
         }
 
         /* =========================
-           LOAD UPLOADED RESOURCES FROM BACKEND
+           LOAD USER'S UPLOADED RESOURCES
         ========================= */
-        async function loadUploadedResources() {
+        async function loadMyUploads() {
             try {
+                loadingUploads.style.display = 'block';
+                myUploadsList.innerHTML = '';
+                noUploadsMessage.style.display = 'none';
+
                 const response = await fetch(`/api/resources/user/${userId}`);
                 const result = await response.json();
 
                 if (result.success && result.resources && result.resources.length > 0) {
-                    noUploadsMessage.style.display = "none";
+                    allUserResources = result.resources;
                     
-                    // Sort by upload date (newest first)
-                    const sortedResources = result.resources.sort((a, b) => 
-                        new Date(b.upload_date) - new Date(a.upload_date)
-                    );
+                    // Update statistics
+                    updateUserStats();
                     
-                    uploadedResources.innerHTML = `
-                        <h3 style="color: #333; margin-bottom: 15px;">
-                            <i class="fas fa-history"></i> Your Recent Uploads (${sortedResources.length})
-                        </h3>
-                        <p style="color: #666; margin-bottom: 20px;">
-                            These resources are stored on the server and available in the Resources page
-                        </p>
-                    `;
-
-                    // Show only recent 10 uploads
-                    const recentResources = sortedResources.slice(0, 10);
+                    // Render the list
+                    renderMyUploads(allUserResources);
                     
-                    recentResources.forEach(resource => {
-                        const uploadDate = new Date(resource.upload_date).toLocaleDateString();
-                        const fileSize = formatFileSize(resource.file_size);
-                        const icon = getFileIcon(resource.file_category);
-                        const fileTypeBadge = getFileTypeText(resource.file_category || 'other');
-                        const badgeClass = `badge-${resource.file_category || 'other'}`;
-                        
-                        // Add warning for large files
-                        const warningBadge = resource.is_large_file ? 
-                            '<span style="background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin-left: 5px;">Large File</span>' : '';
-                        
-                        const previewItem = document.createElement("div");
-                        previewItem.className = "preview-item";
-                        previewItem.innerHTML = `
-                            <div class="preview-icon">
-                                <i class="fas ${icon}"></i>
-                            </div>
-                            <div class="preview-info">
-                                <h4>${resource.title} ${warningBadge}</h4>
-                                <p>
-                                    <strong>Category:</strong> ${resource.category} | 
-                                    <strong>Type:</strong> ${resource.type} |
-                                    <span class="file-type-badge ${badgeClass}" style="font-size:0.7rem;">${fileTypeBadge}</span>
-                                </p>
-                                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                                    <strong>Uploaded:</strong> ${uploadDate} | 
-                                    <strong>Size:</strong> ${fileSize} |
-                                    <strong>Views:</strong> ${resource.views || 0}
-                                </p>
-                                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                                    ${resource.description ? resource.description.substring(0, 100) + '...' : 'No description'}
-                                </p>
-                            </div>
-                            <div style="text-align: right;">
-                                <span style="background: #4361ee; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
-                                    ${resource.privacy === 'public' ? 'Public' : 'Private'}
-                                </span>
-                            </div>
-                        `;
-                        uploadedResources.appendChild(previewItem);
-                    });
-
-                    // Add link to resources page
-                    const linkDiv = document.createElement("div");
-                    linkDiv.style.marginTop = "20px";
-                    linkDiv.innerHTML = `
-                        <a href="/resourses" style="display: inline-flex; align-items: center; gap: 8px; color: #4361ee; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-external-link-alt"></i>
-                            View all resources in Resources page
-                        </a>
-                    `;
-                    uploadedResources.appendChild(linkDiv);
+                    loadingUploads.style.display = 'none';
+                    myUploadsList.style.display = 'block';
                 } else {
-                    uploadedResources.innerHTML = `
-                        <div style="text-align: center; padding: 30px; color: #666;">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #ccc; margin-bottom: 10px;"></i>
-                            <h3>No Uploads Yet</h3>
-                            <p>You haven't uploaded any resources yet</p>
-                        </div>
-                    `;
+                    loadingUploads.style.display = 'none';
+                    noUploadsMessage.style.display = 'block';
                 }
             } catch (error) {
-                console.error('Error loading uploaded resources:', error);
-                uploadedResources.innerHTML = `
-                    <div style="text-align: center; padding: 30px; color: #666;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #ff6b6b; margin-bottom: 10px;"></i>
+                console.error('Error loading user uploads:', error);
+                loadingUploads.style.display = 'none';
+                myUploadsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
                         <h3>Error Loading Uploads</h3>
-                        <p>Failed to load your uploaded resources. Please try again.</p>
+                        <p>Failed to load your uploaded files. Please try again.</p>
                     </div>
                 `;
             }
+        }
+
+        function updateUserStats() {
+            const totalResources = allUserResources.length;
+            const totalSize = allUserResources.reduce((sum, res) => sum + (res.file_size || 0), 0);
+            const videoCount = allUserResources.filter(r => r.file_category === 'video').length;
+            const docCount = allUserResources.filter(r => ['pdf', 'doc', 'presentation', 'spreadsheet', 'code'].includes(r.file_category)).length;
+            const imageCount = allUserResources.filter(r => r.file_category === 'image').length;
+            
+            userStats.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${totalResources}</div>
+                    <div class="stat-label">Total Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${formatFileSize(totalSize)}</div>
+                    <div class="stat-label">Total Size</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${videoCount}</div>
+                    <div class="stat-label">Videos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${docCount}</div>
+                    <div class="stat-label">Documents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${imageCount}</div>
+                    <div class="stat-label">Images</div>
+                </div>
+            `;
+        }
+
+        function renderMyUploads(resources) {
+            myUploadsList.innerHTML = '';
+            
+            if (resources.length === 0) {
+                noUploadsMessage.style.display = 'block';
+                return;
+            }
+            
+            // Sort resources by upload date (newest first by default)
+            const sortedResources = resources.sort((a, b) => 
+                new Date(b.upload_date) - new Date(a.upload_date)
+            );
+            
+            sortedResources.forEach(resource => {
+                const uploadDate = new Date(resource.upload_date).toLocaleDateString();
+                const fileSize = formatFileSize(resource.file_size || 0);
+                const icon = getFileIcon(resource.file_category || 'other');
+                const fileTypeBadge = getFileTypeText(resource.file_category || 'other');
+                const badgeClass = `badge-${resource.file_category || 'other'}`;
+                
+                const previewItem = document.createElement("div");
+                previewItem.className = "preview-item";
+                previewItem.innerHTML = `
+                    <div class="preview-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="preview-info">
+                        <h4>${resource.title}</h4>
+                        <p>
+                            <strong>Category:</strong> ${resource.category} | 
+                            <strong>Type:</strong> ${resource.type} |
+                            <span class="file-type-badge ${badgeClass}" style="font-size:0.7rem;">${fileTypeBadge}</span>
+                        </p>
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                            <strong>Uploaded:</strong> ${uploadDate} | 
+                            <strong>Size:</strong> ${fileSize} |
+                            <strong>Views:</strong> ${resource.views || 0} |
+                            <strong>Downloads:</strong> ${resource.downloads || 0}
+                        </p>
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                            ${resource.description ? (resource.description.length > 100 ? resource.description.substring(0, 100) + '...' : resource.description) : 'No description'}
+                        </p>
+                        <div class="file-actions" style="margin-top: 10px;">
+                            <button class="view-btn" onclick="viewResource(${resource.id})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="view-btn" onclick="downloadResource(${resource.id})">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="delete-btn" onclick="promptDelete(${resource.id}, '${resource.title}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="background: ${resource.privacy === 'public' ? '#4361ee' : '#6b7280'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
+                            ${resource.privacy === 'public' ? 'Public' : 'Private'}
+                        </span>
+                    </div>
+                `;
+                myUploadsList.appendChild(previewItem);
+            });
+        }
+
+        /* =========================
+           FILTER USER UPLOADS
+        ========================= */
+        function filterMyUploads() {
+            const searchTerm = document.getElementById("searchUploads").value.toLowerCase();
+            const categoryFilter = document.getElementById("filterCategory").value;
+            const typeFilter = document.getElementById("filterType").value;
+            const sortFilter = document.getElementById("filterSort").value;
+            
+            let filteredResources = allUserResources;
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredResources = filteredResources.filter(resource =>
+                    resource.title.toLowerCase().includes(searchTerm) ||
+                    (resource.description && resource.description.toLowerCase().includes(searchTerm)) ||
+                    resource.category.toLowerCase().includes(searchTerm) ||
+                    resource.type.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply category filter
+            if (categoryFilter) {
+                filteredResources = filteredResources.filter(resource =>
+                    resource.category === categoryFilter
+                );
+            }
+            
+            // Apply type filter
+            if (typeFilter) {
+                filteredResources = filteredResources.filter(resource => {
+                    if (typeFilter === 'video') return resource.file_category === 'video';
+                    if (typeFilter === 'document') return ['pdf', 'doc', 'presentation', 'spreadsheet', 'code'].includes(resource.file_category);
+                    if (typeFilter === 'image') return resource.file_category === 'image';
+                    if (typeFilter === 'audio') return resource.file_category === 'audio';
+                    if (typeFilter === 'code') return resource.file_category === 'code';
+                    if (typeFilter === 'archive') return resource.file_category === 'zip';
+                    if (typeFilter === 'other') return resource.file_category === 'other';
+                    return true;
+                });
+            }
+            
+            // Apply sorting
+            switch (sortFilter) {
+                case 'newest':
+                    filteredResources.sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date));
+                    break;
+                case 'oldest':
+                    filteredResources.sort((a, b) => new Date(a.upload_date) - new Date(b.upload_date));
+                    break;
+                case 'largest':
+                    filteredResources.sort((a, b) => (b.file_size || 0) - (a.file_size || 0));
+                    break;
+                case 'smallest':
+                    filteredResources.sort((a, b) => (a.file_size || 0) - (b.file_size || 0));
+                    break;
+                case 'name':
+                    filteredResources.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+            }
+            
+            renderMyUploads(filteredResources);
+        }
+
+        /* =========================
+           DELETE FUNCTIONALITY
+        ========================= */
+        function promptDelete(resourceId, resourceTitle) {
+            resourceToDelete = resourceId;
+            deleteMessage.textContent = `Are you sure you want to delete "${resourceTitle}"? This action cannot be undone. The file will be permanently removed from the server.`;
+            deleteDialog.style.display = 'flex';
+        }
+
+        function cancelDelete() {
+            resourceToDelete = null;
+            deleteDialog.style.display = 'none';
+        }
+
+        async function confirmDelete() {
+            if (!resourceToDelete) return;
+            
+            const btn = document.getElementById('confirmDeleteBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner"></span> Deleting...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch(`/api/resources/${resourceToDelete}`, {
+                    method: 'DELETE'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showSuccess('File deleted successfully!');
+                    
+                    // Remove from local array
+                    allUserResources = allUserResources.filter(resource => resource.id !== resourceToDelete);
+                    
+                    // Update display
+                    updateUserStats();
+                    renderMyUploads(allUserResources);
+                    
+                    // Close dialog
+                    setTimeout(() => {
+                        deleteDialog.style.display = 'none';
+                        resourceToDelete = null;
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 1000);
+                } else {
+                    showError('Failed to delete file: ' + (result.message || 'Unknown error'));
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error deleting resource:', error);
+                showError('Network error deleting file. Please try again.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        /* =========================
+           VIEW AND DOWNLOAD FUNCTIONS
+        ========================= */
+        function viewResource(resourceId) {
+            // Open in new tab or redirect to resources page with preview
+            window.open(`/resources?preview=${resourceId}`, '_blank');
+        }
+
+        function downloadResource(resourceId) {
+            window.open(`/api/resources/${resourceId}/download`, '_blank');
         }
 
         /* =========================
@@ -1182,26 +1588,26 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
         }
 
-        function simulateUpload(index) {
-            let p = 0;
-            const bar = document.getElementById(`progress-${index}`);
-            const interval = setInterval(() => {
-                p += Math.random() * 20;
-                bar.style.width = Math.min(p, 100) + "%";
-                if (p >= 100) clearInterval(interval);
-            }, 150);
-        }
-
         function showSuccess(message) {
             document.getElementById("successText").textContent = message;
             successMessage.style.display = "block";
             errorMessage.style.display = "none";
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = "none";
+            }, 5000);
         }
 
         function showError(message) {
             document.getElementById("errorText").textContent = message;
             errorMessage.style.display = "block";
             successMessage.style.display = "none";
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = "none";
+            }, 5000);
         }
 
         /* =========================
@@ -1217,9 +1623,9 @@
             // Show active content
             document.getElementById(`${tab}-tab`).classList.add("active");
             
-            // Load data for preview tab
-            if (tab === 'preview') {
-                loadUploadedResources();
+            // Load data for myuploads tab
+            if (tab === 'myuploads') {
+                loadMyUploads();
             }
         }
     </script>

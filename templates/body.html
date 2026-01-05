@@ -13,7 +13,7 @@
     <!-- Header -->
     <header class="dashboard-header">
         <div class="container header-container">
-            <a href="#" class="logo">
+            <a href="/" class="logo">
                 <i class="fas fa-graduation-cap logo-icon"></i>
                 <div class="logo-text">E<span>school</span></div>
             </a>
@@ -29,202 +29,271 @@
                     <span class="notification-badge">3</span>
                 </button>
                 
-                <div class="user-profile" id="userProfile" href="/login">
-                    <div class="user-avatar">
-                {{ firstname[0] }}{{ lastname[0] }}
-                     </div>
-
-                    <div class="user-info">
-                        <div class="user-name">{{ firstname }} {{ lastname }}</div>
-                        <div class="user-role">Learner</div>
+                <div class="user-profile-dropdown" id="userProfileDropdown">
+                    <div class="user-profile-trigger" id="userProfileTrigger">
+                        <div class="user-avatar">
+                            {{ firstname[0] }}{{ lastname[0] }}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ firstname }} {{ lastname }}</div>
+                            <div class="user-role">Learner</div>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </div>
-                    <i class="fas fa-chevron-down" style="font-size: 0.9rem;"></i>
+                    
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <div class="dropdown-header">
+                            <div class="dropdown-avatar">{{ firstname[0] }}{{ lastname[0] }}</div>
+                            <div>
+                                <div class="dropdown-name">{{ firstname }} {{ lastname }}</div>
+                                <div class="dropdown-email">{{ session.get('email', '') }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="/dashboard" class="dropdown-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        
+                        <a href="/settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        
+                        <a href="/upload" class="dropdown-item">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Upload Resources</span>
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="/help" class="dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help & Support</span>
+                        </a>
+                        
+                        <a href="/aboutus" class="dropdown-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About Us</span>
+                        </a>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <a href="/logout" class="dropdown-item logout-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-
+    <!-- Mobile menu button -->
     <div class="container">
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-    <span></span>
-    <span></span>
-    <span></span>
-</button>
-</div>
-<!--///////////////////////////////////////////////-->
-<nav class="mobile-menu" id="mobileMenu">
-    <a href="/dashboard" class="nav-item active">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-    <a href="/courses" class="nav-item">
-                    <i class="fas fa-book-open"></i>
-                    <span>Explore Courses</span>
-                </a>
-    <a href="#" class="nav-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Schedule</span>
-                </a>
-    <a href="#" class="nav-item">
-                    <i class="fas fa-tasks"></i>
-                    <span>Assignments</span>
-                </a>
-    <a href="#" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Progress</span>
-                </a>
-    <div class="nav-divider"></div>
-                
-                <a href="#" class="nav-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Resources</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Classmates</span>
-                </a>
-                
-                <div class="nav-divider"></div>
-                
-                <a href="#" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Help & Support</span>
-                </a>
-</nav>
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
 
-<!--///////////////////////////////////////////////-->
-        <div class="dashboard-layout">
-            <!-- Sidebar Navigation -->
-            <nav class="sidebar" id="sidebar">
-                <a href="/dashboard" class="nav-item .active">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="/courses" class="nav-item">
-                    <i class="fas fa-book-open"></i>
-                    <span>Explore Courses</span>
-                </a>
-                <a href="/schedule" class="nav-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Schedule</span>
-                </a>
-                <a href="/assignment" class="nav-item">
-                    <i class="fas fa-tasks"></i>
-                    <span>Assignments</span>
-                </a>
-                <a href="progres" class="nav-item">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Progress</span>
-                </a>
-                
-                <div class="nav-divider"></div>
-                
-                <a href="/resourses" class="nav-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Resources</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Classmates</span>
-                </a>
-                
-                <div class="nav-divider"></div>
-                
-                <a href="/settings" class="nav-item">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Help & Support</span>
-                </a>
-            </nav>
+    <!-- Mobile Navigation -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="/dashboard" class="nav-item active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/courses" class="nav-item">
+            <i class="fas fa-book-open"></i>
+            <span>Explore Courses</span>
+        </a>
+        <a href="/schedule" class="nav-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Schedule</span>
+        </a>
+        <a href="/assignment" class="nav-item">
+            <i class="fas fa-tasks"></i>
+            <span>Assignments</span>
+        </a>
+        <a href="/progres" class="nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Progress</span>
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="/resourses" class="nav-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Resources</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Classmates</span>
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="/settings" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        <a href="/help" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Help & Support</span>
+        </a>
+        
+        <div class="nav-divider"></div>
+        
+        <a href="/logout" class="nav-item logout-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Log Out</span>
+        </a>
+    </nav>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <a href="/dashboard" class="nav-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/courses" class="nav-item">
+                <i class="fas fa-book-open"></i>
+                <span>Explore Courses</span>
+            </a>
+            <a href="/schedule" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Schedule</span>
+            </a>
+            <a href="/assignment" class="nav-item">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+            <a href="/progres" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            
+            <div class="nav-divider"></div>
+            
+            <a href="/resourses" class="nav-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Resources</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Classmates</span>
+            </a>
+            
+            <div class="nav-divider"></div>
+            
+            <a href="/settings" class="nav-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="/help" class="nav-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Help & Support</span>
+            </a>
+        </nav>
 <script>
-
-document.addEventListener("DOMContentLoaded", function () {
-    const links = document.querySelectorAll('.nav-item');
-
-
-    let activeLink = localStorage.getItem("activeNavLink");
-    if (activeLink) {
-        links.forEach(l => l.classList.remove("active"));
-        const linkToActivate = document.querySelector(`.sidebar [href="${activeLink}"]`);
-        if (linkToActivate) {
-            linkToActivate.classList.add("active");
+    document.addEventListener("DOMContentLoaded", function () {
+        // Navigation active state
+        const links = document.querySelectorAll('.nav-item');
+        let activeLink = localStorage.getItem("activeNavLink");
+        
+        if (activeLink) {
+            links.forEach(l => l.classList.remove("active"));
+            const linkToActivate = document.querySelector(`.sidebar [href="${activeLink}"]`);
+            if (linkToActivate) {
+                linkToActivate.classList.add("active");
+            }
         }
-    }
 
-
-    links.forEach(link => {
-        link.addEventListener('click', function () {
-            localStorage.setItem("activeNavLink", this.getAttribute("href"));
+        links.forEach(link => {
+            link.addEventListener('click', function () {
+                localStorage.setItem("activeNavLink", this.getAttribute("href"));
+            });
         });
-    });
-});
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
 
-// create overlay dynamically
-const overlay = document.createElement('div');
-overlay.classList.add('mobile-menu-overlay');
-document.body.appendChild(overlay);
+        // Mobile menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
-    overlay.classList.toggle('active');
-});
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            mobileMenu.classList.toggle('open');
+            mobileOverlay.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : 'auto';
+        });
 
-// clicking overlay closes menu
-overlay.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    overlay.classList.remove('active');
-});
-
-
+        mobileOverlay.addEventListener('click', () => {
+            hamburger.classList.remove('open');
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
 
         // User Profile Dropdown
-        const userProfile = document.getElementById('userProfile');
+        const userProfileDropdown = document.getElementById('userProfileDropdown');
+        const userProfileTrigger = document.getElementById('userProfileTrigger');
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
         
-        userProfile.addEventListener('click', function() {
-            // In a real app, this would open a dropdown menu
-            alert('Profile menu would open with options: View Profile, Settings, Log Out');
+        // Toggle dropdown
+        userProfileTrigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userProfileDropdown.classList.toggle('active');
         });
         
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userProfileDropdown.contains(e.target)) {
+                userProfileDropdown.classList.remove('active');
+            }
+        });
+        
+        // Close dropdown when clicking on a dropdown item
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function() {
+                userProfileDropdown.classList.remove('active');
+                
+                // Special handling for logout
+                if (this.classList.contains('logout-item')) {
+                    if (!confirm('Are you sure you want to log out?')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+        
+        // Close dropdown on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                userProfileDropdown.classList.remove('active');
+            }
+        });
+
         // Notification Button
         const notificationBtn = document.querySelector('.notification-btn');
         notificationBtn.addEventListener('click', function() {
             alert('Notifications panel would open showing:\n1. New assignment posted\n2. Class announcement\n3. Message from Sarah');
         });
         
-        // Quick Actions
-        const actionButtons = document.querySelectorAll('.action-btn');
-        actionButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const label = this.querySelector('.action-label').textContent;
-                
-                if (label === 'New Post') {
-                    alert('Redirecting to content creation page...');
-                } else if (label === 'Join Class') {
-                    alert('Opening virtual classroom...');
-                } else if (label === 'Upload Work') {
-                    alert('Opening file upload dialog...');
-                } else if (label === 'Browse Courses') {
-                    alert('Redirecting to course catalog...');
-                } else if (label === 'Ask Question') {
-                    alert('Opening question submission form...');
-                } else if (label === 'Resources') {
-                    alert('Opening resource library...');
-                }
-            });
-        });
+       
         
         // Assignment Buttons
         const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
@@ -259,8 +328,8 @@ overlay.addEventListener('click', () => {
             }
         });
         
-        // Navigation
-        const navItems = document.querySelectorAll('.nav-item');
+        // Navigation items (for non-functional links)
+        const navItems = document.querySelectorAll('.nav-item:not([href]), .nav-item[href="#"]');
         navItems.forEach(item => {
             item.addEventListener('click', function(e) {
                 if (!this.href || this.getAttribute('href') === '#') {
@@ -279,7 +348,15 @@ overlay.addEventListener('click', () => {
                 this.value = '';
             }
         });
-    </script>
+        
+        // Prevent body scroll when dropdown is open
+        userProfileDropdown.addEventListener('click', function(e) {
+            if (this.classList.contains('active')) {
+                e.stopPropagation();
+            }
+        });
+    });
+</script>
     {% block allcontent %}
     {% endblock %}
 </body>

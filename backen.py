@@ -146,7 +146,7 @@ def init_db():
 # Call init_db to create tables
 init_db()
 
-# ============ EXISTING ROUTES ============
+# ============ EXISTING ROUTES ===============
 
 @app.route('/intro')
 def intro():
@@ -176,7 +176,7 @@ def login():
         conn.close()
 
         if user:
-            # Save user info in session
+            # Save user info in s
             session['user_id'] = user[0]
             session['firstname'] = user[1]
             session['lastname'] = user[2]

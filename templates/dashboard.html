@@ -39,10 +39,6 @@
                                 <i class="fas fa-plus-circle"></i>
                                 <span class="action-label">New Post</span>
                             </a>
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-video"></i>
-                                <span class="action-label">Join Class</span>
-                            </a>
                             <a href="/upload" class="action-btn">
                                 <i class="fas fa-upload"></i>
                                 <span class="action-label">Upload Work</span>
@@ -54,10 +50,6 @@
                             <a href="#" class="action-btn">
                                 <i class="fas fa-question-circle"></i>
                                 <span class="action-label">Ask Question</span>
-                            </a>
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-download"></i>
-                                <span class="action-label">Resources</span>
                             </a>
                         </div>
                     </div>
@@ -287,97 +279,111 @@
     </div>
 
     <script>
-        // User Profile Dropdown
-        const userProfile = document.getElementById('userProfile');
-        
+    // User Profile Dropdown
+    const userProfile = document.getElementById('userProfile');
+    if (userProfile) {
         userProfile.addEventListener('click', function() {
-            // In a real app, this would open a dropdown menu
             alert('Profile menu would open with options: View Profile, Settings, Log Out');
         });
-        
-        // Notification Button
-        const notificationBtn = document.querySelector('.notification-btn');
+    }
+
+    // Notification Button
+    const notificationBtn = document.querySelector('.notification-btn');
+    if (notificationBtn) {
         notificationBtn.addEventListener('click', function() {
             alert('Notifications panel would open showing:\n1. New assignment posted\n2. Class announcement\n3. Message from Sarah');
         });
-        
-        // Quick Actions
-        const actionButtons = document.querySelectorAll('.action-btn');
-        actionButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const label = this.querySelector('.action-label').textContent;
-                
-                if (label === 'New Post') {
-                    alert('Redirecting to content creation page...');
-                } else if (label === 'Join Class') {
-                    alert('Opening virtual classroom...');
-                } else if (label === 'Upload Work') {
-                    alert('Opening file upload dialog...');
-                } else if (label === 'Browse Courses') {
-                    alert('Redirecting to course catalog...');
-                } else if (label === 'Ask Question') {
-                    alert('Opening question submission form...');
-                } else if (label === 'Resources') {
-                    alert('Opening resource library...');
-                }
-            });
-        });
-        
-        // Assignment Buttons
-        const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
-        assignmentButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (this.textContent.includes('Submit')) {
-                    alert('Opening assignment submission page...');
-                } else if (this.textContent.includes('Start')) {
-                    alert('Opening document editor...');
-                } else if (this.textContent.includes('View')) {
-                    alert('Showing assignment details...');
-                }
-            });
-        });
-        
-        // Calendar Day Clicks
-        const calendarDays = document.querySelectorAll('.calendar-day');
-        calendarDays.forEach(day => {
-            if (!day.classList.contains('calendar-header')) {
-                day.addEventListener('click', function() {
-                    const date = this.textContent;
-                    const month = 'September';
-                    
-                    if (this.classList.contains('today')) {
-                        alert(`Today is ${month} ${date}. You have:\n- Calculus assignment due\n- Physics class at 2 PM`);
-                    } else if (this.classList.contains('event')) {
-                        alert(`${month} ${date}: You have a scheduled event`);
-                    } else {
-                        alert(`${month} ${date}: No events scheduled`);
-                    }
-                });
+    }
+
+    // Quick Actions
+    const actionButtons = document.querySelectorAll('.action-btn');
+    actionButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const label = this.querySelector('.action-label').textContent;
+
+            // For buttons with actual pages, navigate
+            if (label === 'Upload Work') {
+                window.location.href = '/upload';
+                return;
+            }
+            if (label === 'New Post') {
+                window.location.href = '/newpost';
+                return;
+            }
+            if (label === 'Browse Courses') {
+                window.location.href = '/courses';
+                return;
+            }
+
+            // For buttons without a page, show alerts
+            e.preventDefault();
+            if (label === 'Join Class') {
+                alert('Opening virtual classroom...');
+            } else if (label === 'Ask Question') {
+                alert('Opening question submission form...');
+            } else if (label === 'Resources') {
+                alert('Opening resource library...');
             }
         });
-        
-        // Navigation
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                if (!this.href || this.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    const label = this.querySelector('span').textContent;
-                    alert(`Navigating to ${label} section...`);
+    });
+    
+
+    // Assignment Buttons
+    const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
+    assignmentButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.textContent.includes('Submit')) {
+                alert('Opening assignment submission page...');
+            } else if (this.textContent.includes('Start')) {
+                alert('Opening document editor...');
+            } else if (this.textContent.includes('View')) {
+                alert('Showing assignment details...');
+            }
+        });
+    });
+
+    // Calendar Day Clicks
+    const calendarDays = document.querySelectorAll('.calendar-day');
+    calendarDays.forEach(day => {
+        if (!day.classList.contains('calendar-header')) {
+            day.addEventListener('click', function() {
+                const date = this.textContent;
+                const month = 'September';
+
+                if (this.classList.contains('today')) {
+                    alert(`Today is ${month} ${date}. You have:\n- Calculus assignment due\n- Physics class at 2 PM`);
+                } else if (this.classList.contains('event')) {
+                    alert(`${month} ${date}: You have a scheduled event`);
+                } else {
+                    alert(`${month} ${date}: No events scheduled`);
                 }
             });
+        }
+    });
+
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (!this.href || this.getAttribute('href') === '#') {
+                e.preventDefault();
+                const label = this.querySelector('span').textContent;
+                alert(`Navigating to ${label} section...`);
+            }
         });
-        
-        // Search Functionality
-        const searchInput = document.querySelector('.search-bar input');
+    });
+
+    // Search Functionality
+    const searchInput = document.querySelector('.search-bar input');
+    if (searchInput) {
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 alert(`Searching for: "${this.value}"`);
                 this.value = '';
             }
         });
-    </script>
+    }
+</script>
 </body>
 </html>
 {% endblock %}
