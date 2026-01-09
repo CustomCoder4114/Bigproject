@@ -963,7 +963,7 @@ def like_resource(resource_id):
 
 @app.route('/resourses')
 def resourses():
-    """Render the resources page"""
+    """Render the resourses page"""
     if 'user_id' not in session:
         return redirect(url_for('login'))
     

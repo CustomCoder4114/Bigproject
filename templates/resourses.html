@@ -853,35 +853,33 @@
         </div>
     </header>
 
-    <!-- Quick Stats -->
-    <div class="quick-stats" id="quickStats">
-        <!-- Stats will be loaded dynamically -->
-    </div>
+
 
     <!-- Main Tabs -->
-    <div class="main-tabs">
-        <button class="main-tab-btn active" onclick="switchTab('all')" data-tab="all">
-            <i class="fas fa-th-large"></i> All Resources
-        </button>
-        <button class="main-tab-btn" onclick="switchTab('videos')" data-tab="videos">
-            <i class="fas fa-play-circle"></i> Videos
-        </button>
-        <button class="main-tab-btn" onclick="switchTab('documents')" data-tab="documents">
-            <i class="fas fa-file-alt"></i> Documents
-        </button>
-        <button class="main-tab-btn" onclick="switchTab('images')" data-tab="images">
-            <i class="fas fa-image"></i> Images
-        </button>
-        <button class="main-tab-btn" onclick="switchTab('audio')" data-tab="audio">
-            <i class="fas fa-music"></i> Audio
-        </button>
-        <button class="main-tab-btn" onclick="switchTab('other')" data-tab="other">
-            <i class="fas fa-file"></i> Other Files
-        </button>
-        <button class="main-tab-btn" onclick="window.location.href='/upload'" style="margin-left: auto;">
-            <i class="fas fa-cloud-upload-alt"></i> Upload New
-        </button>
-    </div>
+   <div class="main-tabs">
+    <button class="main-tab-btn active" onclick="switchTab('all', this)" data-tab="all">
+        <i class="fas fa-th-large"></i> All Resources
+    </button>
+    <button class="main-tab-btn" onclick="switchTab('videos', this)" data-tab="videos">
+        <i class="fas fa-play-circle"></i> Videos
+    </button>
+    <button class="main-tab-btn" onclick="switchTab('documents', this)" data-tab="documents">
+        <i class="fas fa-file-alt"></i> Documents
+    </button>
+    <button class="main-tab-btn" onclick="switchTab('images', this)" data-tab="images">
+        <i class="fas fa-image"></i> Images
+    </button>
+    <button class="main-tab-btn" onclick="switchTab('audio', this)" data-tab="audio">
+        <i class="fas fa-music"></i> Audio
+    </button>
+    <button class="main-tab-btn" onclick="switchTab('other', this)" data-tab="other">
+        <i class="fas fa-file"></i> Other Files
+    </button>
+    <button class="main-tab-btn" onclick="window.location.href='/upload'" style="margin-left: auto;">
+        <i class="fas fa-cloud-upload-alt"></i> Upload New
+    </button>
+</div>
+
 
     <!-- Filter Bar -->
     <div class="filter-bar">
@@ -943,54 +941,49 @@
 </div>
 
 <script>
-    // Global variables
+    // =========================
+    // Global Variables
+    // =========================
     let allResources = [];
     let currentUser = "{{ firstname }} {{ lastname }}" || "John Doe";
     let currentUserId = "{{ user_id }}" || null;
     let currentPreviewResource = null;
 
-    // Initialize the page
+    // =========================
+    // Initialization
+    // =========================
     document.addEventListener('DOMContentLoaded', () => {
-        loadAllResources();
-        setupEventListeners();
         createNotificationContainer();
+        setupEventListeners();
+        loadAllResources();
     });
 
-    // Create notification container
+    // =========================
+    // Notification Container
+    // =========================
     function createNotificationContainer() {
         const container = document.createElement('div');
         container.id = 'notificationContainer';
         document.body.appendChild(container);
     }
 
-    // Load all resources from backend
-    async function loadAllResources() {
-        try {
-            const response = await fetch('/api/resources');
-            const result = await response.json();
-            
-            if (result.success) {
-                allResources = result.resources;
-                updateStats();
-                renderResources('all');
-                renderQuickStats();
-                showNotification('Resources loaded successfully', 'success');
-            } else {
-                console.error('Failed to load resources:', result.message);
-                showNotification('Failed to load resources', 'error');
-            }
-        } catch (error) {
-            console.error('Error loading resources:', error);
-            showNotification('Network error loading resources', 'error');
-        } finally {
-            showLoading(false);
-        }
+    function showNotification(message, type='info') {
+        const container = document.getElementById('notificationContainer');
+        if (!container) return;
+        const notif = document.createElement('div');
+        notif.className = `notification ${type}`;
+        notif.textContent = message;
+        container.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
     }
 
-    // Show/hide loading spinner
+    // =========================
+    // Loading Spinner
+    // =========================
     function showLoading(show) {
         const spinner = document.getElementById('loadingSpinner');
         const grid = document.getElementById('resourcesGrid');
+        if (!spinner || !grid) return;
         if (show) {
             spinner.style.display = 'block';
             grid.innerHTML = '';
@@ -999,63 +992,97 @@
         }
     }
 
-    // Setup event listeners
+    // =========================
+    // Event Listeners
+    // =========================
     function setupEventListeners() {
-        document.getElementById('searchInput').addEventListener('input', filterResources);
-        document.getElementById('courseFilter').addEventListener('change', filterResources);
-        document.getElementById('sortFilter').addEventListener('change', filterResources);
-        
-        // Close modal when clicking outside
-        document.getElementById('previewModal').addEventListener('click', (e) => {
-            if (e.target.id === 'previewModal') {
-                closePreview();
-            }
-        });
-        
+        const searchInput = document.getElementById('searchInput');
+        const courseFilter = document.getElementById('courseFilter');
+        const sortFilter = document.getElementById('sortFilter');
+
+        if (searchInput) searchInput.addEventListener('input', filterResources);
+        if (courseFilter) courseFilter.addEventListener('change', filterResources);
+        if (sortFilter) sortFilter.addEventListener('change', filterResources);
+
+        // Close preview modal on click outside
+        const previewModal = document.getElementById('previewModal');
+        if (previewModal) {
+            previewModal.addEventListener('click', e => {
+                if (e.target.id === 'previewModal') closePreview();
+            });
+        }
+
         // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closePreview();
-            }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closePreview();
         });
     }
 
-    // Switch tabs
-    function switchTab(tab) {
+    // =========================
+    // Load All Resources
+    // =========================
+    async function loadAllResources() {
+        try {
+            showLoading(true);
+            const response = await fetch('/api/resources');
+            const result = await response.json();
+            if (result.success) {
+                allResources = result.resources;
+                updateStats();
+                renderResources(getActiveTab());
+                renderQuickStats();
+                showNotification('Resources loaded successfully', 'success');
+            } else {
+                showNotification('Failed to load resources', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification('Network error loading resources', 'error');
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // =========================
+    // Active Tab
+    // =========================
+    function getActiveTab() {
+        const activeBtn = document.querySelector('.main-tab-btn.active');
+        return activeBtn ? activeBtn.dataset.tab : 'all';
+    }
+
+    function switchTab(tab, btnElement) {
         document.querySelectorAll('.main-tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        btnElement.classList.add('active');
         renderResources(tab);
     }
 
-    // Filter resources
+    // =========================
+    // Filter Resources
+    // =========================
     function filterResources() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const courseFilter = document.getElementById('courseFilter').value;
-        const sortFilter = document.getElementById('sortFilter').value;
-        const activeTab = document.querySelector('.main-tab-btn.active').dataset.tab;
-        renderResources(activeTab, searchTerm, courseFilter, sortFilter);
+        const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        const courseFilter = document.getElementById('courseFilter')?.value || '';
+        const sortFilter = document.getElementById('sortFilter')?.value || 'newest';
+        renderResources(getActiveTab(), searchTerm, courseFilter, sortFilter);
     }
 
-    // Render resources grid
-    function renderResources(tab = 'all', searchTerm = '', courseFilter = '', sortFilter = 'newest') {
-        let filteredResources = allResources;
+    // =========================
+    // Render Resources Grid
+    // =========================
+    function renderResources(tab='all', searchTerm='', courseFilter='', sortFilter='newest') {
+        let filtered = [...allResources];
 
-        if (tab === 'videos') {
-            filteredResources = filteredResources.filter(r => r.file_category === 'video');
-        } else if (tab === 'documents') {
-            filteredResources = filteredResources.filter(r => 
-                ['pdf', 'doc', 'presentation', 'spreadsheet', 'code'].includes(r.file_category));
-        } else if (tab === 'images') {
-            filteredResources = filteredResources.filter(r => r.file_category === 'image');
-        } else if (tab === 'audio') {
-            filteredResources = filteredResources.filter(r => r.file_category === 'audio');
-        } else if (tab === 'other') {
-            filteredResources = filteredResources.filter(r => 
-                r.file_category === 'other' || r.file_category === 'zip');
-        }
+        // Filter by tab
+        if (tab === 'videos') filtered = filtered.filter(r => r.file_category === 'video');
+        else if (tab === 'documents') filtered = filtered.filter(r => ['pdf','doc','presentation','spreadsheet','code'].includes(r.file_category));
+        else if (tab === 'images') filtered = filtered.filter(r => r.file_category === 'image');
+        else if (tab === 'audio') filtered = filtered.filter(r => r.file_category === 'audio');
+        else if (tab === 'other') filtered = filtered.filter(r => ['other','zip'].includes(r.file_category));
 
+        // Filter by search term
         if (searchTerm) {
-            filteredResources = filteredResources.filter(r => 
+            filtered = filtered.filter(r => 
                 (r.title && r.title.toLowerCase().includes(searchTerm)) ||
                 (r.description && r.description.toLowerCase().includes(searchTerm)) ||
                 (r.category && r.category.toLowerCase().includes(searchTerm)) ||
@@ -1064,40 +1091,43 @@
             );
         }
 
-        if (courseFilter) {
-            filteredResources = filteredResources.filter(r => r.category === courseFilter);
-        }
+        // Filter by course
+        if (courseFilter) filtered = filtered.filter(r => r.category === courseFilter);
 
-        filteredResources = sortResources(filteredResources, sortFilter);
+        // Sort
+        filtered = sortResources(filtered, sortFilter);
 
+        // Render
         const grid = document.getElementById('resourcesGrid');
         const emptyState = document.getElementById('emptyState');
-        if (filteredResources.length === 0) {
+        if (!grid || !emptyState) return;
+
+        if (filtered.length === 0) {
             grid.innerHTML = '';
             emptyState.style.display = 'block';
         } else {
             emptyState.style.display = 'none';
-            grid.innerHTML = filteredResources.map(resource => createResourceCard(resource)).join('');
+            grid.innerHTML = filtered.map(createResourceCard).join('');
         }
     }
 
+    // =========================
+    // Sort Resources
+    // =========================
     function sortResources(resources, sortBy) {
-        switch (sortBy) {
-            case 'newest':
-                return resources.sort((a, b) => new Date(b.upload_date) - new Date(a.upload_date));
-            case 'oldest':
-                return resources.sort((a, b) => new Date(a.upload_date) - new Date(b.upload_date));
-            case 'largest':
-                return resources.sort((a, b) => (b.file_size || 0) - (a.file_size || 0));
-            case 'smallest':
-                return resources.sort((a, b) => (a.file_size || 0) - (b.file_size || 0));
-            case 'popular':
-                return resources.sort((a, b) => (b.views || 0) - (a.views || 0));
-            default:
-                return resources;
+        switch(sortBy) {
+            case 'newest': return resources.sort((a,b)=> new Date(b.upload_date)-new Date(a.upload_date));
+            case 'oldest': return resources.sort((a,b)=> new Date(a.upload_date)-new Date(b.upload_date));
+            case 'largest': return resources.sort((a,b)=> (b.file_size||0)-(a.file_size||0));
+            case 'smallest': return resources.sort((a,b)=> (a.file_size||0)-(b.file_size||0));
+            case 'popular': return resources.sort((a,b)=> (b.views||0)-(a.views||0));
+            default: return resources;
         }
     }
 
+    // =========================
+    // Create Resource Card
+    // =========================
     function createResourceCard(resource) {
         const icon = getFileIcon(resource.file_category);
         const badgeClass = `badge-${resource.file_category}`;
@@ -1106,29 +1136,26 @@
         const views = resource.views || 0;
         const likes = resource.likes || 0;
         const isMyResource = resource.user_id == currentUserId;
-
         let thumbnailUrl = resource.thumbnail_url || getDefaultThumbnail(resource.file_category, resource.category);
         if (resource.file_category === 'image' && resource.file_url) thumbnailUrl = resource.file_url;
 
-        const playOverlay = resource.file_category === 'video' && resource.file_url ? `
-            <div class="play-overlay"><i class="fas fa-play"></i> Play Video</div>
-        ` : '';
+        const playOverlay = resource.file_category === 'video' && resource.file_url ? `<div class="play-overlay"><i class="fas fa-play"></i> Play Video</div>` : '';
 
         return `
             <div class="resource-card" onclick="previewResource(${resource.id})">
                 <div class="resource-thumbnail">
                     <img src="${thumbnailUrl}" alt="${resource.title}" onerror="this.src='https://images.unsplash.com/photo-1551989137-294a2c6a2c2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'">
                     <div class="resource-badge"><i class="fas ${icon}"></i> ${badgeText}</div>
-                    ${resource.file_category === 'video' ? `<div class="resource-duration">${resource.duration || '15:00'}</div>` : ''}
+                    ${resource.file_category==='video'?`<div class="resource-duration">${resource.duration || '15:00'}</div>`:''}
                     ${playOverlay}
                 </div>
                 <div class="resource-content">
                     <h3 class="resource-title">${resource.title}</h3>
                     <p class="resource-description">${resource.description || 'No description provided.'}</p>
                     <div class="resource-meta">
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="display:flex; gap:8px; align-items:center;">
                             <span class="resource-category">${resource.category || 'General'}</span>
-                            ${isMyResource ? '<span class="user-badge"><i class="fas fa-user"></i> Yours</span>' : ''}
+                            ${isMyResource?'<span class="user-badge"><i class="fas fa-user"></i> Yours</span>':''}
                         </div>
                         <div class="resource-stats">
                             <span><i class="fas fa-eye"></i> ${views}</span>
@@ -1140,19 +1167,23 @@
         `;
     }
 
+    // =========================
+    // Resource Preview
+    // =========================
     async function previewResource(resourceId) {
         try {
-            const response = await fetch(`/api/resources/${resourceId}`);
-            const result = await response.json();
+            showLoading(true);
+            const res = await fetch(`/api/resources/${resourceId}`);
+            const result = await res.json();
             if (!result.success) {
                 showNotification('Failed to load resource', 'error');
                 return;
             }
-
             const resource = result.resource;
             currentPreviewResource = resource;
             const modal = document.getElementById('previewModal');
             const content = document.getElementById('previewContent');
+            if (!modal || !content) return;
 
             const icon = getFileIcon(resource.file_category);
             const badgeClass = `badge-${resource.file_category}`;
@@ -1163,35 +1194,13 @@
             const likes = resource.likes || 0;
             const isMyResource = resource.user_id == currentUserId;
 
-            let previewContent = '';
-
-            if (resource.file_category === 'video' && resource.file_url) {
-                previewContent = `
-                    <div class="video-preview">
-                        <video controls autoplay style="width:100%; height:100%;">
-                            <source src="${resource.file_url}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                `;
-            } else if (resource.file_category === 'image' && resource.file_url) {
-                previewContent = `
-                    <div style="text-align:center;">
-                        <img src="${resource.file_url}" alt="${resource.title}" 
-                             style="max-width:100%; max-height:500px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-                    </div>
-                `;
+            let previewHTML = '';
+            if (resource.file_category==='video' && resource.file_url) {
+                previewHTML = `<div class="video-preview"><video controls autoplay style="width:100%; height:100%;"><source src="${resource.file_url}" type="video/mp4">Your browser does not support the video tag.</video></div>`;
+            } else if (resource.file_category==='image' && resource.file_url) {
+                previewHTML = `<div style="text-align:center;"><img src="${resource.file_url}" alt="${resource.title}" style="max-width:100%; max-height:500px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>`;
             } else {
-                previewContent = `
-                    <div class="document-preview">
-                        <i class="fas ${icon}" style="font-size:4rem; color:var(--primary-color);"></i>
-                        <h3>${resource.title}</h3>
-                        <p>${resource.description || 'No description provided.'}</p>
-                        <p><strong>File Type:</strong> ${badgeText}</p>
-                        <p><strong>File Size:</strong> ${fileSize}</p>
-                        <p><strong>Uploaded:</strong> ${uploadDate}</p>
-                    </div>
-                `;
+                previewHTML = `<div class="document-preview"><i class="fas ${icon}" style="font-size:4rem; color:var(--primary-color);"></i><h3>${resource.title}</h3><p>${resource.description || 'No description provided.'}</p><p><strong>File Type:</strong> ${badgeText}</p><p><strong>File Size:</strong> ${fileSize}</p><p><strong>Uploaded:</strong> ${uploadDate}</p></div>`;
             }
 
             content.innerHTML = `
@@ -1200,13 +1209,13 @@
                     <button class="close-preview" onclick="closePreview()"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="preview-body">
-                    ${previewContent}
+                    ${previewHTML}
                     <div class="file-details">
-                        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
-                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:15px; margin-bottom:20px;">
+                            <div style="display:flex; gap:10px; flex-wrap:wrap;">
                                 <span class="file-type-badge ${badgeClass}"><i class="fas ${icon}"></i> ${badgeText}</span>
                                 <span style="color:var(--gray-600); font-weight:500;">${fileSize}</span>
-                                ${isMyResource ? '<span class="user-badge"><i class="fas fa-user"></i> Your Upload</span>' : ''}
+                                ${isMyResource?'<span class="user-badge"><i class="fas fa-user"></i> Your Upload</span>':''}
                             </div>
                             <div class="file-actions">
                                 <button class="download-btn" onclick="downloadResource(${resource.id})"><i class="fas fa-download"></i> Download</button>
@@ -1219,19 +1228,18 @@
                             <div class="detail-item"><span class="detail-label">Upload date</span><span class="detail-value">${uploadDate}</span></div>
                             <div class="detail-item"><span class="detail-label">Views</span><span class="detail-value">${views}</span></div>
                             <div class="detail-item"><span class="detail-label">Downloads</span><span class="detail-value">${resource.downloads || 0}</span></div>
-                            <div class="detail-item"><span class="detail-label">Privacy</span><span class="detail-value" style="text-transform:capitalize;">${resource.privacy || 'public'}</span></div>
+                            <div class="detail-item"><span class="detail-label">Privacy</span><span class="detail-value">${resource.privacy || 'public'}</span></div>
                         </div>
                         ${resource.description ? `<div style="margin-top:20px; border-top:1px solid var(--gray-200); padding-top:20px;"><h4>Description</h4><p style="color:var(--gray-700); line-height:1.6;">${resource.description}</p></div>` : ''}
                     </div>
                 </div>
             `;
-
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             showLoading(false);
 
         } catch (error) {
-            console.error('Error previewing resource:', error);
+            console.error(error);
             showNotification('Failed to load resource', 'error');
             showLoading(false);
         }
@@ -1239,52 +1247,54 @@
 
     function closePreview() {
         const modal = document.getElementById('previewModal');
+        if (!modal) return;
         modal.style.display = 'none';
         document.body.style.overflow = '';
         currentPreviewResource = null;
+        loadAllResources();
     }
 
-    async function downloadResource(resourceId) {
+    // =========================
+    // Download & Like
+    // =========================
+    async function downloadResource(id) {
         try {
-            window.open(`/api/resources/${resourceId}/download`, '_blank');
+            window.open(`/api/resources/${id}/download`, '_blank');
             showNotification('Download started', 'success');
         } catch (error) {
-            console.error('Error downloading resource:', error);
             showNotification('Failed to download', 'error');
         }
     }
 
-    async function likeResource(resourceId) {
+    async function likeResource(id) {
         try {
-            const response = await fetch(`/api/resources/${resourceId}/like`, { method:'POST' });
-            const result = await response.json();
+            const res = await fetch(`/api/resources/${id}/like`, {method:'POST'});
+            const result = await res.json();
             if (result.success) {
-                const likeBtn = document.querySelector('.preview-body .btn-secondary');
-                if (likeBtn) {
-                    likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> Like (${result.likes})`;
-                    likeBtn.style.background = 'var(--primary-light)';
-                    likeBtn.style.color = 'var(--primary-color)';
-                    setTimeout(() => { likeBtn.style.background=''; likeBtn.style.color=''; }, 1000);
-                }
+                const btn = document.querySelector('.preview-body .btn-secondary');
+                if (btn) btn.innerHTML = `<i class="fas fa-thumbs-up"></i> Like (${result.likes})`;
+                const idx = allResources.findIndex(r => r.id===id);
+                if (idx!==-1) allResources[idx].likes = result.likes;
                 showNotification('Resource liked!', 'success');
-                const idx = allResources.findIndex(r => r.id === resourceId);
-                if (idx !== -1) allResources[idx].likes = result.likes;
             } else showNotification('Failed to like resource', 'error');
         } catch (error) {
-            console.error('Error liking resource:', error);
             showNotification('Failed to like resource', 'error');
         }
     }
 
+    // =========================
+    // Quick Stats & Stats
+    // =========================
     function updateStats() {
         const totalResources = allResources.length;
-        const totalVideos = allResources.filter(r => r.file_category === 'video').length;
-        const totalDocuments = allResources.filter(r => ['pdf', 'doc', 'presentation', 'spreadsheet', 'code'].includes(r.file_category)).length;
+        const totalVideos = allResources.filter(r => r.file_category==='video').length;
+        const totalDocuments = allResources.filter(r => ['pdf','doc'].includes(r.file_category)).length;
         const totalCourses = new Set(allResources.map(r => r.category).filter(Boolean)).size || 1;
-        document.getElementById('totalResources').textContent = totalResources;
-        document.getElementById('totalVideos').textContent = totalVideos;
-        document.getElementById('totalDocuments').textContent = totalDocuments;
-        document.getElementById('totalCourses').textContent = totalCourses;
+
+        if(document.getElementById('totalResources')) document.getElementById('totalResources').textContent = totalResources;
+        if(document.getElementById('totalVideos')) document.getElementById('totalVideos').textContent = totalVideos;
+        if(document.getElementById('totalDocuments')) document.getElementById('totalDocuments').textContent = totalDocuments;
+        if(document.getElementById('totalCourses')) document.getElementById('totalCourses').textContent = totalCourses;
     }
 
     function renderQuickStats() {
@@ -1296,6 +1306,7 @@
             { type:'other', count:allResources.filter(r=>!['video','pdf','doc','image','audio'].includes(r.file_category)).length, icon:'fa-file', color:'icon-other' }
         ];
         const container=document.getElementById('quickStats');
+        if(!container) return;
         container.innerHTML = stats.map(stat => `
             <div class="stat-item">
                 <div class="stat-icon ${stat.color}"><i class="fas ${stat.icon}"></i></div>
@@ -1304,43 +1315,14 @@
         `).join('');
     }
 
-    async function refreshResources() { await loadAllResources(); showNotification('Resources refreshed!', 'success'); }
+    // =========================
+    // Utilities
+    // =========================
+    function getFileIcon(cat){ const icons={video:"fa-video",pdf:"fa-file-pdf",doc:"fa-file-word",presentation:"fa-file-powerpoint",spreadsheet:"fa-file-excel",code:"fa-code",image:"fa-image",audio:"fa-music",other:"fa-file",zip:"fa-file-archive"}; return icons[cat]||'fa-file'; }
+    function getFileTypeText(cat){ const texts={video:"Video",pdf:"PDF",doc:"Document",presentation:"Presentation",spreadsheet:"Spreadsheet",code:"Code",image:"Image",audio:"Audio",other:"Other",zip:"ZIP"}; return texts[cat]||'File'; }
+    function formatFileSize(bytes){ if(bytes===0)return'0 B'; const k=1024,sizes=['B','KB','MB','GB','TB'],i=Math.floor(Math.log(bytes)/Math.log(k)); return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]; }
+    function getDefaultThumbnail(category,course){ return `https://source.unsplash.com/600x400/?${category},${course}`; }
 
-    function getFileIcon(fileCategory) {
-        const icons = { video:"fa-video", audio:"fa-music", image:"fa-image", pdf:"fa-file-pdf", doc:"fa-file-word", presentation:"fa-file-powerpoint", spreadsheet:"fa-file-excel", code:"fa-file-code", zip:"fa-file-archive", other:"fa-file" };
-        return icons[fileCategory] || "fa-file";
-    }
-
-    function getFileTypeText(fileCategory) {
-        const texts = { video:"Video", audio:"Audio", image:"Image", pdf:"PDF", doc:"Document", presentation:"Presentation", spreadsheet:"Spreadsheet", code:"Code", zip:"Archive", other:"File" };
-        return texts[fileCategory] || "File";
-    }
-
-    function getDefaultThumbnail(fileCategory, course) {
-        const thumbnails = {
-            mathematics:'https://images.unsplash.com/photo-1509228468518-180dd4864904?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-            science:'https://images.unsplash.com/photo-1581091870621-3f020cd9360c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-            history:'https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-            english:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
-            default:'https://images.unsplash.com/photo-1551989137-294a2c6a2c2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
-        };
-        return thumbnails[course?.toLowerCase()] || thumbnails.default;
-    }
-
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024, sizes = ['Bytes','KB','MB','GB','TB'];
-        const i = Math.floor(Math.log(bytes)/Math.log(k));
-        return parseFloat((bytes/k**i).toFixed(2)) + ' ' + sizes[i];
-    }
-
-    function showNotification(message, type='info', duration=3000) {
-        const container = document.getElementById('notificationContainer');
-        const notif = document.createElement('div');
-        notif.className = `notification ${type}`;
-        notif.textContent = message;
-        container.appendChild(notif);
-        setTimeout(() => notif.remove(), duration);
-    }
 </script>
 {% endblock %}
+
