@@ -466,7 +466,7 @@
             font-weight: bold;
         }
 
-        /* DELETE BUTTON STYLES */
+        /* DELETE BUTTON STYLES - UPDATED */
         .delete-btn {
             background: #ef4444;
             color: white;
@@ -496,6 +496,12 @@
             box-shadow: none;
         }
 
+        .delete-btn.deleting {
+            background: #dc2626;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
         .confirm-delete-dialog {
             position: fixed;
             top: 0;
@@ -517,17 +523,22 @@
             max-width: 500px;
             width: 90%;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease-out;
         }
 
         .confirm-delete-box h3 {
             color: #333;
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .confirm-delete-box p {
             color: #666;
             margin-bottom: 25px;
             line-height: 1.5;
+            font-size: 1rem;
         }
 
         .confirm-actions {
@@ -560,10 +571,26 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .confirm-delete-btn:hover {
             background: #dc2626;
+        }
+
+        .confirm-delete-btn:disabled {
+            background: #fca5a5;
+            cursor: not-allowed;
+        }
+
+        .confirm-delete-btn .spinner {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+            border-top-color: white;
+            margin-right: 0;
         }
 
         /* Statistics */
@@ -580,6 +607,12 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .stat-number {
@@ -609,6 +642,12 @@
             background: white;
             font-size: 0.9rem;
             cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #4361ee;
         }
 
         .search-input {
@@ -618,6 +657,13 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
 
         .empty-state {
@@ -637,6 +683,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            margin-top: 10px;
         }
 
         .view-btn {
@@ -656,6 +703,38 @@
 
         .view-btn:hover {
             background: #3a0ca3;
+        }
+
+        .view-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* File details */
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .file-size {
+            background: #eef1ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .file-date {
+            color: #999;
+        }
+
+        .file-category {
+            background: #f0f9ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #0369a1;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -952,6 +1031,7 @@
         // For delete functionality
         let resourceToDelete = null;
         let allUserResources = [];
+        let isDeleting = false;
 
         /* =========================
            DOM ELEMENTS
@@ -973,6 +1053,49 @@
         const deleteDialog = document.getElementById("deleteDialog");
         const deleteMessage = document.getElementById("deleteMessage");
         const userStats = document.getElementById("userStats");
+
+        /* =========================
+           SECURITY UTILITIES - NEW
+        ========================= */
+        
+        /**
+         * Escape HTML special characters to prevent XSS attacks
+         */
+        function escapeHtml(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
+         * Escape text for use in HTML attributes
+         */
+        function escapeHtmlAttr(text) {
+            if (typeof text !== 'string') return '';
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        /**
+         * Escape text for use in JavaScript strings (single quotes)
+         */
+        function escapeJsString(text) {
+            if (typeof text !== 'string') return '';
+            return text
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n')
+                .replace(/\r/g, '\\r')
+                .replace(/\t/g, '\\t')
+                .replace(/\f/g, '\\f')
+                .replace(/\b/g, '\\b');
+        }
 
         /* =========================
            INITIALIZATION
@@ -1000,6 +1123,23 @@
             dropArea.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
             dropArea.addEventListener("click", () => fileInput.click());
             fileInput.addEventListener("change", e => handleFiles(e.target.files));
+            
+            // Add event delegation for delete buttons
+            myUploadsList.addEventListener('click', handleResourceAction);
+            
+            // Close delete dialog when clicking outside
+            deleteDialog.addEventListener('click', (e) => {
+                if (e.target === deleteDialog) {
+                    cancelDelete();
+                }
+            });
+            
+            // Close delete dialog with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && deleteDialog.style.display === 'flex') {
+                    cancelDelete();
+                }
+            });
         }
 
         function preventDefaults(e) {
@@ -1072,7 +1212,7 @@
                     <div>
                         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
                             <i class="fas ${icon}" style="color:#4361ee"></i>
-                            <strong style="flex:1;min-width:200px;word-break:break-all">${file.name}</strong>
+                            <strong style="flex:1;min-width:200px;word-break:break-all">${escapeHtml(file.name)}</strong>
                             ${warningIcon}
                             <span style="font-size:0.8rem;color:#666">${size}</span>
                             <span class="file-type-badge ${badgeClass}">${badgeText}</span>
@@ -1299,6 +1439,9 @@
             `;
         }
 
+        /* =========================
+           RENDER UPLOADS WITH SECURE DELETE BUTTONS
+        ========================= */
         function renderMyUploads(resources) {
             myUploadsList.innerHTML = '';
             
@@ -1321,46 +1464,81 @@
                 
                 const previewItem = document.createElement("div");
                 previewItem.className = "preview-item";
+                previewItem.dataset.resourceId = resource.id;
+                
+                // Use data attributes instead of unsafe onclick
                 previewItem.innerHTML = `
                     <div class="preview-icon">
                         <i class="fas ${icon}"></i>
                     </div>
                     <div class="preview-info">
-                        <h4>${resource.title}</h4>
+                        <h4>${escapeHtml(resource.title)}</h4>
                         <p>
-                            <strong>Category:</strong> ${resource.category} | 
-                            <strong>Type:</strong> ${resource.type} |
-                            <span class="file-type-badge ${badgeClass}" style="font-size:0.7rem;">${fileTypeBadge}</span>
+                            <strong>Category:</strong> ${escapeHtml(resource.category || 'General')} | 
+                            <strong>Type:</strong> ${escapeHtml(resource.type || 'Other')} |
+                            <span class="file-type-badge ${badgeClass}" style="font-size:0.7rem;">${escapeHtml(fileTypeBadge)}</span>
                         </p>
                         <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                            <strong>Uploaded:</strong> ${uploadDate} | 
-                            <strong>Size:</strong> ${fileSize} |
+                            <strong>Uploaded:</strong> ${escapeHtml(uploadDate)} | 
+                            <strong>Size:</strong> ${escapeHtml(fileSize)} |
                             <strong>Views:</strong> ${resource.views || 0} |
                             <strong>Downloads:</strong> ${resource.downloads || 0}
                         </p>
                         <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                            ${resource.description ? (resource.description.length > 100 ? resource.description.substring(0, 100) + '...' : resource.description) : 'No description'}
+                            ${escapeHtml(resource.description ? (resource.description.length > 100 ? resource.description.substring(0, 100) + '...' : resource.description) : 'No description')}
                         </p>
                         <div class="file-actions" style="margin-top: 10px;">
-                            <button class="view-btn" onclick="viewResource(${resource.id})">
+                            <button class="view-btn" data-action="view" data-id="${resource.id}">
                                 <i class="fas fa-eye"></i> View
                             </button>
-                            <button class="view-btn" onclick="downloadResource(${resource.id})">
+                            <button class="view-btn" data-action="download" data-id="${resource.id}">
                                 <i class="fas fa-download"></i> Download
                             </button>
-                            <button class="delete-btn" onclick="promptDelete(${resource.id}, '${resource.title}')">
+                            <button class="delete-btn" 
+                                    data-action="delete" 
+                                    data-id="${resource.id}"
+                                    data-title="${escapeHtmlAttr(resource.title)}">
                                 <i class="fas fa-trash"></i> Delete
                             </button>
                         </div>
                     </div>
                     <div style="text-align: right;">
                         <span style="background: ${resource.privacy === 'public' ? '#4361ee' : '#6b7280'}; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
-                            ${resource.privacy === 'public' ? 'Public' : 'Private'}
+                            ${escapeHtml(resource.privacy === 'public' ? 'Public' : 'Private')}
                         </span>
                     </div>
                 `;
                 myUploadsList.appendChild(previewItem);
             });
+        }
+
+        /* =========================
+           EVENT HANDLER FOR ALL ACTIONS
+        ========================= */
+        function handleResourceAction(event) {
+            const button = event.target.closest('[data-action]');
+            if (!button) return;
+            
+            // Prevent multiple clicks if already processing
+            if (button.classList.contains('deleting') || button.disabled) {
+                return;
+            }
+            
+            const action = button.dataset.action;
+            const id = parseInt(button.dataset.id);
+            const title = button.dataset.title || '';
+            
+            switch(action) {
+                case 'view':
+                    viewResource(id);
+                    break;
+                case 'download':
+                    downloadResource(id);
+                    break;
+                case 'delete':
+                    promptDelete(id, title, button);
+                    break;
+            }
         }
 
         /* =========================
@@ -1428,21 +1606,41 @@
         }
 
         /* =========================
-           DELETE FUNCTIONALITY
+           DELETE FUNCTIONALITY - FIXED AND SECURE
         ========================= */
-        function promptDelete(resourceId, resourceTitle) {
+        function promptDelete(resourceId, resourceTitle, button = null) {
+            if (isDeleting) return;
+            
             resourceToDelete = resourceId;
-            deleteMessage.textContent = `Are you sure you want to delete "${resourceTitle}"? This action cannot be undone. The file will be permanently removed from the server.`;
+            deleteMessage.innerHTML = `Are you sure you want to delete <strong>"${escapeHtml(resourceTitle)}"</strong>?<br><br>This action <strong>cannot be undone</strong>. The file will be permanently removed from the server.`;
             deleteDialog.style.display = 'flex';
+            
+            // Disable the clicked button if provided
+            if (button) {
+                button.disabled = true;
+                button.classList.add('deleting');
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Delete';
+            }
         }
 
         function cancelDelete() {
+            if (isDeleting) return;
+            
             resourceToDelete = null;
             deleteDialog.style.display = 'none';
+            
+            // Re-enable all delete buttons
+            document.querySelectorAll('.delete-btn[data-action="delete"]').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('deleting');
+                btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+            });
         }
 
         async function confirmDelete() {
-            if (!resourceToDelete) return;
+            if (!resourceToDelete || isDeleting) return;
+            
+            isDeleting = true;
             
             const btn = document.getElementById('confirmDeleteBtn');
             const originalText = btn.innerHTML;
@@ -1470,19 +1668,45 @@
                     setTimeout(() => {
                         deleteDialog.style.display = 'none';
                         resourceToDelete = null;
+                        isDeleting = false;
+                        
+                        // Reset delete button
                         btn.innerHTML = originalText;
                         btn.disabled = false;
+                        
+                        // Re-enable all delete buttons in the list
+                        document.querySelectorAll('.delete-btn[data-action="delete"]').forEach(button => {
+                            button.disabled = false;
+                            button.classList.remove('deleting');
+                            button.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                        });
                     }, 1000);
                 } else {
                     showError('Failed to delete file: ' + (result.message || 'Unknown error'));
                     btn.innerHTML = originalText;
                     btn.disabled = false;
+                    isDeleting = false;
+                    
+                    // Re-enable all delete buttons
+                    document.querySelectorAll('.delete-btn[data-action="delete"]').forEach(button => {
+                        button.disabled = false;
+                        button.classList.remove('deleting');
+                        button.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                    });
                 }
             } catch (error) {
                 console.error('Error deleting resource:', error);
                 showError('Network error deleting file. Please try again.');
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+                isDeleting = false;
+                
+                // Re-enable all delete buttons
+                document.querySelectorAll('.delete-btn[data-action="delete"]').forEach(button => {
+                    button.disabled = false;
+                    button.classList.remove('deleting');
+                    button.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                });
             }
         }
 
