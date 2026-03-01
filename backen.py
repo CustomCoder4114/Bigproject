@@ -981,5 +981,76 @@ def format_file_size(bytes):
     i = int(math.floor(math.log(bytes) / math.log(k)))
     return f"{bytes / math.pow(k, i):.2f} {sizes[i]}"
 
+@app.route('/api/resources/<int:resource_id>', methods=['DELETE'])
+def delete_resource(resource_id):
+    try:
+        # 1. User must be logged in
+        if 'user_id' not in session:
+            return jsonify({
+                'success': False,
+                'message': 'Authentication required'
+            }), 401
+
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+
+        # 2. Get the resource from DB
+        cursor.execute('''
+            SELECT user_id, file_name 
+            FROM resources 
+            WHERE id = ?
+        ''', (resource_id,))
+        resource = cursor.fetchone()
+
+        # 3. Resource must exist
+        if not resource:
+            conn.close()
+            return jsonify({
+                'success': False,
+                'message': 'Resource not found'
+            }), 404
+
+        owner_id, file_name = resource
+
+        # 4. User must own the resource
+        if int(owner_id) != int(session['user_id']):
+            conn.close()
+            return jsonify({
+                'success': False,
+                'message': 'You are not allowed to delete this resource'
+            }), 403
+
+        # 5. Delete file from disk
+        file_path = os.path.join(
+            UPLOAD_FOLDER,
+            str(owner_id),
+            file_name
+        )
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+        # 6. Delete from database
+        cursor.execute(
+            'DELETE FROM resources WHERE id = ?',
+            (resource_id,)
+        )
+        conn.commit()
+        conn.close()
+
+        # 7. Return success
+        return jsonify({
+            'success': True,
+            'message': 'Resource deleted successfully'
+        })
+
+    except Exception as e:
+        print(f"Delete error: {e}")
+        return jsonify({
+            'success': False,
+            'message': 'Server error while deleting'
+        }), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
