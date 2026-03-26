@@ -1,0 +1,1406 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Hub - Master New Abilities - eSchool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary-color: #7209b7;
+            --accent-color: #4cc9f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --hover-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        padding: 20px;
+        }
+
+        /* Header Styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--gray-100);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            padding: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 25px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 45px;
+            min-width: 150px;
+        }
+
+        .tab-btn:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .select-control {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Skill Card */
+        .skill-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .skill-banner {
+            height: 160px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 4px solid white;
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-beginner { background: var(--success-color); color: white; }
+        .difficulty-intermediate { background: var(--warning-color); color: white; }
+        .difficulty-advanced { background: var(--danger-color); color: white; }
+
+        .skill-content {
+            padding: 25px;
+            flex: 1;
+        }
+
+        .skill-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .skill-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .skill-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .skill-stats {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            margin: 15px 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .stat-item i {
+            color: var(--primary-color);
+        }
+
+        .skill-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Progress Tracker */
+        .progress-section {
+            margin: 15px 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        /* Interactive Learning Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: var(--danger-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Interactive Game Elements */
+        .interactive-game {
+            background: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            background: #f0d9b5;
+            aspect-ratio: 1;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 2px solid var(--gray-800);
+        }
+
+        .chess-square {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chess-square.light { background: #f0d9b5; }
+        .chess-square.dark { background: #b58863; }
+        .chess-square.selected { background: #7b9ae0; }
+
+        .rubik-preview {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .rubik-face {
+            width: 100px;
+            height: 100px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background: #333;
+            padding: 2px;
+            border-radius: 8px;
+        }
+
+        .rubik-sticker {
+            background: white;
+            border-radius: 4px;
+        }
+
+        /* Achievements Section */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .achievement-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: var(--gray-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .skills-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-radius: var(--border-radius);
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .search-box, .select-control {
+                width: 100%;
+            }
+            
+            .skill-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <div class="page-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h1 class="page-title">Skills Hub</h1>
+                <p class="page-subtitle">Discover your talents, learn amazing skills, and master new abilities from chess to rubik's cube and beyond!</p>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-number" id="totalSkills">0</div>
+                <div class="stat-label">Skills to Learn</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="activeLearners">0</div>
+                <div class="stat-label">Active Learners</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <div class="stat-number" id="achievementsUnlocked">0</div>
+                <div class="stat-label">Achievements</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number" id="hoursPracticed">0</div>
+                <div class="stat-label">Hours Practiced</div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('explore')">
+                <i class="fas fa-compass"></i> Explore Skills
+            </button>
+            <button class="tab-btn" onclick="switchTab('mySkills')">
+                <i class="fas fa-user-graduate"></i> My Skills
+            </button>
+            <button class="tab-btn" onclick="switchTab('achievements')">
+                <i class="fas fa-medal"></i> Achievements
+            </button>
+            <button class="tab-btn" onclick="switchTab('practice')">
+                <i class="fas fa-gamepad"></i> Practice Zone
+            </button>
+        </div>
+
+        <!-- Explore Skills Tab -->
+        <div id="explore-tab" class="tab-content active">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchSkills" class="form-control" placeholder="Search skills (chess, rubik's cube, drawing...)">
+                    </div>
+                    <select id="categoryFilter" class="select-control">
+                        <option value="">All Categories</option>
+                        <option value="puzzle">Puzzle & Games</option>
+                        <option value="creative">Creative Arts</option>
+                        <option value="mental">Mental Abilities</option>
+                        <option value="physical">Physical Skills</option>
+                        <option value="technology">Technology</option>
+                    </select>
+                    <select id="difficultyFilter" class="select-control">
+                        <option value="">All Difficulties</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                    <select id="sortSkills" class="select-control">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest First</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="skills-grid" id="skillsContainer">
+                <!-- Skills will be loaded here -->
+            </div>
+        </div>
+
+        <!-- My Skills Tab -->
+        <div id="mySkills-tab" class="tab-content">
+            <div class="skills-grid" id="mySkillsContainer">
+                <!-- User's skills will be loaded here -->
+            </div>
+            <div class="empty-state" id="mySkillsEmpty" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="empty-title">Start Your Skills Journey</h3>
+                <p class="empty-text">Begin learning a new skill from our collection and track your progress!</p>
+                <button class="btn btn-primary" onclick="switchTab('explore')">
+                    <i class="fas fa-compass"></i> Explore Skills
+                </button>
+            </div>
+        </div>
+
+        <!-- Achievements Tab -->
+        <div id="achievements-tab" class="tab-content">
+            <div class="achievements-grid" id="achievementsContainer">
+                <!-- Achievements will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Practice Zone Tab -->
+        <div id="practice-tab" class="tab-content">
+            <div class="skills-grid" id="practiceContainer">
+                <!-- Practice games will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Learning Modal -->
+    <div id="skillModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Skill Title</h2>
+                <p id="modalCategory">Category</p>
+                <button class="close-modal" onclick="closeSkillModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Skill details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Skills Database
+        const skills = [
+            {
+                id: 1,
+                title: "Chess Mastery",
+                category: "puzzle",
+                icon: "fa-chess-queen",
+                difficulty: "intermediate",
+                timeToLearn: "20-40 hours",
+                popularity: 98,
+                description: "Learn strategic thinking, tactics, and game patterns to become a chess master.",
+                longDescription: "Chess is the ultimate game of strategy. This course covers openings, middle game tactics, endgame principles, and advanced strategies.",
+                steps: [
+                    "Learn piece movements and basic rules",
+                    "Master basic tactics (forks, pins, skewers)",
+                    "Study common opening principles",
+                    "Practice endgame techniques",
+                    "Analyze grandmaster games"
+                ],
+                tips: [
+                    "Play daily to build pattern recognition",
+                    "Analyze your losses to learn from mistakes",
+                    "Study one opening deeply",
+                    "Join local chess clubs for practice"
+                ],
+                learners: 15234,
+                lessons: 25,
+                practiceTime: "30 min/day"
+            },
+            {
+                id: 2,
+                title: "Rubik's Cube Solving",
+                category: "puzzle",
+                icon: "fa-cube",
+                difficulty: "beginner",
+                timeToLearn: "5-10 hours",
+                popularity: 95,
+                description: "Learn to solve the 3x3 Rubik's Cube in under 2 minutes using the beginner's method.",
+                longDescription: "Master the world's most famous puzzle! Learn layer-by-layer method, algorithms, and speedcubing techniques.",
+                steps: [
+                    "Understand cube notation",
+                    "Solve the white cross",
+                    "Complete the first two layers",
+                    "Orient the last layer",
+                    "Permute the last layer"
+                ],
+                tips: [
+                    "Practice algorithms slowly at first",
+                    "Use finger tricks for speed",
+                    "Time yourself to track progress",
+                    "Learn CFOP for advanced solving"
+                ],
+                learners: 23456,
+                lessons: 15,
+                practiceTime: "15 min/day"
+            },
+            {
+                id: 3,
+                title: "Speed Reading",
+                category: "mental",
+                icon: "fa-book-open",
+                difficulty: "intermediate",
+                timeToLearn: "15-20 hours",
+                popularity: 89,
+                description: "Read faster while maintaining comprehension. Perfect for students and professionals.",
+                longDescription: "Learn techniques to double or triple your reading speed while improving comprehension and retention.",
+                steps: [
+                    "Eliminate subvocalization",
+                    "Use peripheral vision",
+                    "Practice with a pointer",
+                    "Expand visual span",
+                    "Regular comprehension tests"
+                ],
+                tips: [
+                    "Start with easier material",
+                    "Practice 15 minutes daily",
+                    "Track your words per minute",
+                    "Take breaks between sessions"
+                ],
+                learners: 18765,
+                lessons: 20,
+                practiceTime: "20 min/day"
+            },
+            {
+                id: 4,
+                title: "Calligraphy & Hand Lettering",
+                category: "creative",
+                icon: "fa-pen-fancy",
+                difficulty: "beginner",
+                timeToLearn: "10-15 hours",
+                popularity: 92,
+                description: "Create beautiful handwritten art with modern calligraphy techniques.",
+                longDescription: "Discover the art of beautiful writing. Learn brush lettering, pointed pen techniques, and create stunning designs.",
+                steps: [
+                    "Understand basic strokes",
+                    "Practice letterforms",
+                    "Connect letters into words",
+                    "Add flourishes and decoration",
+                    "Create final compositions"
+                ],
+                tips: [
+                    "Use grid paper for practice",
+                    "Invest in quality pens",
+                    "Trace master works to learn",
+                    "Join lettering communities"
+                ],
+                learners: 12345,
+                lessons: 18,
+                practiceTime: "20 min/day"
+            },
+            {
+                id: 5,
+                title: "Memory Techniques",
+                category: "mental",
+                icon: "fa-brain",
+                difficulty: "intermediate",
+                timeToLearn: "12-18 hours",
+                popularity: 94,
+                description: "Master mnemonics, memory palaces, and recall techniques to remember anything.",
+                longDescription: "Learn powerful memory techniques used by memory champions to remember names, numbers, and complex information.",
+                steps: [
+                    "Learn the method of loci",
+                    "Create vivid mental images",
+                    "Use peg systems for numbers",
+                    "Build memory palaces",
+                    "Practice recall speed"
+                ],
+                tips: [
+                    "Start with short lists",
+                    "Use sensory details in images",
+                    "Review memories regularly",
+                    "Teach techniques to others"
+                ],
+                learners: 14567,
+                lessons: 22,
+                practiceTime: "15 min/day"
+            },
+            {
+                id: 6,
+                title: "Juggling",
+                category: "physical",
+                icon: "fa-hand-peace",
+                difficulty: "beginner",
+                timeToLearn: "8-12 hours",
+                popularity: 86,
+                description: "Learn to juggle 3 balls with proper technique and patterns.",
+                longDescription: "Develop coordination and focus through the art of juggling. Perfect for improving hand-eye coordination.",
+                steps: [
+                    "Practice with one ball",
+                    "Two-ball exchanges",
+                    "Three-ball cascade pattern",
+                    "Add variations and tricks",
+                    "Increase speed and height"
+                ],
+                tips: [
+                    "Stand over a bed while learning",
+                    "Use beanbags not hard balls",
+                    "Practice 15 minutes daily",
+                    "Film yourself to check form"
+                ],
+                learners: 9876,
+                lessons: 12,
+                practiceTime: "15 min/day"
+            },
+            {
+                id: 7,
+                title: "Public Speaking",
+                category: "mental",
+                icon: "fa-microphone-alt",
+                difficulty: "advanced",
+                timeToLearn: "25-35 hours",
+                popularity: 97,
+                description: "Overcome stage fright and deliver compelling presentations with confidence.",
+                longDescription: "Master the art of speaking in front of audiences. Learn structure, delivery, and audience engagement techniques.",
+                steps: [
+                    "Overcome fear of speaking",
+                    "Structure your message",
+                    "Use body language effectively",
+                    "Engage with the audience",
+                    "Handle Q&A sessions"
+                ],
+                tips: [
+                    "Record yourself practicing",
+                    "Join Toastmasters clubs",
+                    "Start with small groups",
+                    "Use storytelling techniques"
+                ],
+                learners: 21567,
+                lessons: 28,
+                practiceTime: "30 min/day"
+            },
+            {
+                id: 8,
+                title: "Sudoku Mastery",
+                category: "puzzle",
+                icon: "fa-th",
+                difficulty: "beginner",
+                timeToLearn: "5-8 hours",
+                popularity: 88,
+                description: "Learn techniques to solve any Sudoku puzzle from easy to expert level.",
+                longDescription: "Master logic puzzles with systematic solving techniques and pattern recognition.",
+                steps: [
+                    "Understand basic rules",
+                    "Use elimination techniques",
+                    "Learn hidden pairs and triples",
+                    "Master X-Wing and Swordfish",
+                    "Practice with timed puzzles"
+                ],
+                tips: [
+                    "Start with easy puzzles",
+                    "Use pencil marks",
+                    "Take breaks when stuck",
+                    "Solve daily for improvement"
+                ],
+                learners: 11234,
+                lessons: 16,
+                practiceTime: "15 min/day"
+            }
+        ];
+
+        // User's learned skills with progress
+        let mySkills = JSON.parse(localStorage.getItem('mySkills')) || [
+            { skillId: 1, progress: 65, startedAt: "2024-01-15", practiceMinutes: 780, completed: false },
+            { skillId: 2, progress: 32, startedAt: "2024-02-01", practiceMinutes: 320, completed: false }
+        ];
+
+        // Achievements
+        let achievements = [
+            { id: 1, title: "First Steps", description: "Start learning your first skill", icon: "fa-star", unlocked: true },
+            { id: 2, title: "Practice Makes Perfect", description: "Complete 5 practice sessions", icon: "fa-clock", unlocked: false },
+            { id: 3, title: "Skill Master", description: "Reach 100% in any skill", icon: "fa-trophy", unlocked: false },
+            { id: 4, title: "Diverse Learner", description: "Learn 3 different skills", icon: "fa-globe", unlocked: false },
+            { id: 5, title: "Dedicated Student", description: "Practice 10 hours total", icon: "fa-hourglass-half", unlocked: false },
+            { id: 6, title: "Speed Demon", description: "Complete a skill in under 10 hours", icon: "fa-rocket", unlocked: false }
+        ];
+
+        let totalPracticeHours = mySkills.reduce((sum, s) => sum + s.practiceMinutes, 0) / 60;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSkills();
+            loadMySkills();
+            loadAchievements();
+            loadPracticeZone();
+            updateStats();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('searchSkills').addEventListener('input', filterSkills);
+            document.getElementById('categoryFilter').addEventListener('change', filterSkills);
+            document.getElementById('difficultyFilter').addEventListener('change', filterSkills);
+            document.getElementById('sortSkills').addEventListener('change', filterSkills);
+        }
+
+        function loadSkills() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = skills.map(skill => createSkillCard(skill)).join('');
+        }
+
+        function createSkillCard(skill, showProgress = false) {
+            const userSkill = mySkills.find(s => s.skillId === skill.id);
+            const progress = userSkill ? userSkill.progress : 0;
+            
+            const difficultyClass = `difficulty-${skill.difficulty}`;
+            
+            return `
+                <div class="skill-card" onclick="viewSkillDetails(${skill.id})">
+                    <div class="skill-banner">
+                        <div class="skill-icon">
+                            <i class="fas ${skill.icon}"></i>
+                        </div>
+                        <div class="difficulty-badge ${difficultyClass}">
+                            ${skill.difficulty.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="skill-content">
+                        <h3 class="skill-title">${skill.title}</h3>
+                        <span class="skill-category">${skill.category.toUpperCase()}</span>
+                        <p class="skill-description">${skill.description}</p>
+                        
+                        <div class="skill-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${skill.timeToLearn}</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-users"></i>
+                                <span>${skill.learners.toLocaleString()}</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-star"></i>
+                                <span>${skill.popularity}%</span>
+                            </div>
+                        </div>
+                        
+                        ${showProgress ? `
+                            <div class="progress-section">
+                                <div class="progress-header">
+                                    <span>Your Progress</span>
+                                    <span>${progress}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                                <div style="font-size: 0.8rem; margin-top: 8px; color: var(--gray-500);">
+                                    <i class="fas fa-hourglass-half"></i> ${Math.floor(userSkill.practiceMinutes / 60)}h ${userSkill.practiceMinutes % 60}m practiced
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="skill-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); startLearning(${skill.id})">
+                                <i class="fas ${userSkill ? 'fa-play-circle' : 'fa-rocket'}"></i> ${userSkill ? 'Continue' : 'Start Learning'}
+                            </button>
+                            <button class="btn btn-outline" onclick="event.stopPropagation(); viewSkillDetails(${skill.id})">
+                                <i class="fas fa-info-circle"></i> Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadMySkills() {
+            const container = document.getElementById('mySkillsContainer');
+            const empty = document.getElementById('mySkillsEmpty');
+            
+            if (mySkills.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            
+            empty.style.display = 'none';
+            const userSkills = mySkills.map(s => skills.find(skill => skill.id === s.skillId)).filter(s => s);
+            container.innerHTML = userSkills.map(skill => createSkillCard(skill, true)).join('');
+        }
+
+        function loadAchievements() {
+            const container = document.getElementById('achievementsContainer');
+            container.innerHTML = achievements.map(achievement => `
+                <div class="achievement-card ${!achievement.unlocked ? 'locked' : ''}">
+                    <div class="achievement-icon">
+                        <i class="fas ${achievement.icon}"></i>
+                    </div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div style="font-size: 0.85rem; color: var(--gray-500);">${achievement.description}</div>
+                    ${!achievement.unlocked ? '<div style="margin-top: 10px; font-size: 0.8rem;"><i class="fas fa-lock"></i> Locked</div>' : '<div style="margin-top: 10px; color: var(--success-color);"><i class="fas fa-check-circle"></i> Unlocked</div>'}
+                </div>
+            `).join('');
+        }
+
+        function loadPracticeZone() {
+            const container = document.getElementById('practiceContainer');
+            const practiceSkills = skills.slice(0, 4);
+            
+            container.innerHTML = practiceSkills.map(skill => `
+                <div class="skill-card" onclick="openPracticeGame(${skill.id})">
+                    <div class="skill-banner">
+                        <div class="skill-icon">
+                            <i class="fas ${skill.icon}"></i>
+                        </div>
+                    </div>
+                    <div class="skill-content">
+                        <h3 class="skill-title">Practice ${skill.title}</h3>
+                        <p class="skill-description">Interactive practice sessions to improve your ${skill.title.toLowerCase()} skills.</p>
+                        <div class="skill-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); openPracticeGame(${skill.id})">
+                                <i class="fas fa-play"></i> Start Practice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewSkillDetails(id) {
+            const skill = skills.find(s => s.id === id);
+            if (!skill) return;
+            
+            const userSkill = mySkills.find(s => s.skillId === id);
+            const progress = userSkill ? userSkill.progress : 0;
+            
+            document.getElementById('modalTitle').textContent = skill.title;
+            document.getElementById('modalCategory').textContent = `${skill.category.toUpperCase()} • ${skill.difficulty.toUpperCase()} • ${skill.timeToLearn}`;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <p style="font-size: 1.1rem; line-height: 1.6;">${skill.longDescription}</p>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-list-ol"></i> Learning Path</h4>
+                    <ul style="list-style: none;">
+                        ${skill.steps.map((step, index) => `
+                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
+                                <span style="width: 28px; height: 28px; background: var(--primary-light); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600;">${index + 1}</span>
+                                ${step}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> Pro Tips</h4>
+                    <div style="display: grid; gap: 10px;">
+                        ${skill.tips.map(tip => `
+                            <div style="padding: 10px; background: white; border-radius: 8px; border-left: 3px solid var(--primary-color);">
+                                <i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 8px;"></i>
+                                ${tip}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-chart-line"></i> Practice Statistics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                        <div>
+                            <div class="stat-value" style="font-size: 1.5rem;">${skill.lessons}</div>
+                            <div class="stat-label-sm">Lessons</div>
+                        </div>
+                        <div>
+                            <div class="stat-value" style="font-size: 1.5rem;">${skill.learners.toLocaleString()}</div>
+                            <div class="stat-label-sm">Learners</div>
+                        </div>
+                        <div>
+                            <div class="stat-value" style="font-size: 1.5rem;">${skill.practiceTime}</div>
+                            <div class="stat-label-sm">Daily Practice</div>
+                        </div>
+                    </div>
+                    ${userSkill ? `
+                        <div class="progress-section" style="margin-top: 20px;">
+                            <div class="progress-header">
+                                <span>Your Progress</span>
+                                <span>${progress}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div style="margin-top: 10px; text-align: center; color: var(--gray-600);">
+                                <i class="fas fa-hourglass-half"></i> Practiced: ${Math.floor(userSkill.practiceMinutes / 60)}h ${userSkill.practiceMinutes % 60}m
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div class="skill-actions" style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="startLearning(${skill.id})">
+                        <i class="fas ${userSkill ? 'fa-play-circle' : 'fa-rocket'}"></i> ${userSkill ? 'Continue Learning' : 'Start Learning'}
+                    </button>
+                    <button class="btn btn-outline" onclick="closeSkillModal()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('skillModal').style.display = 'flex';
+        }
+
+        function startLearning(id) {
+            const skill = skills.find(s => s.id === id);
+            if (!skill) return;
+            
+            let userSkill = mySkills.find(s => s.skillId === id);
+            
+            if (!userSkill) {
+                userSkill = {
+                    skillId: id,
+                    progress: 0,
+                    startedAt: new Date().toISOString().split('T')[0],
+                    practiceMinutes: 0,
+                    completed: false
+                };
+                mySkills.push(userSkill);
+                localStorage.setItem('mySkills', JSON.stringify(mySkills));
+                alert(`✨ Started learning ${skill.title}! Check the My Skills tab to track your progress.`);
+            }
+            
+            closeSkillModal();
+            loadMySkills();
+            updateStats();
+            
+            // Show practice session
+            openPracticeSession(skill);
+        }
+
+        function openPracticeSession(skill) {
+            alert(`🎯 Practice Session: ${skill.title}\n\nComplete the following:\n1. Review lesson materials\n2. Practice ${skill.practiceTime} of focused practice\n3. Complete the quiz\n\nKeep practicing daily to build your skills!`);
+        }
+
+        function openPracticeGame(id) {
+            const skill = skills.find(s => s.id === id);
+            if (skill) {
+                alert(`🎮 Interactive ${skill.title} Practice\n\nOpen the practice module to improve your ${skill.title.toLowerCase()} skills!\n\nFeatures:\n• Step-by-step tutorials\n• Interactive exercises\n• Progress tracking\n• Achievement rewards`);
+            }
+        }
+
+        function filterSkills() {
+            const searchTerm = document.getElementById('searchSkills').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const difficulty = document.getElementById('difficultyFilter').value;
+            const sortBy = document.getElementById('sortSkills').value;
+            
+            let filtered = [...skills];
+            
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    s.title.toLowerCase().includes(searchTerm) ||
+                    s.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (category) {
+                filtered = filtered.filter(s => s.category === category);
+            }
+            
+            if (difficulty) {
+                filtered = filtered.filter(s => s.difficulty === difficulty);
+            }
+            
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'popular':
+                        return b.popularity - a.popularity;
+                    case 'newest':
+                        return b.id - a.id;
+                    case 'name':
+                        return a.title.localeCompare(b.title);
+                    default:
+                        return 0;
+                }
+            });
+            
+            const container = document.getElementById('skillsContainer');
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-search"></i></div>
+                        <h3 class="empty-title">No Skills Found</h3>
+                        <p class="empty-text">Try adjusting your search or filters to find more skills</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filtered.map(skill => createSkillCard(skill)).join('');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalSkills').textContent = skills.length;
+            document.getElementById('activeLearners').textContent = (Math.random() * 5000 + 5000).toFixed(0);
+            document.getElementById('achievementsUnlocked').textContent = achievements.filter(a => a.unlocked).length;
+            document.getElementById('hoursPracticed').textContent = totalPracticeHours.toFixed(0);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+                btn.innerHTML.toLowerCase().includes(tabName === 'explore' ? 'explore' :
+                                                   tabName === 'mySkills' ? 'my skills' :
+                                                   tabName === 'achievements' ? 'achievements' : 'practice')
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            if (tabName === 'mySkills') loadMySkills();
+            if (tabName === 'achievements') loadAchievements();
+            if (tabName === 'practice') loadPracticeZone();
+        }
+
+        function closeSkillModal() {
+            document.getElementById('skillModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('skillModal');
+            if (event.target === modal) {
+                closeSkillModal();
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

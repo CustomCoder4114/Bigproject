@@ -6,21 +6,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Videos - eSchool</title>
+    <title>Interactive Learning - eSchool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4361ee;
-            --primary-light: #e0e7ff;
-            --secondary-color: #3a0ca3;
-            --accent-color: #4cc9f0;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --light-color: #f8fafc;
-            --dark-color: #1e293b;
-            --gray-50: #f9fafb;
+            
+            --primary-light: #ddffdd;
+            --secondary-color: #4361ee;
+         
+            --code-bg: #1d2a35;
+            --success-color: #04AA6D;
+            --warning-color: #ffc107;
+            --danger-color: #f44336;
+            --light-color: #f1f1f1;
+            --dark-color: #282A35;
+            --gray-50: #f8f9fa;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
             --gray-300: #d1d5db;
@@ -29,10 +30,10 @@
             --gray-600: #4b5563;
             --gray-700: #374151;
             --gray-800: #1f2937;
-            --border-radius: 12px;
+            --border-radius: 16px;
             --border-radius-sm: 8px;
-            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -41,84 +42,145 @@
             box-sizing: border-box;
         }
 
-        
+        body {
+            font-family: 'Inter', sans-serif;
+           
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            
+        }
 
         /* Header Styles */
         .page-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--secondary-color), #4361ee);
             color: white;
-            padding: 40px;
+            padding: 50px 40px;
             border-radius: var(--border-radius);
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--card-shadow);
         }
 
         .header-content {
             position: relative;
             z-index: 2;
+            text-align: center;
         }
 
         .page-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
+            width: 100px;
+            height: 100px;
+            background: var(--primary-color);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 25px;
-            font-size: 2.5rem;
-            backdrop-filter: blur(5px);
+            font-size: 3rem;
+            border: 4px solid rgba(255, 255, 255, 0.2);
         }
 
         .page-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 15px;
             font-weight: 700;
-            text-align: center;
         }
 
         .page-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 600px;
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
             text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         /* Tabs Navigation */
         .tabs {
             display: flex;
             background: white;
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 30px;
+            border-radius: 50px;
+            margin-bottom: 40px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
-            flex-wrap: wrap;
+            padding: 5px;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 18px 20px;
+            padding: 16px 25px;
             border: none;
             background: none;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--gray-600);
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            min-width: 200px;
+            gap: 12px;
+            border-radius: 45px;
         }
 
         .tab-btn:hover {
-            background: var(--gray-50);
+            background: var(--gray-100);
+            color: var(--primary-color);
         }
 
         .tab-btn.active {
@@ -136,372 +198,454 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* YouTube Style Grid */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        /* Video Card (YouTube Style) */
-        .video-card {
+        /* Filter Bar */
+        .filter-bar {
             background: white;
+            padding: 25px;
             border-radius: var(--border-radius);
-            overflow: hidden;
+            margin-bottom: 40px;
             box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            cursor: pointer;
-            border: 1px solid var(--gray-200);
-            height: 100%;
         }
 
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .thumbnail-container {
+        .search-box {
+            flex: 2;
+            min-width: 300px;
             position: relative;
-            width: 100%;
-            height: 180px;
-            background: var(--gray-200);
-            overflow: hidden;
         }
 
-        .video-thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .video-card:hover .video-thumbnail {
-            transform: scale(1.05);
-        }
-
-        .thumbnail-overlay {
+        .search-box i {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: var(--transition);
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
         }
 
-        .video-card:hover .thumbnail-overlay {
-            opacity: 1;
-        }
-
-        .play-btn {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .duration-badge {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .video-details {
-            padding: 15px;
-            flex: 1;
-        }
-
-        .video-title {
-            font-family: 'Inter', sans-serif;
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
             font-size: 1rem;
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 10px;
-            line-height: 1.4;
-            height: 2.8em;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            transition: var(--transition);
         }
 
-        .video-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            color: var(--gray-500);
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(4, 170, 109, 0.1);
         }
 
-        .video-owner {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .owner-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .owner-name {
-            color: var(--gray-600);
-            font-weight: 500;
-        }
-
-        .video-stats {
-            display: flex;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .course-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: var(--primary-light);
-            color: var(--primary-color);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 8px;
-        }
-
-        .video-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .action-btn {
+        .select-control {
             flex: 1;
-            padding: 8px 10px;
-            border-radius: 6px;
-            border: none;
-            background: var(--gray-100);
-            color: var(--gray-600);
+            min-width: 180px;
+            padding: 14px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            background: white;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            font-size: 0.85rem;
+            font-weight: 500;
         }
 
-        .action-btn:hover {
-            background: var(--primary-light);
-            color: var(--primary-color);
+        .select-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
-        .action-btn.download:hover {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .action-btn.delete:hover {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        /* Course Cards */
+        /* Courses Grid - W3Schools Style */
         .courses-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
             margin-top: 20px;
         }
 
+        /* Course Card - W3Schools Inspired */
         .course-card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 25px;
+            overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
-            border: 2px solid transparent;
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             position: relative;
-            overflow: hidden;
         }
 
         .course-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary-light);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
         }
 
-        .course-card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+        .course-header {
+            padding: 30px 25px;
+            background: linear-gradient(135deg, var(--secondary-color), #1e2a3a);
+            color: white;
+            position: relative;
         }
 
         .course-icon {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
+            background: var(--primary-color);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .course-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .course-code {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: var(--accent-color);
+            color: var(--dark-color);
+        }
+
+        .course-content {
+            padding: 25px;
+            flex: 1;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Module List */
+        .modules-list {
+            margin: 20px 0;
+        }
+
+        .module-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .module-item:last-child {
+            border-bottom: none;
+        }
+
+        .module-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        .module-info {
+            flex: 1;
+        }
+
+        .module-title {
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 3px;
+        }
+
+        .module-meta {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            display: flex;
+            gap: 10px;
+        }
+
+        .module-status {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            flex-shrink: 0;
+            font-size: 0.8rem;
         }
 
-        .math { background: #4361ee; }
-        .physics { background: #ff6b6b; }
-        .cs { background: #1dd1a1; }
-        .english { background: #feca57; }
+        .status-completed {
+            background: var(--primary-color);
+            color: white;
+        }
 
-        .course-info h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.3rem;
+        .status-inprogress {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .status-locked {
+            background: var(--gray-300);
+            color: white;
+        }
+
+        /* Course Stats */
+        .course-stats {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .stat-tag i {
+            color: var(--primary-color);
+        }
+
+        /* Course Actions */
+        .course-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(4, 170, 109, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        /* Interactive Elements */
+        .interactive-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            background: var(--accent-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        /* My Learning Path */
+        .learning-path {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .path-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .path-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .path-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .path-content {
+            flex: 1;
+        }
+
+        .path-title {
             font-weight: 600;
             color: var(--dark-color);
             margin-bottom: 5px;
+            font-size: 1.1rem;
         }
 
-        .course-code {
+        .path-progress {
             font-size: 0.9rem;
             color: var(--gray-500);
         }
 
-        .course-description {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .course-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .stat-box {
-            padding: 10px;
-        }
-
-        .stat-number {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
+        .path-action {
+            padding: 10px 25px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
             font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 5px;
+            text-decoration: none;
+            transition: var(--transition);
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .path-action:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
         }
 
-        /* Video Player Modal */
-        .video-modal {
+        /* Interactive Preview Modal */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 10000;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        .video-modal-content {
+        .modal-content {
             width: 90%;
             max-width: 1000px;
-            background: var(--dark-color);
+            background: white;
             border-radius: var(--border-radius);
             overflow: hidden;
             position: relative;
-            animation: fadeIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .video-player {
-            width: 100%;
-            height: 500px;
-            background: #000;
-        }
-
-        .video-info {
-            padding: 20px;
-            background: var(--gray-800);
+        .modal-header {
+            padding: 25px;
+            background: var(--secondary-color);
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .video-info h3 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.3rem;
+        .modal-header h2 {
+            font-size: 1.8rem;
             margin-bottom: 10px;
         }
 
-        .video-meta-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: var(--gray-400);
-            margin-bottom: 15px;
-        }
-
-        .video-description {
-            color: var(--gray-300);
-            line-height: 1.6;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--gray-700);
-        }
-
-        .close-video-btn {
+        .close-modal {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
             border: none;
             color: white;
             width: 40px;
@@ -512,87 +656,165 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10001;
             transition: var(--transition);
         }
 
-        .close-video-btn:hover {
+        .close-modal:hover {
             background: var(--danger-color);
+            transform: rotate(90deg);
         }
 
-        /* Buttons */
-        .btn {
-            padding: 12px 24px;
-            border-radius: var(--border-radius-sm);
-            border: none;
-            font-weight: 500;
+        .modal-body {
+            padding: 25px;
+        }
+
+        /* Interactive Exercise */
+        .exercise-container {
+            background: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .question-box {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
             cursor: pointer;
             transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        .option-item:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .option-item.selected {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .option-item input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Code Editor */
+        .code-editor {
+            background: var(--code-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .code-editor textarea {
+            width: 100%;
+            min-height: 200px;
+            background: var(--code-bg);
+            border: 1px solid var(--gray-600);
             color: white;
+            padding: 15px;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            resize: vertical;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        .code-editor textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
 
-        .btn-outline {
-            background: transparent;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-light);
-        }
-
-        .btn-danger {
-            background: transparent;
-            color: var(--danger-color);
-            border: 2px solid var(--danger-color);
-        }
-
-        .btn-danger:hover {
-            background-color: var(--danger-color);
+        .run-btn {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: var(--primary-color);
             color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .run-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Notes Section */
+        .notes-section {
+            background: var(--accent-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+
+        .notes-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .notes-content {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
             background: white;
             border-radius: var(--border-radius);
             box-shadow: var(--card-shadow);
         }
 
         .empty-icon {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             background: var(--gray-100);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 2.5rem;
+            margin: 0 auto 30px;
+            font-size: 3rem;
             color: var(--gray-400);
         }
 
         .empty-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
+            font-size: 2rem;
             color: var(--gray-600);
             margin-bottom: 15px;
         }
@@ -605,101 +827,46 @@
             line-height: 1.6;
         }
 
-        /* Filter Bar */
-        .filter-bar {
-            background: white;
-            padding: 20px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-        }
-
-        .select-control {
-            padding: 10px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--border-radius-sm);
-            font-size: 0.95rem;
-            background: white;
-            cursor: pointer;
-            min-width: 180px;
-            transition: var(--transition);
-        }
-
-        .select-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .video-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        /* Responsive */
+        @media (max-width: 968px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .courses-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
             }
             
-            .tab-btn {
-                min-width: 150px;
+            .tabs {
+                flex-direction: column;
+                border-radius: var(--border-radius);
             }
             
             .filter-group {
                 flex-direction: column;
-                align-items: stretch;
             }
             
             .search-box, .select-control {
                 width: 100%;
             }
             
-            .video-player {
-                height: 300px;
+            .course-actions {
+                flex-direction: column;
             }
             
-            .video-actions {
-                flex-direction: column;
+            .course-header h3 {
+                font-size: 1.5rem;
             }
         }
 
         @media (max-width: 576px) {
-            .page-header {
-                padding: 30px 20px;
-            }
-            
-            .page-title {
-                font-size: 2rem;
-            }
-            
-            .video-grid, .courses-grid {
+            .stats-bar {
                 grid-template-columns: 1fr;
             }
         }
@@ -711,739 +878,892 @@
         <header class="page-header">
             <div class="header-content">
                 <div class="page-icon">
-                    <i class="fas fa-video"></i>
+                    <i class="fas fa-book"></i>
                 </div>
-                <h1 class="page-title">Course Videos and notes</h1>
-                <p class="page-subtitle">Watch and share educational videos and with your classmates</p>
+                <h1 class="page-title">Learn through courses</h1>
+                <p class="page-subtitle">Interactive tutorials, quizzes, and exercises. Learn by doing with real-time feedback.</p>
             </div>
         </header>
 
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="stat-number" id="totalCourses">8</div>
+                <div class="stat-label">Interactive Courses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="stat-number" id="totalExercises">245</div>
+                <div class="stat-label">Exercises</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-number" id="totalQuizzes">128</div>
+                <div class="stat-label">Quiz Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="stat-number" id="totalLearners">15,234</div>
+                <div class="stat-label">Active Learners</div>
+            </div>
+        </div>
+
         <!-- Tabs Navigation -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('allvideos')">
-                <i class="fas fa-play-circle"></i> All Videos
+            <button class="tab-btn active" onclick="switchTab('explore')">
+                <i class="fas fa-compass"></i> Browse Courses
             </button>
-            <button class="tab-btn" onclick="switchTab('courses')">
-                <i class="fas fa-graduation-cap"></i> By Course
+            <button class="tab-btn" onclick="switchTab('mylearning')">
+                <i class="fas fa-user-graduate"></i> My Learning
             </button>
-            <button class="tab-btn" onclick="switchTab('myuploads')">
-                <i class="fas fa-cloud-upload-alt"></i> My Uploads
+            <button class="tab-btn" onclick="switchTab('exercises')">
+                <i class="fas fa-code"></i> Practice Exercises
             </button>
         </div>
 
-        <!-- All Videos Tab (YouTube Style) -->
-        <div id="allvideos-tab" class="tab-content active">
-            <section class="content-section">
-                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
-                    <i class="fas fa-play-circle"></i> All Course Videos
-                </h2>
-                <p style="color: var(--gray-600); margin-bottom: 30px;">
-                    Browse all videos uploaded by everyone in your classes. All videos are visible to everyone.
-                </p>
+        <!-- Explore Courses Tab -->
+        <div id="explore-tab" class="tab-content active">
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchCourses" class="form-control" placeholder="Search courses (e.g., HTML, Python, JavaScript...)" oninput="filterCourses()">
+                    </div>
+                    <select id="filterLevel" class="select-control" onchange="filterCourses()">
+                        <option value="">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                    <select id="sortCourses" class="select-control" onchange="filterCourses()">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest First</option>
+                        <option value="name">Course Name</option>
+                    </select>
+                </div>
+            </div>
 
-                <!-- Filter Bar -->
-                <div class="filter-bar">
-                    <div class="filter-group">
-                        <div class="search-box">
-                            <input type="text" id="searchVideos" class="form-control" placeholder="Search videos...">
+            <!-- Courses Grid -->
+            <div class="courses-grid" id="coursesContainer">
+                <!-- Courses will be loaded here -->
+            </div>
+        </div>
+
+        <!-- My Learning Tab -->
+        <div id="mylearning-tab" class="tab-content">
+            <div class="learning-path" id="learningPathContainer">
+                <!-- Learning path will be loaded here -->
+            </div>
+
+            <!-- Empty State for My Learning -->
+            <div class="empty-state" id="myLearningEmpty" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="empty-title">Start Your Learning Journey</h3>
+                <p class="empty-text">Enroll in a course and track your progress here. Interactive exercises and quizzes await!</p>
+                <button class="btn btn-primary" onclick="switchTab('explore')">
+                    <i class="fas fa-compass"></i> Browse Courses
+                </button>
+            </div>
+        </div>
+
+        <!-- Exercises Tab -->
+        <div id="exercises-tab" class="tab-content">
+            <div class="courses-grid" id="exercisesContainer">
+                <!-- Exercises will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Course Modal -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCourseTitle">Course Title</h2>
+                <p id="modalCourseSubtitle">Course Code • Level</p>
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Course Data - W3Schools Style Interactive Courses
+        const courses = [
+            {
+                id: 'html',
+                name: 'HTML Tutorial',
+                code: 'HTML5',
+                level: 'beginner',
+                icon: 'fa-html5',
+                color: '#e44d26',
+                description: 'Learn HTML, the standard markup language for creating web pages.',
+                longDescription: 'HTML is the foundation of all web pages. This course teaches you everything about HTML, from basic tags to semantic elements and forms.',
+                modules: [
+                    { name: 'HTML Introduction', type: 'lesson', duration: '10 min', exercises: 5, quiz: true },
+                    { name: 'HTML Elements', type: 'lesson', duration: '15 min', exercises: 8, quiz: true },
+                    { name: 'HTML Attributes', type: 'lesson', duration: '12 min', exercises: 6, quiz: true },
+                    { name: 'HTML Headings', type: 'lesson', duration: '8 min', exercises: 4, quiz: true },
+                    { name: 'HTML Paragraphs', type: 'lesson', duration: '10 min', exercises: 5, quiz: true },
+                    { name: 'HTML Styles', type: 'lesson', duration: '15 min', exercises: 7, quiz: true },
+                    { name: 'HTML Formatting', type: 'lesson', duration: '12 min', exercises: 6, quiz: true },
+                    { name: 'HTML Quotations', type: 'lesson', duration: '10 min', exercises: 4, quiz: true },
+                    { name: 'HTML Comments', type: 'lesson', duration: '8 min', exercises: 3, quiz: true },
+                    { name: 'HTML Colors', type: 'lesson', duration: '15 min', exercises: 6, quiz: true }
+                ],
+                stats: {
+                    lessons: 25,
+                    exercises: 45,
+                    quizzes: 10,
+                    projects: 3,
+                    duration: '20 hours',
+                    learners: 45231
+                },
+                prerequisites: ['None'],
+                popular: true,
+                new: true,
+                rating: 4.9
+            },
+            {
+                id: 'css',
+                name: 'CSS Tutorial',
+                code: 'CSS3',
+                level: 'beginner',
+                icon: 'fa-css3-alt',
+                color: '#264de4',
+                description: 'Learn CSS to style and layout beautiful web pages.',
+                longDescription: 'CSS is the language used to style HTML documents. This course covers everything from selectors to animations and responsive design.',
+                modules: [
+                    { name: 'CSS Introduction', type: 'lesson', duration: '10 min', exercises: 4, quiz: true },
+                    { name: 'CSS Syntax', type: 'lesson', duration: '12 min', exercises: 5, quiz: true },
+                    { name: 'CSS Selectors', type: 'lesson', duration: '20 min', exercises: 10, quiz: true },
+                    { name: 'CSS Colors', type: 'lesson', duration: '15 min', exercises: 6, quiz: true },
+                    { name: 'CSS Backgrounds', type: 'lesson', duration: '12 min', exercises: 5, quiz: true },
+                    { name: 'CSS Borders', type: 'lesson', duration: '15 min', exercises: 7, quiz: true },
+                    { name: 'CSS Margins', type: 'lesson', duration: '12 min', exercises: 5, quiz: true },
+                    { name: 'CSS Padding', type: 'lesson', duration: '12 min', exercises: 5, quiz: true },
+                    { name: 'CSS Box Model', type: 'lesson', duration: '15 min', exercises: 8, quiz: true },
+                    { name: 'CSS Flexbox', type: 'lesson', duration: '25 min', exercises: 12, quiz: true }
+                ],
+                stats: {
+                    lessons: 30,
+                    exercises: 52,
+                    quizzes: 12,
+                    projects: 4,
+                    duration: '25 hours',
+                    learners: 38456
+                },
+                prerequisites: ['HTML basics'],
+                popular: true,
+                rating: 4.8
+            },
+            {
+                id: 'javascript',
+                name: 'JavaScript Tutorial',
+                code: 'JS',
+                level: 'intermediate',
+                icon: 'fa-js',
+                color: '#f7df1e',
+                description: 'Learn JavaScript, the programming language of the web.',
+                longDescription: 'JavaScript makes web pages interactive. Master variables, functions, loops, DOM manipulation, and modern ES6+ features.',
+                modules: [
+                    { name: 'JS Introduction', type: 'lesson', duration: '15 min', exercises: 5, quiz: true },
+                    { name: 'JS Variables', type: 'lesson', duration: '20 min', exercises: 8, quiz: true },
+                    { name: 'JS Data Types', type: 'lesson', duration: '18 min', exercises: 7, quiz: true },
+                    { name: 'JS Functions', type: 'lesson', duration: '25 min', exercises: 10, quiz: true },
+                    { name: 'JS Objects', type: 'lesson', duration: '22 min', exercises: 9, quiz: true },
+                    { name: 'JS Events', type: 'lesson', duration: '20 min', exercises: 8, quiz: true },
+                    { name: 'JS Strings', type: 'lesson', duration: '18 min', exercises: 7, quiz: true },
+                    { name: 'JS Arrays', type: 'lesson', duration: '22 min', exercises: 9, quiz: true },
+                    { name: 'JS Loops', type: 'lesson', duration: '20 min', exercises: 8, quiz: true },
+                    { name: 'JS DOM', type: 'lesson', duration: '30 min', exercises: 12, quiz: true }
+                ],
+                stats: {
+                    lessons: 40,
+                    exercises: 68,
+                    quizzes: 15,
+                    projects: 5,
+                    duration: '35 hours',
+                    learners: 35678
+                },
+                prerequisites: ['HTML & CSS'],
+                popular: true,
+                rating: 4.9
+            },
+            {
+                id: 'python',
+                name: 'Python Tutorial',
+                code: 'PY3',
+                level: 'beginner',
+                icon: 'fa-python',
+                color: '#306998',
+                description: 'Learn Python, one of the most popular programming languages.',
+                longDescription: 'Python is great for beginners and powerful for experts. Learn syntax, data structures, OOP, and more.',
+                modules: [
+                    { name: 'Python Intro', type: 'lesson', duration: '12 min', exercises: 4, quiz: true },
+                    { name: 'Python Syntax', type: 'lesson', duration: '15 min', exercises: 5, quiz: true },
+                    { name: 'Python Variables', type: 'lesson', duration: '15 min', exercises: 6, quiz: true },
+                    { name: 'Python Data Types', type: 'lesson', duration: '20 min', exercises: 8, quiz: true },
+                    { name: 'Python Lists', type: 'lesson', duration: '18 min', exercises: 7, quiz: true },
+                    { name: 'Python Tuples', type: 'lesson', duration: '15 min', exercises: 5, quiz: true },
+                    { name: 'Python Dictionaries', type: 'lesson', duration: '18 min', exercises: 6, quiz: true },
+                    { name: 'Python If...Else', type: 'lesson', duration: '16 min', exercises: 6, quiz: true },
+                    { name: 'Python Loops', type: 'lesson', duration: '18 min', exercises: 7, quiz: true },
+                    { name: 'Python Functions', type: 'lesson', duration: '22 min', exercises: 8, quiz: true }
+                ],
+                stats: {
+                    lessons: 35,
+                    exercises: 58,
+                    quizzes: 14,
+                    projects: 4,
+                    duration: '30 hours',
+                    learners: 29876
+                },
+                prerequisites: ['None'],
+                new: true,
+                rating: 4.7
+            },
+            {
+                id: 'sql',
+                name: 'SQL Tutorial',
+                code: 'SQL',
+                level: 'intermediate',
+                icon: 'fa-database',
+                color: '#00758f',
+                description: 'Learn SQL to manage and query databases.',
+                longDescription: 'SQL is the standard language for relational databases. Master queries, joins, and database design.',
+                modules: [
+                    { name: 'SQL Intro', type: 'lesson', duration: '10 min', exercises: 3, quiz: true },
+                    { name: 'SQL Syntax', type: 'lesson', duration: '12 min', exercises: 4, quiz: true },
+                    { name: 'SQL SELECT', type: 'lesson', duration: '18 min', exercises: 6, quiz: true },
+                    { name: 'SQL WHERE', type: 'lesson', duration: '15 min', exercises: 5, quiz: true },
+                    { name: 'SQL AND/OR', type: 'lesson', duration: '12 min', exercises: 4, quiz: true },
+                    { name: 'SQL ORDER BY', type: 'lesson', duration: '12 min', exercises: 4, quiz: true },
+                    { name: 'SQL INSERT INTO', type: 'lesson', duration: '15 min', exercises: 5, quiz: true },
+                    { name: 'SQL UPDATE', type: 'lesson', duration: '12 min', exercises: 4, quiz: true },
+                    { name: 'SQL DELETE', type: 'lesson', duration: '10 min', exercises: 3, quiz: true },
+                    { name: 'SQL JOIN', type: 'lesson', duration: '25 min', exercises: 8, quiz: true }
+                ],
+                stats: {
+                    lessons: 28,
+                    exercises: 42,
+                    quizzes: 10,
+                    projects: 3,
+                    duration: '22 hours',
+                    learners: 23456
+                },
+                prerequisites: ['Basic computer skills'],
+                rating: 4.6
+            },
+            {
+                id: 'react',
+                name: 'React Tutorial',
+                code: 'REACT',
+                level: 'advanced',
+                icon: 'fa-react',
+                color: '#61dafb',
+                description: 'Learn React, the popular JavaScript library for building UIs.',
+                longDescription: 'React makes building interactive UIs fun and easy. Learn components, props, state, hooks, and more.',
+                modules: [
+                    { name: 'React Intro', type: 'lesson', duration: '15 min', exercises: 4, quiz: true },
+                    { name: 'React ES6', type: 'lesson', duration: '20 min', exercises: 6, quiz: true },
+                    { name: 'React JSX', type: 'lesson', duration: '18 min', exercises: 5, quiz: true },
+                    { name: 'React Components', type: 'lesson', duration: '22 min', exercises: 7, quiz: true },
+                    { name: 'React Props', type: 'lesson', duration: '18 min', exercises: 6, quiz: true },
+                    { name: 'React State', type: 'lesson', duration: '20 min', exercises: 7, quiz: true },
+                    { name: 'React Hooks', type: 'lesson', duration: '25 min', exercises: 8, quiz: true },
+                    { name: 'React Forms', type: 'lesson', duration: '18 min', exercises: 6, quiz: true },
+                    { name: 'React Router', type: 'lesson', duration: '22 min', exercises: 7, quiz: true },
+                    { name: 'React API Calls', type: 'lesson', duration: '20 min', exercises: 6, quiz: true }
+                ],
+                stats: {
+                    lessons: 32,
+                    exercises: 48,
+                    quizzes: 12,
+                    projects: 4,
+                    duration: '28 hours',
+                    learners: 18765
+                },
+                prerequisites: ['JavaScript'],
+                popular: true,
+                rating: 4.8
+            }
+        ];
+
+        // User's enrolled courses with progress
+        let myCourses = [
+            { courseId: 'html', progress: 65, completed: [0,1,2,3,4,5], currentModule: 6, exercisesCompleted: 28, quizzesPassed: 5 },
+            { courseId: 'css', progress: 32, completed: [0,1,2], currentModule: 3, exercisesCompleted: 14, quizzesPassed: 2 },
+            { courseId: 'javascript', progress: 15, completed: [0], currentModule: 1, exercisesCompleted: 4, quizzesPassed: 0 }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCourses();
+            loadMyLearning();
+            loadExercises();
+            updateStats();
+        });
+
+        // Load courses grid
+        function loadCourses() {
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = courses.map(course => createCourseCard(course)).join('');
+        }
+
+        // Create course card
+        function createCourseCard(course) {
+            const isEnrolled = myCourses.find(m => m.courseId === course.id);
+            const progress = isEnrolled ? isEnrolled.progress : 0;
+            
+            return `
+                <div class="course-card" data-course-id="${course.id}" data-level="${course.level}" data-popular="${course.popular ? 1 : 0}" data-name="${course.name}">
+                    <div class="course-header" style="background: linear-gradient(135deg, ${course.color}22, #282A35);">
+                        <div class="course-icon" style="background: ${course.color};">
+                            <i class="fab ${course.icon}"></i>
                         </div>
-                        <select id="filterCourseVideos" class="select-control">
-                            <option value="">All Courses</option>
-                            <option value="math101">Mathematics 101</option>
-                            <option value="physics201">Physics 201</option>
-                            <option value="cs301">Computer Science 301</option>
-                            <option value="english101">English Literature 101</option>
-                        </select>
-                        <select id="sortVideos" class="select-control">
-                            <option value="recent">Most Recent</option>
-                            <option value="views">Most Viewed</option>
-                            <option value="downloads">Most Downloaded</option>
-                        </select>
+                        <h3>${course.name}</h3>
+                        <span class="course-code">${course.code}</span>
+                        ${course.popular ? '<div class="course-badge"><i class="fas fa-fire"></i> Popular</div>' : ''}
+                        ${course.new ? '<div class="course-badge" style="background: #04AA6D; color: white;"><i class="fas fa-star"></i> New</div>' : ''}
+                    </div>
+                    
+                    <div class="course-content">
+                        <p style="color: var(--gray-600); margin-bottom: 15px;">${course.description}</p>
+                        
+                        ${isEnrolled ? `
+                            <div class="progress-section">
+                                <div class="progress-header">
+                                    <span>Your Progress</span>
+                                    <span>${progress}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress}%"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="modules-list">
+                            ${course.modules.slice(0, 5).map((module, index) => {
+                                const isCompleted = isEnrolled && isEnrolled.completed.includes(index);
+                                const isCurrent = isEnrolled && isEnrolled.currentModule === index;
+                                
+                                return `
+                                    <div class="module-item">
+                                        <div class="module-icon">
+                                            <i class="fas ${module.type === 'lesson' ? 'fa-book' : 'fa-code'}"></i>
+                                        </div>
+                                        <div class="module-info">
+                                            <div class="module-title">${module.name}</div>
+                                            <div class="module-meta">
+                                                <span><i class="far fa-clock"></i> ${module.duration}</span>
+                                                <span><i class="fas fa-tasks"></i> ${module.exercises} ex</span>
+                                            </div>
+                                        </div>
+                                        <div class="module-status status-${isCompleted ? 'completed' : isCurrent ? 'inprogress' : 'locked'}">
+                                            <i class="fas ${isCompleted ? 'fa-check' : isCurrent ? 'fa-play' : 'fa-lock'}"></i>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <div class="course-stats">
+                            <span class="stat-tag"><i class="fas fa-book"></i> ${course.stats.lessons} lessons</span>
+                            <span class="stat-tag"><i class="fas fa-code"></i> ${course.stats.exercises} exercises</span>
+                            <span class="stat-tag"><i class="fas fa-question"></i> ${course.stats.quizzes} quizzes</span>
+                            <span class="stat-tag"><i class="fas fa-clock"></i> ${course.stats.duration}</span>
+                        </div>
+                        
+                        <div class="course-actions">
+                            ${isEnrolled ? `
+                                <button class="btn btn-primary" onclick="continueCourse('${course.id}')">
+                                    <i class="fas fa-play-circle"></i> Continue
+                                </button>
+                                <button class="btn btn-outline" onclick="previewCourse('${course.id}')">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            ` : `
+                                <button class="btn btn-primary" onclick="enrollCourse('${course.id}')">
+                                    <i class="fas fa-graduation-cap"></i> Start Learning
+                                </button>
+                                <button class="btn btn-outline" onclick="previewCourse('${course.id}')">
+                                    <i class="fas fa-eye"></i> Preview
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load my learning path
+        function loadMyLearning() {
+            const container = document.getElementById('learningPathContainer');
+            const empty = document.getElementById('myLearningEmpty');
+
+            if (myCourses.length === 0) {
+                container.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+
+            container.innerHTML = myCourses.map(enrolled => {
+                const course = courses.find(c => c.id === enrolled.courseId);
+                const nextModule = course.modules[enrolled.currentModule];
+                
+                return `
+                    <div class="path-item">
+                        <div class="path-icon" style="background: ${course.color}22; color: ${course.color};">
+                            <i class="fab ${course.icon}"></i>
+                        </div>
+                        <div class="path-content">
+                            <div class="path-title">${course.name}</div>
+                            <div class="path-progress">
+                                <i class="fas fa-tasks"></i> ${enrolled.exercisesCompleted}/${course.stats.exercises} exercises • 
+                                <i class="fas fa-question"></i> ${enrolled.quizzesPassed}/${course.stats.quizzes} quizzes • 
+                                ${enrolled.progress}% complete
+                            </div>
+                            <div style="margin-top: 10px; max-width: 400px;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${enrolled.progress}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="path-action" onclick="continueCourse('${course.id}')">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load exercises
+        function loadExercises() {
+            const container = document.getElementById('exercisesContainer');
+            
+            // Create exercise cards
+            container.innerHTML = courses.map(course => `
+                <div class="course-card">
+                    <div class="course-header" style="background: linear-gradient(135deg, ${course.color}22, #282A35);">
+                        <div class="course-icon" style="background: ${course.color};">
+                            <i class="fab ${course.icon}"></i>
+                        </div>
+                        <h3>${course.name} Exercises</h3>
+                        <span class="course-code">Practice</span>
+                    </div>
+                    
+                    <div class="course-content">
+                        <div style="margin-bottom: 20px;">
+                            <span class="interactive-badge">
+                                <i class="fas fa-code"></i> Interactive Coding
+                            </span>
+                        </div>
+                        
+                        <div class="modules-list">
+                            <div class="module-item">
+                                <div class="module-icon"><i class="fas fa-check-circle" style="color: var(--success-color);"></i></div>
+                                <div class="module-info">
+                                    <div class="module-title">Basic Exercises</div>
+                                    <div class="module-meta">${Math.floor(course.stats.exercises * 0.3)} exercises</div>
+                                </div>
+                            </div>
+                            <div class="module-item">
+                                <div class="module-icon"><i class="fas fa-star" style="color: var(--warning-color);"></i></div>
+                                <div class="module-info">
+                                    <div class="module-title">Intermediate Exercises</div>
+                                    <div class="module-meta">${Math.floor(course.stats.exercises * 0.4)} exercises</div>
+                                </div>
+                            </div>
+                            <div class="module-item">
+                                <div class="module-icon"><i class="fas fa-trophy" style="color: var(--primary-color);"></i></div>
+                                <div class="module-info">
+                                    <div class="module-title">Advanced Challenges</div>
+                                    <div class="module-meta">${Math.floor(course.stats.exercises * 0.3)} exercises</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="course-stats">
+                            <span class="stat-tag"><i class="fas fa-tasks"></i> ${course.stats.exercises} total</span>
+                            <span class="stat-tag"><i class="fas fa-clock"></i> Interactive</span>
+                        </div>
+                        
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="startExercises('${course.id}')">
+                                <i class="fas fa-code"></i> Start Practicing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter courses
+        function filterCourses() {
+            const searchTerm = document.getElementById('searchCourses').value.toLowerCase();
+            const level = document.getElementById('filterLevel').value;
+            const sortBy = document.getElementById('sortCourses').value;
+
+            let filtered = [...courses];
+
+            // Search filter
+            if (searchTerm) {
+                filtered = filtered.filter(course => 
+                    course.name.toLowerCase().includes(searchTerm) ||
+                    course.description.toLowerCase().includes(searchTerm) ||
+                    course.code.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Level filter
+            if (level) {
+                filtered = filtered.filter(course => course.level === level);
+            }
+
+            // Sort
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'popular':
+                        return b.stats.learners - a.stats.learners;
+                    case 'newest':
+                        return (b.new ? 1 : 0) - (a.new ? 1 : 0);
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    default:
+                        return 0;
+                }
+            });
+
+            const container = document.getElementById('coursesContainer');
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-search"></i></div>
+                        <h3 class="empty-title">No Courses Found</h3>
+                        <p class="empty-text">Try adjusting your search or filters</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filtered.map(course => createCourseCard(course)).join('');
+            }
+        }
+
+        // Course actions
+        function enrollCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (!course) return;
+
+            if (!myCourses.find(m => m.courseId === courseId)) {
+                myCourses.push({
+                    courseId: courseId,
+                    progress: 0,
+                    completed: [],
+                    currentModule: 0,
+                    exercisesCompleted: 0,
+                    quizzesPassed: 0
+                });
+                
+                alert(`✨ Enrolled in ${course.name}! Start your learning journey now.`);
+                loadCourses();
+                loadMyLearning();
+                updateStats();
+            }
+        }
+
+        function continueCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            const enrolled = myCourses.find(m => m.courseId === courseId);
+            
+            if (!enrolled) {
+                enrollCourse(courseId);
+                return;
+            }
+
+            const nextModule = course.modules[enrolled.currentModule];
+            
+            // Show interactive modal
+            showCourseModal(course, enrolled);
+        }
+
+        function previewCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            showCourseModal(course, null, true);
+        }
+
+        function startExercises(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            showExerciseModal(course);
+        }
+
+        // Show interactive course modal
+        function showCourseModal(course, enrolled = null, preview = false) {
+            document.getElementById('modalCourseTitle').textContent = course.name;
+            document.getElementById('modalCourseSubtitle').textContent = `${course.code} • ${course.level.charAt(0).toUpperCase() + course.level.slice(1)} Level`;
+            
+            const modalBody = document.getElementById('modalBody');
+            const currentModule = enrolled ? course.modules[enrolled.currentModule] : course.modules[0];
+            
+            modalBody.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 15px;">${currentModule.name}</h3>
+                    <p style="color: var(--gray-600);">${course.longDescription}</p>
+                </div>
+
+                <!-- Interactive Exercise -->
+                <div class="exercise-container">
+                    <h4 style="margin-bottom: 20px;">Try it Yourself</h4>
+                    
+                    <div class="code-editor">
+                        <textarea id="codeEditor" placeholder="Write your code here...">${getExerciseCode(course.id, currentModule)}</textarea>
+                        <button class="run-btn" onclick="runCode('${course.id}')">
+                            <i class="fas fa-play"></i> Run Code
+                        </button>
+                    </div>
+                    
+                    <div id="output" style="background: var(--code-bg); color: white; padding: 15px; border-radius: 8px; margin-top: 15px; font-family: 'Source Code Pro', monospace;">
+                        Output will appear here...
                     </div>
                 </div>
 
-                <!-- YouTube Style Grid -->
-                <div class="video-grid" id="videosContainer">
-                    <!-- Video cards will be dynamically loaded here -->
+                <!-- Quiz Section -->
+                <div class="notes-section">
+                    <div class="notes-title">
+                        <i class="fas fa-question-circle"></i> Quick Quiz
+                    </div>
+                    <div class="notes-content">
+                        ${getQuizContent(course.id, currentModule)}
+                    </div>
                 </div>
 
-                <!-- Empty State -->
-                <div class="empty-state" id="videosEmpty" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-video-slash"></i>
-                    </div>
-                    <h3 class="empty-title">No Videos and notes Yet</h3>
-                    <p class="empty-text">No videos and notes have been uploaded yet. Be the first to share educational videos!</p>
-                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
-                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
+                <!-- Navigation -->
+                <div style="display: flex; gap: 15px; margin-top: 30px;">
+                    <button class="btn btn-outline" onclick="previousModule('${course.id}')" ${enrolled && enrolled.currentModule > 0 ? '' : 'disabled'}>
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="nextModule('${course.id}')" style="flex: 1;">
+                        Next Module <i class="fas fa-arrow-right"></i>
                     </button>
                 </div>
-            </section>
-        </div>
+            `;
 
-        <!-- Courses Tab -->
-        <div id="courses-tab" class="tab-content">
-            <section class="content-section">
-                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
-                    <i class="fas fa-graduation-cap"></i> Videos by Course
-                </h2>
-                <p style="color: var(--gray-600); margin-bottom: 30px;">
-                    View uploaded videos organized by course. Everyone can see all videos.
-                </p>
+            document.getElementById('courseModal').style.display = 'flex';
+        }
 
-                <!-- Filter Bar -->
-                <div class="filter-bar">
-                    <div class="filter-group">
-                        <div class="search-box">
-                            <input type="text" id="courseSearch" class="form-control" placeholder="Search courses...">
+        function showExerciseModal(course) {
+            document.getElementById('modalCourseTitle').textContent = `${course.name} - Practice Exercises`;
+            document.getElementById('modalCourseSubtitle').textContent = `Interactive Coding Challenges`;
+            
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="exercise-container">
+                    <div class="question-box">
+                        <div class="question-title">Exercise 1: Create a heading</div>
+                        <p>Create an h1 element with the text "Hello World".</p>
+                        
+                        <div class="code-editor">
+                            <textarea id="exerciseCode" placeholder="Write your code...">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <!-- Write your code here -->
+    
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                            <button class="run-btn" onclick="checkExercise('${course.id}', 1)">
+                                <i class="fas fa-check"></i> Check Answer
+                            </button>
                         </div>
-                        <button class="btn btn-outline" onclick="refreshVideos()">
-                            <i class="fas fa-sync-alt"></i> Refresh
+                        
+                        <div id="exerciseOutput" style="background: var(--code-bg); color: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            Result will appear here...
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <button class="btn btn-outline" onclick="previousExercise()">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button class="btn btn-primary" onclick="nextExercise()" style="flex: 1;">
+                            Next Exercise <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
+            `;
 
-                <!-- Courses Grid -->
-                <div class="courses-grid" id="coursesContainer">
-                    <!-- Course cards will be dynamically loaded here -->
-                </div>
-
-                <!-- Empty State -->
-                <div class="empty-state" id="coursesEmpty" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <h3 class="empty-title">No Course Videos Yet</h3>
-                    <p class="empty-text">No videos have been uploaded to courses yet.</p>
-                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
-                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
-                    </button>
-                </div>
-            </section>
-        </div>
-
-        <!-- My Uploads Tab -->
-        <div id="myuploads-tab" class="tab-content">
-            <section class="content-section">
-                <h2 style="margin-bottom: 20px; color: var(--dark-color);">
-                    <i class="fas fa-cloud-upload-alt"></i> My Uploaded Videos
-                </h2>
-                <p style="color: var(--gray-600); margin-bottom: 30px;">
-                    Manage videos that you have uploaded. You can delete your own videos.
-                </p>
-
-                <!-- My Uploads Grid -->
-                <div class="video-grid" id="myUploadsGrid">
-                    <!-- My uploads will be loaded here -->
-                </div>
-
-                <!-- Empty State -->
-                <div class="empty-state" id="myUploadsEmpty" style="display: none;">
-                    <div class="empty-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <h3 class="empty-title">No Uploads Yet</h3>
-                    <p class="empty-text">You haven't uploaded any videos yet.</p>
-                    <button class="btn btn-primary" onclick="window.location.href='/upload'">
-                        <i class="fas fa-cloud-upload-alt"></i> Upload Videos
-                    </button>
-                </div>
-            </section>
-        </div>
-    </div>
-
-    <!-- Video Player Modal -->
-    <div id="videoModal" class="video-modal">
-        <div class="video-modal-content">
-            <button class="close-video-btn" onclick="closeVideoModal()">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="video-player" id="videoPlayer">
-                <video id="videoElement" controls style="width: 100%; height: 100%;">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="video-info">
-                <h3 id="videoTitle"></h3>
-                <div class="video-meta-info">
-                    <span id="videoCourse"></span>
-                    <span id="videoOwner"></span>
-                    <span id="videoStats"></span>
-                </div>
-                <div class="video-description" id="videoDescription"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Replace the existing JavaScript section with this corrected version -->
-<script>
-/* =========================
-   GLOBAL STATE
-========================= */
-let allUploads = [];
-let currentUser = "{{ firstname }} {{ lastname }}" || "Test User";
-
-/* =========================
-   COURSE DATA
-========================= */
-const courseData = {
-    math101: { 
-        name: "Mathematics 101", 
-        code: "MATH101", 
-        icon: "fa-calculator", 
-        class: "math",
-        description: "Introduction to calculus and algebra"
-    },
-    physics201: { 
-        name: "Physics 201", 
-        code: "PHY201", 
-        icon: "fa-atom", 
-        class: "physics",
-        description: "Classical mechanics and thermodynamics"
-    },
-    cs301: { 
-        name: "Computer Science 301", 
-        code: "CS301", 
-        icon: "fa-laptop-code", 
-        class: "cs",
-        description: "Data structures and algorithms"
-    },
-    english101: { 
-        name: "English Literature 101", 
-        code: "ENG101", 
-        icon: "fa-book-open", 
-        class: "english",
-        description: "Introduction to English literature"
-    }
-};
-
-/* =========================
-   HELPER FUNCTIONS
-========================= */
-function getFileType(filename) {
-    if (!filename) return "file";
-    const ext = filename.split(".").pop().toLowerCase();
-    if (["mp4", "mov", "avi", "webm", "mkv"].includes(ext)) return "video";
-    if (["pdf"].includes(ext)) return "pdf";
-    if (["doc", "docx"].includes(ext)) return "word";
-    if (["ppt", "pptx"].includes(ext)) return "powerpoint";
-    if (["jpg", "jpeg", "png", "gif"].includes(ext)) return "image";
-    if (["txt", "md"].includes(ext)) return "notes";
-    return "file";
-}
-
-function getFileIcon(filename) {
-    const type = getFileType(filename);
-    switch(type) {
-        case "video": return "fa-video";
-        case "pdf": return "fa-file-pdf";
-        case "word": return "fa-file-word";
-        case "powerpoint": return "fa-file-powerpoint";
-        case "image": return "fa-image";
-        case "notes": return "fa-file-alt";
-        default: return "fa-file";
-    }
-}
-
-function getInitials(name) {
-    if (!name) return "??";
-    const parts = name.split(" ");
-    if (parts.length >= 2) {
-        return (parts[0][0] + parts[1][0]).toUpperCase();
-    } else if (parts.length === 1) {
-        return parts[0].substring(0, 2).toUpperCase();
-    }
-    return "??";
-}
-
-function formatFileSize(bytes) {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-}
-
-/* =========================
-   INITIALIZATION
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Course page loaded");
-    loadFromStorage();
-    loadAllFiles(); // Changed from loadVideos()
-    loadCourses();
-    loadMyUploads();
-});
-
-/* =========================
-   STORAGE FUNCTIONS
-========================= */
-function loadFromStorage() {
-    try {
-        const stored = localStorage.getItem("eschool_uploads");
-        if (stored) {
-            allUploads = JSON.parse(stored);
-            console.log("Loaded uploads:", allUploads.length);
-            
-            // Ensure all files have required properties
-            allUploads.forEach((file, index) => {
-                if (!file.id) file.id = Date.now() + index;
-                if (!file.views) file.views = 0;
-                if (!file.downloads) file.downloads = 0;
-                if (!file.owner) file.owner = "Unknown User";
-                if (!file.privacy) file.privacy = "class";
-                if (!file.fileType) file.fileType = getFileType(file.name);
-            });
-        } else {
-            allUploads = [];
-            console.log("No uploads found in storage");
+            document.getElementById('courseModal').style.display = 'flex';
         }
-    } catch (error) {
-        console.error("Error loading from storage:", error);
-        allUploads = [];
-    }
+
+        // Helper functions for exercise content
+        function getExerciseCode(courseId, module) {
+            const exercises = {
+                html: `<!DOCTYPE html>
+<html>
+<head>
+    <title>My First Page</title>
+</head>
+<body>
+    <h1>This is a Heading</h1>
+    <p>This is a paragraph.</p>
+</body>
+</html>`,
+                css: `body {
+    background-color: lightblue;
 }
 
-function saveToStorage() {
-    localStorage.setItem("eschool_uploads", JSON.stringify(allUploads));
+h1 {
+    color: white;
+    text-align: center;
+}`,
+                javascript: `// Write your JavaScript code here
+function greet(name) {
+    return "Hello, " + name + "!";
 }
 
-/* =========================
-   LOAD ALL FILES (VIDEOS & NOTES)
-========================= */
-function loadAllFiles() {
-    const container = document.getElementById("videosContainer");
-    const empty = document.getElementById("videosEmpty");
-
-    // Filter files that are shared with class
-    const sharedFiles = allUploads.filter(file => 
-        file.privacy === "class" && 
-        (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
-    );
-
-    console.log("Shared files to display:", sharedFiles.length);
-
-    if (sharedFiles.length === 0) {
-        container.innerHTML = "";
-        empty.style.display = "block";
-        return;
-    }
-
-    empty.style.display = "none";
-    
-    // Sort by most recent
-    const sortedFiles = [...sharedFiles].sort((a, b) => 
-        (b.timestamp || b.id) - (a.timestamp || a.id)
-    );
-    
-    container.innerHTML = sortedFiles.map(file => createFileCard(file, false)).join("");
-}
-
-/* =========================
-   CREATE FILE CARD (FOR VIDEOS & NOTES)
-========================= */
-function createFileCard(file, isMyUpload) {
-    const course = courseData[file.course] || {};
-    const fileType = getFileType(file.name);
-    const fileIcon = getFileIcon(file.name);
-    
-    // Different colors for different file types
-    const colors = {
-        video: '#4361ee',
-        pdf: '#ef4444',
-        notes: '#10b981',
-        word: '#2b579a',
-        powerpoint: '#d24726',
-        image: '#ec4899',
-        default: '#6b7280'
-    };
-    
-    const color = colors[fileType] || colors.default;
-    
-    return `
-        <div class="video-card" data-file-id="${file.id}">
-            <div class="thumbnail-container">
-                <div class="video-thumbnail" 
-                     style="background:${color}; display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">
-                    <i class="fas ${fileIcon}"></i>
-                </div>
-                <div class="thumbnail-overlay">
-                    <div class="play-btn" onclick="${fileType === 'video' ? `playVideo(${file.id})` : `previewFile(${file.id})`}">
-                        <i class="fas ${fileType === 'video' ? 'fa-play' : 'fa-eye'}"></i>
-                    </div>
-                </div>
-                ${fileType === 'video' ? '<div class="duration-badge">--:--</div>' : ''}
-            </div>
+console.log(greet("World"));`
+            };
             
-            <div class="video-details">
-                <h3 class="video-title" title="${file.name}">
-                    ${file.name}
-                </h3>
-                
-                <div class="video-meta">
-                    <div class="video-owner">
-                        <div class="owner-avatar" style="background: ${stringToColor(file.owner)}">
-                            ${getInitials(file.owner)}
+            return exercises[courseId] || "// Write your code here";
+        }
+
+        function getQuizContent(courseId, module) {
+            const quizzes = {
+                html: `
+                    <div>
+                        <p><strong>Question:</strong> What does HTML stand for?</p>
+                        <div style="margin-top: 15px;">
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> Hyper Text Markup Language</div>
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> High Tech Modern Language</div>
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> Hyper Transfer Markup Language</div>
                         </div>
-                        <span class="owner-name">${file.owner}</span>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="checkQuiz('html')">Submit Answer</button>
                     </div>
-                    <div class="video-stats">
-                        <div class="stat-item">
-                            <i class="fas fa-eye"></i>
-                            <span>${file.views || 0}</span>
+                `,
+                css: `
+                    <div>
+                        <p><strong>Question:</strong> Which CSS property is used to change the text color?</p>
+                        <div style="margin-top: 15px;">
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> text-color</div>
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> font-color</div>
+                            <div style="margin-bottom: 10px;"><input type="radio" name="quiz"> color</div>
                         </div>
-                        <div class="stat-item">
-                            <i class="fas fa-download"></i>
-                            <span>${file.downloads || 0}</span>
-                        </div>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="checkQuiz('css')">Submit Answer</button>
                     </div>
-                </div>
-                
-                <div class="course-badge">
-                    ${course.name || "No Course"}
-                    <span style="margin-left: 8px; font-size: 0.7em; opacity: 0.8;">
-                        <i class="fas ${fileIcon}"></i> ${fileType.toUpperCase()}
-                    </span>
-                </div>
-                
-                <div class="video-actions">
-                    <button class="action-btn" onclick="${fileType === 'video' ? `playVideo(${file.id})` : `previewFile(${file.id})`}">
-                        <i class="fas ${fileType === 'video' ? 'fa-play' : 'fa-eye'}"></i> ${fileType === 'video' ? 'Play' : 'View'}
-                    </button>
-                    <button class="action-btn download" onclick="downloadFile(${file.id})">
-                        <i class="fas fa-download"></i> Download
-                    </button>
-                    ${isMyUpload ? `
-                    <button class="action-btn delete" onclick="deleteFile(${file.id})">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>` : ""}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-/* =========================
-   LOAD MY UPLOADS
-========================= */
-function loadMyUploads() {
-    const container = document.getElementById("myUploadsGrid");
-    const empty = document.getElementById("myUploadsEmpty");
-
-    const myFiles = allUploads.filter(file => 
-        file.owner === currentUser && 
-        (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
-    );
-
-    console.log("My uploads:", myFiles.length);
-
-    if (!myFiles.length) {
-        container.innerHTML = "";
-        empty.style.display = "block";
-        return;
-    }
-
-    empty.style.display = "none";
-    container.innerHTML = myFiles.map(file => createFileCard(file, true)).join("");
-}
-
-/* =========================
-   LOAD COURSES
-========================= */
-function loadCourses() {
-    const container = document.getElementById("coursesContainer");
-    const empty = document.getElementById("coursesEmpty");
-
-    // Get courses that have videos or notes
-    const coursesWithFiles = Object.keys(courseData).filter(courseId => {
-        return allUploads.some(file => 
-            file.course === courseId && 
-            file.privacy === "class" &&
-            (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
-        );
-    });
-
-    if (!coursesWithFiles.length) {
-        container.innerHTML = "";
-        empty.style.display = "block";
-        return;
-    }
-
-    empty.style.display = "none";
-    container.innerHTML = coursesWithFiles.map(courseId => {
-        const course = courseData[courseId];
-        const courseFiles = allUploads.filter(file => 
-            file.course === courseId && 
-            file.privacy === "class" &&
-            (getFileType(file.name) === "video" || getFileType(file.name) === "notes")
-        );
-        
-        const videos = courseFiles.filter(f => getFileType(f.name) === "video");
-        const notes = courseFiles.filter(f => getFileType(f.name) === "notes");
-        
-        return `
-            <div class="course-card" data-course-id="${courseId}">
-                <div class="course-card-header">
-                    <div class="course-icon ${course.class}">
-                        <i class="fas ${course.icon}"></i>
-                    </div>
-                    <div class="course-info">
-                        <h3>${course.name}</h3>
-                        <div class="course-code">${course.code}</div>
-                    </div>
-                </div>
-                
-                <p class="course-description">${course.description || "Course materials and resources"}</p>
-                
-                <div class="course-stats">
-                    <div class="stat-box">
-                        <div class="stat-number">${videos.length}</div>
-                        <div class="stat-label">Videos</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${notes.length}</div>
-                        <div class="stat-label">Notes</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-number">${getCourseDownloads(courseId)}</div>
-                        <div class="stat-label">Downloads</div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-primary" onclick="viewCourseFiles('${courseId}')" style="width: 100%;">
-                        <i class="fas fa-folder-open"></i> View ${courseFiles.length} Files
-                    </button>
-                </div>
-            </div>
-        `;
-    }).join("");
-}
-
-/* =========================
-   FILE OPERATIONS
-========================= */
-function playVideo(id) {
-    const file = allUploads.find(f => f.id == id);
-    if (!file) return alert("File not found");
-
-    // Update views
-    file.views = (file.views || 0) + 1;
-    saveToStorage();
-
-    const course = courseData[file.course] || {};
-    
-    // Update modal content
-    document.getElementById("videoTitle").textContent = file.name;
-    document.getElementById("videoCourse").textContent = course.name || "No Course";
-    document.getElementById("videoOwner").textContent = "Uploaded by: " + file.owner;
-    document.getElementById("videoStats").textContent = 
-        `${file.views} views • ${file.downloads} downloads`;
-    document.getElementById("videoDescription").textContent = 
-        file.description || file.assignment || "No description available";
-
-    const video = document.getElementById("videoElement");
-    
-    // For video files
-    if (getFileType(file.name) === "video") {
-        video.src = file.data || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
-        video.style.display = "block";
-    } else {
-        video.style.display = "none";
-    }
-
-    document.getElementById("videoModal").style.display = "flex";
-
-    // Refresh displays
-    loadAllFiles();
-    loadMyUploads();
-    loadCourses();
-}
-
-function previewFile(id) {
-    const file = allUploads.find(f => f.id == id);
-    if (!file) return;
-
-    file.views = (file.views || 0) + 1;
-    saveToStorage();
-
-    const fileType = getFileType(file.name);
-    
-    if (fileType === "notes") {
-        // For text files, show in modal
-        const course = courseData[file.course] || {};
-        
-        document.getElementById("videoTitle").textContent = file.name;
-        document.getElementById("videoCourse").textContent = course.name || "No Course";
-        document.getElementById("videoOwner").textContent = "Uploaded by: " + file.owner;
-        document.getElementById("videoStats").textContent = 
-            `${file.views} views • ${file.downloads} downloads`;
-        document.getElementById("videoDescription").textContent = 
-            file.description || file.assignment || "No description available";
-        
-        // Hide video element for notes
-        document.getElementById("videoElement").style.display = "none";
-        document.getElementById("videoModal").style.display = "flex";
-        
-        // Add text content if available
-        if (file.data && file.data.startsWith("data:text")) {
-            const textContent = atob(file.data.split(",")[1]);
-            const textElement = document.createElement("pre");
-            textElement.style.color = "white";
-            textElement.style.padding = "20px";
-            textElement.style.whiteSpace = "pre-wrap";
-            textElement.textContent = textContent.substring(0, 1000) + "...";
+                `
+            };
             
-            // Replace or add to video description
-            const description = document.getElementById("videoDescription");
-            description.innerHTML = `<h4>Content Preview:</h4>` + textElement.outerHTML;
+            return quizzes[courseId] || "<p>Quiz questions loading...</p>";
         }
-    } else {
-        // For other files, download or show message
-        alert(`Previewing ${file.name}\n\nFile type: ${fileType}\nSize: ${formatFileSize(file.size)}`);
-    }
 
-    // Refresh displays
-    loadAllFiles();
-    loadMyUploads();
-    loadCourses();
-}
-
-function downloadFile(id) {
-    const file = allUploads.find(f => f.id == id);
-    if (!file) return alert("File not found");
-
-    // Update downloads
-    file.downloads = (file.downloads || 0) + 1;
-    saveToStorage();
-
-    // Create download link
-    const a = document.createElement("a");
-    a.href = file.data;
-    a.download = file.name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // Refresh displays
-    loadAllFiles();
-    loadMyUploads();
-    loadCourses();
-    
-    alert(`Downloading ${file.name}...`);
-}
-
-function deleteFile(id) {
-    const file = allUploads.find(f => f.id == id);
-    if (!file) return;
-
-    if (file.owner !== currentUser) {
-        alert("You can only delete your own files");
-        return;
-    }
-
-    if (!confirm(`Are you sure you want to delete "${file.name}"?`)) {
-        return;
-    }
-
-    allUploads = allUploads.filter(f => f.id != id);
-    saveToStorage();
-
-    // Refresh displays
-    loadAllFiles();
-    loadMyUploads();
-    loadCourses();
-    
-    alert("File deleted successfully!");
-}
-
-/* =========================
-   HELPER FUNCTIONS
-========================= */
-function stringToColor(str) {
-    if (!str) return "#4361ee";
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const colors = [
-        "#4361ee", "#3a0ca3", "#4cc9f0", "#f72585",
-        "#7209b7", "#3a86ff", "#fb5607", "#8338ec",
-        "#ff006e", "#ffbe0b", "#06d6a0", "#118ab2"
-    ];
-    return colors[Math.abs(hash) % colors.length];
-}
-
-function getCourseDownloads(courseId) {
-    return allUploads
-        .filter(file => file.course === courseId && file.privacy === "class")
-        .reduce((total, file) => total + (file.downloads || 0), 0);
-}
-
-function viewCourseFiles(courseId) {
-    const course = courseData[courseId];
-    if (!course) return;
-    
-    // Switch to all files tab and filter
-    switchTab("allvideos");
-    const filterSelect = document.getElementById("filterCourseVideos");
-    if (filterSelect) {
-        filterSelect.value = courseId;
-    }
-    
-    // Reload with filtered view
-    loadAllFiles();
-    
-    // Apply filter to current display
-    const cards = document.querySelectorAll("#videosContainer .video-card");
-    cards.forEach(card => {
-        const fileId = parseInt(card.dataset.fileId);
-        const file = allUploads.find(f => f.id === fileId);
-        if (file && file.course !== courseId) {
-            card.style.display = "none";
+        // Modal functions
+        function closeModal() {
+            document.getElementById('courseModal').style.display = 'none';
         }
-    });
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-}
 
-function closeVideoModal() {
-    const video = document.getElementById("videoElement");
-    video.pause();
-    video.src = "";
-    video.style.display = "block";
-    document.getElementById("videoModal").style.display = "none";
-}
+        function runCode(courseId) {
+            const code = document.getElementById('codeEditor').value;
+            document.getElementById('output').innerHTML = 'Running code... <i class="fas fa-spinner fa-spin"></i>';
+            
+            setTimeout(() => {
+                document.getElementById('output').innerHTML = '✓ Code executed successfully!\n\nOutput: Hello World';
+            }, 1000);
+        }
 
-function switchTab(tab) {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        function checkExercise(courseId, exerciseNum) {
+            alert(`Exercise ${exerciseNum} checked! Great job!`);
+        }
 
-    const activeTabBtn = document.querySelector(`[onclick="switchTab('${tab}')"]`);
-    if (activeTabBtn) {
-        activeTabBtn.classList.add("active");
-    }
+        function checkQuiz(courseId) {
+            alert('Correct answer! Well done!');
+        }
 
-    const activeTabContent = document.getElementById(`${tab}-tab`);
-    if (activeTabContent) {
-        activeTabContent.classList.add("active");
-    }
+        function previousModule(courseId) {
+            const enrolled = myCourses.find(m => m.courseId === courseId);
+            if (enrolled && enrolled.currentModule > 0) {
+                enrolled.currentModule--;
+                const course = courses.find(c => c.id === courseId);
+                showCourseModal(course, enrolled);
+            }
+        }
 
-    if (tab === "allvideos") loadAllFiles();
-    if (tab === "courses") loadCourses();
-    if (tab === "myuploads") loadMyUploads();
-}
+        function nextModule(courseId) {
+            const enrolled = myCourses.find(m => m.courseId === courseId);
+            const course = courses.find(c => c.id === courseId);
+            
+            if (enrolled) {
+                if (enrolled.currentModule < course.modules.length - 1) {
+                    // Mark current module as completed
+                    if (!enrolled.completed.includes(enrolled.currentModule)) {
+                        enrolled.completed.push(enrolled.currentModule);
+                        enrolled.progress = Math.round((enrolled.completed.length / course.modules.length) * 100);
+                    }
+                    
+                    enrolled.currentModule++;
+                    showCourseModal(course, enrolled);
+                    loadMyLearning();
+                } else {
+                    alert('🎉 Congratulations! You completed all modules!');
+                }
+            }
+        }
 
-function refreshVideos() {
-    loadFromStorage();
-    loadAllFiles();
-    loadCourses();
-    loadMyUploads();
-    alert("Content refreshed!");
-}
-</script>
+        function previousExercise() {
+            alert('Loading previous exercise...');
+        }
 
+        function nextExercise() {
+            alert('Loading next exercise...');
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalCourses').textContent = courses.length;
+            document.getElementById('totalExercises').textContent = courses.reduce((sum, c) => sum + c.stats.exercises, 0);
+            document.getElementById('totalQuizzes').textContent = courses.reduce((sum, c) => sum + c.stats.quizzes, 0) * 10; // Approx
+            document.getElementById('totalLearners').textContent = courses.reduce((sum, c) => sum + c.stats.learners, 0).toLocaleString();
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+                btn.innerHTML.includes(tab === 'explore' ? 'Browse' : tab === 'mylearning' ? 'My Learning' : 'Practice')
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('courseModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
 {% endblock %}

@@ -1,0 +1,1530 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Strategies Hub - eSchool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary-color: #7209b7;
+            --accent-color: #4cc9f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --hover-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--gray-100);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            padding: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 25px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 45px;
+            min-width: 150px;
+        }
+
+        .tab-btn:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 2;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .select-control {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .select-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Strategies Grid */
+        .strategies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        /* Strategy Card */
+        .strategy-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-200);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .strategy-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .strategy-banner {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .strategy-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 4px solid white;
+        }
+
+        .difficulty-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy { background: var(--success-color); color: white; }
+        .difficulty-medium { background: var(--warning-color); color: white; }
+        .difficulty-advanced { background: var(--danger-color); color: white; }
+
+        .strategy-content {
+            padding: 25px;
+            flex: 1;
+        }
+
+        .strategy-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .strategy-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .strategy-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .strategy-stats {
+            display: flex;
+            gap: 20px;
+            padding: 15px 0;
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+            margin: 15px 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .stat-item i {
+            color: var(--primary-color);
+        }
+
+        .strategy-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        /* Opinion Space */
+        .opinion-space {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .opinion-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .opinion-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .opinion-form {
+            background: var(--gray-50);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+
+        .opinion-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            resize: vertical;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .opinion-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .opinions-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .opinion-card {
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .opinion-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .opinion-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 3px;
+        }
+
+        .opinion-date {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .opinion-text {
+            color: var(--gray-700);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .opinion-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .opinion-tag {
+            padding: 4px 12px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .like-btn:hover {
+            color: var(--danger-color);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: var(--danger-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Technique Steps */
+        .steps-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .steps-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tip-card {
+            background: var(--gray-50);
+            padding: 15px;
+            border-radius: var(--border-radius-sm);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: var(--gray-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .strategies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-radius: var(--border-radius);
+            }
+            
+            .filter-group {
+                flex-direction: column;
+            }
+            
+            .search-box, .select-control {
+                width: 100%;
+            }
+            
+            .strategy-actions {
+                flex-direction: column;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <div class="page-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h1 class="page-title">Learning Strategies Hub</h1>
+                <p class="page-subtitle">Discover proven techniques to master subjects faster, memorize effectively, and unlock your full learning potential</p>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="stat-number" id="totalStrategies">0</div>
+                <div class="stat-label">Learning Strategies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="totalOpinions">0</div>
+                <div class="stat-label">Community Opinions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-number" id="avgEffectiveness">94%</div>
+                <div class="stat-label">Avg Effectiveness</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <div class="stat-number" id="activeUsers">2,345</div>
+                <div class="stat-label">Active Learners</div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('all')">
+                <i class="fas fa-compass"></i> All Strategies
+            </button>
+            <button class="tab-btn" onclick="switchTab('reading')">
+                <i class="fas fa-book-open"></i> Reading
+            </button>
+            <button class="tab-btn" onclick="switchTab('memorization')">
+                <i class="fas fa-database"></i> Memorization
+            </button>
+            <button class="tab-btn" onclick="switchTab('mastery')">
+                <i class="fas fa-trophy"></i> Mastery
+            </button>
+            <button class="tab-btn" onclick="switchTab('opinions')">
+                <i class="fas fa-comments"></i> Community Opinions
+            </button>
+        </div>
+
+        <!-- Filter Bar (for strategies tabs) -->
+        <div class="filter-bar" id="filterBar">
+            <div class="filter-group">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchStrategies" class="form-control" placeholder="Search strategies...">
+                </div>
+                <select id="difficultyFilter" class="select-control">
+                    <option value="">All Difficulties</option>
+                    <option value="easy">Easy to Learn</option>
+                    <option value="medium">Medium</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+                <select id="timeFilter" class="select-control">
+                    <option value="">All Time</option>
+                    <option value="quick">Quick (5-10 min)</option>
+                    <option value="medium">Medium (15-30 min)</option>
+                    <option value="deep">Deep (1+ hour)</option>
+                </select>
+                <select id="sortStrategies" class="select-control">
+                    <option value="popular">Most Popular</option>
+                    <option value="effective">Most Effective</option>
+                    <option value="newest">Newest First</option>
+                    <option value="name">Name A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- All Strategies Tab -->
+        <div id="all-tab" class="tab-content active">
+            <div class="strategies-grid" id="strategiesContainer">
+                <!-- Strategies will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Reading Strategies Tab -->
+        <div id="reading-tab" class="tab-content">
+            <div class="strategies-grid" id="readingContainer">
+                <!-- Reading strategies will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Memorization Strategies Tab -->
+        <div id="memorization-tab" class="tab-content">
+            <div class="strategies-grid" id="memorizationContainer">
+                <!-- Memorization strategies will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Mastery Strategies Tab -->
+        <div id="mastery-tab" class="tab-content">
+            <div class="strategies-grid" id="masteryContainer">
+                <!-- Mastery strategies will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Community Opinions Tab -->
+        <div id="opinions-tab" class="tab-content">
+            <div class="opinion-space">
+                <div class="opinion-header">
+                    <h2><i class="fas fa-comments"></i> Share Your Learning Wisdom</h2>
+                    <p>What techniques work best for you? Share your strategies and help others learn better!</p>
+                </div>
+                
+                <div class="opinion-form">
+                    <textarea id="opinionText" class="opinion-input" rows="4" placeholder="Share your learning strategy, memorization technique, or study tip..."></textarea>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <select id="opinionTag" class="select-control" style="flex: 1;">
+                            <option value="reading">Reading Strategy</option>
+                            <option value="memorization">Memorization Technique</option>
+                            <option value="mastery">Mastery Method</option>
+                            <option value="general">General Tip</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="submitOpinion()">
+                            <i class="fas fa-paper-plane"></i> Share Opinion
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="opinions-list" id="opinionsContainer">
+                    <!-- Opinions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategy Details Modal -->
+    <div id="strategyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Strategy Title</h2>
+                <p id="modalCategory">Category</p>
+                <button class="close-modal" onclick="closeStrategyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Strategy details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Learning Strategies Database
+        const strategies = [
+            {
+                id: 1,
+                title: "Active Recall Method",
+                category: "memorization",
+                icon: "fa-brain",
+                difficulty: "medium",
+                timeRequired: "15-30 min",
+                effectiveness: 96,
+                description: "Test yourself repeatedly instead of passive review. This technique strengthens neural pathways and improves long-term retention.",
+                longDescription: "Active recall is one of the most effective learning techniques. Instead of simply re-reading notes, you actively try to remember information without looking at the source.",
+                steps: [
+                    "Read a section of material and close the book",
+                    "Write down everything you remember without looking",
+                    "Check your answer against the source",
+                    "Review what you missed and repeat",
+                    "Space out these recall sessions over time"
+                ],
+                tips: [
+                    "Use flashcards for quick recall practice",
+                    "Teach someone else what you learned",
+                    "Create practice questions for yourself",
+                    "Use the Feynman Technique: explain it simply"
+                ],
+                views: 15234,
+                likes: 2341
+            },
+            {
+                id: 2,
+                title: "Pomodoro Technique",
+                category: "mastery",
+                icon: "fa-clock",
+                difficulty: "easy",
+                timeRequired: "5-10 min",
+                effectiveness: 89,
+                description: "Work in focused 25-minute intervals with 5-minute breaks to maintain peak concentration and prevent burnout.",
+                longDescription: "The Pomodoro Technique uses timed intervals to maintain focus and prevent mental fatigue. It's proven to increase productivity and learning efficiency.",
+                steps: [
+                    "Choose a task to work on",
+                    "Set a timer for 25 minutes",
+                    "Work focused until the timer rings",
+                    "Take a 5-minute break",
+                    "After 4 Pomodoros, take a longer 15-30 minute break"
+                ],
+                tips: [
+                    "Use a physical timer to avoid phone distractions",
+                    "Track your Pomodoros to see progress",
+                    "Adjust intervals to fit your focus span",
+                    "Use breaks to stretch and move around"
+                ],
+                views: 23456,
+                likes: 3452
+            },
+            {
+                id: 3,
+                title: "SQ3R Reading Method",
+                category: "reading",
+                icon: "fa-book",
+                difficulty: "medium",
+                timeRequired: "15-30 min",
+                effectiveness: 92,
+                description: "Survey, Question, Read, Recite, Review - A systematic approach to comprehend and retain what you read.",
+                longDescription: "SQ3R is a proven reading comprehension strategy that helps you actively engage with text and retain information more effectively.",
+                steps: [
+                    "Survey: Skim headings, subheadings, and summaries",
+                    "Question: Turn headings into questions",
+                    "Read: Read actively looking for answers",
+                    "Recite: Summarize what you read in your own words",
+                    "Review: Go back and review key concepts"
+                ],
+                tips: [
+                    "Write questions before reading",
+                    "Highlight key points while reading",
+                    "Create mind maps of the material",
+                    "Review within 24 hours for best retention"
+                ],
+                views: 18765,
+                likes: 2156
+            },
+            {
+                id: 4,
+                title: "Memory Palace Technique",
+                category: "memorization",
+                icon: "fa-building",
+                difficulty: "advanced",
+                timeRequired: "1+ hour",
+                effectiveness: 98,
+                description: "Use spatial memory to store and recall information by visualizing it in familiar locations.",
+                longDescription: "The Memory Palace (Method of Loci) is an ancient mnemonic technique that leverages your spatial memory to store and retrieve information.",
+                steps: [
+                    "Choose a familiar place (your home, school, etc.)",
+                    "Create a mental journey through the space",
+                    "Place vivid images representing information along the path",
+                    "Walk through the path mentally to recall",
+                    "Practice regularly to strengthen the associations"
+                ],
+                tips: [
+                    "Use exaggerated, colorful images for better recall",
+                    "Start with small palaces before scaling up",
+                    "Combine with other mnemonics for complex info",
+                    "Create multiple palaces for different subjects"
+                ],
+                views: 12345,
+                likes: 1876
+            },
+            {
+                id: 5,
+                title: "Spaced Repetition",
+                category: "memorization",
+                icon: "fa-chart-line",
+                difficulty: "medium",
+                timeRequired: "15-30 min",
+                effectiveness: 95,
+                description: "Review information at increasing intervals to optimize long-term memory retention.",
+                longDescription: "Spaced repetition uses the forgetting curve to time reviews when you're about to forget, strengthening memory with each review.",
+                steps: [
+                    "Learn new information",
+                    "Review after 1 day",
+                    "Review after 3 days",
+                    "Review after 1 week",
+                    "Review after 1 month",
+                    "Continue with increasing intervals"
+                ],
+                tips: [
+                    "Use apps like Anki for automated scheduling",
+                    "Prioritize difficult items for more frequent review",
+                    "Combine with active recall for best results",
+                    "Keep sessions short but consistent"
+                ],
+                views: 19876,
+                likes: 2678
+            },
+            {
+                id: 6,
+                title: "Feynman Technique",
+                category: "mastery",
+                icon: "fa-chalkboard-teacher",
+                difficulty: "medium",
+                timeRequired: "15-30 min",
+                effectiveness: 97,
+                description: "Explain concepts in simple terms to identify gaps in understanding and achieve true mastery.",
+                longDescription: "Named after physicist Richard Feynman, this technique ensures deep understanding by forcing you to explain concepts simply.",
+                steps: [
+                    "Choose a concept to learn",
+                    "Explain it as if teaching a child",
+                    "Identify gaps in your explanation",
+                    "Go back to source material to fill gaps",
+                    "Simplify and refine your explanation"
+                ],
+                tips: [
+                    "Use analogies to simplify complex ideas",
+                    "Write your explanations down",
+                    "Teach someone else for feedback",
+                    "Use drawings and diagrams"
+                ],
+                views: 16543,
+                likes: 2345
+            },
+            {
+                id: 7,
+                title: "Speed Reading",
+                category: "reading",
+                icon: "fa-bolt",
+                difficulty: "advanced",
+                timeRequired: "1+ hour",
+                effectiveness: 85,
+                description: "Techniques to read faster while maintaining comprehension. Perfect for research and exam preparation.",
+                longDescription: "Speed reading combines several techniques to increase reading speed without sacrificing comprehension or retention.",
+                steps: [
+                    "Eliminate subvocalization (saying words in your head)",
+                    "Use a pointer to guide your eyes",
+                    "Expand peripheral vision to read word groups",
+                    "Practice with easier material first",
+                    "Regularly test comprehension"
+                ],
+                tips: [
+                    "Start with 15-minute practice sessions",
+                    "Use apps like Spreeder for training",
+                    "Preview material before speed reading",
+                    "Adjust speed based on material difficulty"
+                ],
+                views: 9876,
+                likes: 1234
+            },
+            {
+                id: 8,
+                title: "Mind Mapping",
+                category: "reading",
+                icon: "fa-project-diagram",
+                difficulty: "easy",
+                timeRequired: "5-10 min",
+                effectiveness: 88,
+                description: "Visual organization of information using diagrams to show relationships between concepts.",
+                longDescription: "Mind mapping helps organize thoughts visually, making complex information easier to understand and remember.",
+                steps: [
+                    "Start with main topic in center",
+                    "Add main branches for key concepts",
+                    "Add sub-branches for details",
+                    "Use colors and images for visual cues",
+                    "Connect related ideas across branches"
+                ],
+                tips: [
+                    "Use different colors for different themes",
+                    "Keep it simple - use keywords not sentences",
+                    "Review and revise maps over time",
+                    "Use digital tools like MindMeister"
+                ],
+                views: 14321,
+                likes: 1876
+            }
+        ];
+
+        // Community Opinions
+        let opinions = JSON.parse(localStorage.getItem('learningOpinions')) || [
+            {
+                id: 1,
+                author: "Sarah Johnson",
+                text: "The Pomodoro technique completely transformed my study sessions! I used to study for hours without breaks and would burn out quickly. Now I do 25-minute focused sessions with 5-minute breaks, and I can study for 4+ hours with better retention!",
+                tag: "mastery",
+                likes: 45,
+                date: "2024-01-15"
+            },
+            {
+                id: 2,
+                author: "Michael Chen",
+                text: "For memorizing formulas, I use the Memory Palace technique. I visualize my house and place each formula in a different room with vivid imagery. Works incredibly well for physics and math!",
+                tag: "memorization",
+                likes: 32,
+                date: "2024-01-14"
+            },
+            {
+                id: 3,
+                author: "Emily Rodriguez",
+                text: "Active recall changed my life! Instead of re-reading textbooks, I create question banks and test myself. My exam scores improved by 30% in just one semester.",
+                tag: "memorization",
+                likes: 67,
+                date: "2024-01-13"
+            },
+            {
+                id: 4,
+                author: "David Kim",
+                text: "For dense textbooks, I use SQ3R. Surveying the chapter first helps me understand the structure, and reciting in my own words ensures I actually understood what I read.",
+                tag: "reading",
+                likes: 28,
+                date: "2024-01-12"
+            }
+        ];
+
+        let currentUser = "{{ firstname }} {{ lastname }}" || "Anonymous Learner";
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStrategies('all');
+            loadOpinions();
+            updateStats();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('searchStrategies').addEventListener('input', filterStrategies);
+            document.getElementById('difficultyFilter').addEventListener('change', filterStrategies);
+            document.getElementById('timeFilter').addEventListener('change', filterStrategies);
+            document.getElementById('sortStrategies').addEventListener('change', filterStrategies);
+        }
+
+        function loadStrategies(category) {
+            let filtered = [...strategies];
+            
+            if (category !== 'all') {
+                filtered = filtered.filter(s => s.category === category);
+            }
+            
+            const container = document.getElementById(`${category === 'all' ? 'strategies' : category}Container`);
+            if (!container) return;
+            
+            container.innerHTML = filtered.map(strategy => createStrategyCard(strategy)).join('');
+        }
+
+        function createStrategyCard(strategy) {
+            const difficultyClass = `difficulty-${strategy.difficulty}`;
+            
+            return `
+                <div class="strategy-card" onclick="showStrategyDetails(${strategy.id})">
+                    <div class="strategy-banner">
+                        <div class="strategy-icon">
+                            <i class="fas ${strategy.icon}"></i>
+                        </div>
+                        <div class="difficulty-badge ${difficultyClass}">
+                            ${strategy.difficulty.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="strategy-content">
+                        <h3 class="strategy-title">${strategy.title}</h3>
+                        <span class="strategy-category">${strategy.category.toUpperCase()}</span>
+                        <p class="strategy-description">${strategy.description}</p>
+                        
+                        <div class="strategy-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${strategy.timeRequired}</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-chart-line"></i>
+                                <span>${strategy.effectiveness}% effective</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-eye"></i>
+                                <span>${strategy.views.toLocaleString()}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strategy-actions">
+                            <button class="btn btn-primary" onclick="event.stopPropagation(); showStrategyDetails(${strategy.id})">
+                                <i class="fas fa-eye"></i> Learn More
+                            </button>
+                            <button class="btn btn-outline" onclick="event.stopPropagation(); likeStrategy(${strategy.id})">
+                                <i class="fas fa-heart"></i> Like (${strategy.likes})
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showStrategyDetails(id) {
+            const strategy = strategies.find(s => s.id === id);
+            if (!strategy) return;
+            
+            document.getElementById('modalTitle').textContent = strategy.title;
+            document.getElementById('modalCategory').textContent = `${strategy.category.toUpperCase()} • ${strategy.timeRequired} • ${strategy.effectiveness}% Effective`;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">${strategy.longDescription}</p>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-list-ol"></i> Step-by-Step Guide</h4>
+                    <ul class="steps-list">
+                        ${strategy.steps.map((step, index) => `
+                            <li>
+                                <div class="step-number">${index + 1}</div>
+                                <div>${step}</div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> Pro Tips</h4>
+                    <div class="tips-grid">
+                        ${strategy.tips.map(tip => `
+                            <div class="tip-card">
+                                <i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 8px;"></i>
+                                ${tip}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-chart-line"></i> Effectiveness Rating</h4>
+                    <div class="career-bar-item">
+                        <div class="career-bar-label">Student Success Rate</div>
+                        <div class="career-bar-track">
+                            <div class="career-bar-fill" style="width: ${strategy.effectiveness}%">
+                                ${strategy.effectiveness}%
+                            </div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 15px; color: var(--gray-600);">
+                        <i class="fas fa-users"></i> Used by ${(strategy.views / 100).toFixed(0)}k+ students • 
+                        <i class="fas fa-heart" style="color: var(--danger-color);"></i> ${strategy.likes} likes
+                    </p>
+                </div>
+                
+                <div class="strategy-actions" style="margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="tryStrategy('${strategy.title}')">
+                        <i class="fas fa-play"></i> Try This Technique
+                    </button>
+                    <button class="btn btn-outline" onclick="closeStrategyModal()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('strategyModal').style.display = 'flex';
+            
+            // Increment views
+            strategy.views++;
+            updateStats();
+        }
+
+        function likeStrategy(id) {
+            const strategy = strategies.find(s => s.id === id);
+            if (strategy) {
+                strategy.likes++;
+                loadStrategies('all');
+                loadStrategies('reading');
+                loadStrategies('memorization');
+                loadStrategies('mastery');
+                updateStats();
+            }
+        }
+
+        function tryStrategy(title) {
+            alert(`🎯 Let's practice the "${title}" technique!\n\nStart with small steps and practice daily for best results. Remember, consistency is key to mastering any learning technique.`);
+        }
+
+        // Opinion Functions
+        function loadOpinions() {
+            const container = document.getElementById('opinionsContainer');
+            
+            if (opinions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-comments"></i></div>
+                        <h3 class="empty-title">No Opinions Yet</h3>
+                        <p class="empty-text">Be the first to share your learning strategy!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = opinions.sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(opinion => createOpinionCard(opinion)).join('');
+        }
+
+        function createOpinionCard(opinion) {
+            const tagNames = {
+                reading: "Reading Strategy",
+                memorization: "Memorization",
+                mastery: "Mastery Method",
+                general: "General Tip"
+            };
+            
+            return `
+                <div class="opinion-card">
+                    <div class="opinion-author">
+                        <div class="author-avatar">
+                            ${opinion.author.charAt(0)}
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">${opinion.author}</div>
+                            <div class="opinion-date">${formatDate(opinion.date)}</div>
+                        </div>
+                        <button class="like-btn" onclick="likeOpinion(${opinion.id})">
+                            <i class="fas fa-heart"></i> ${opinion.likes}
+                        </button>
+                    </div>
+                    <div class="opinion-text">${opinion.text}</div>
+                    <div class="opinion-tags">
+                        <span class="opinion-tag">${tagNames[opinion.tag]}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitOpinion() {
+            const text = document.getElementById('opinionText').value.trim();
+            const tag = document.getElementById('opinionTag').value;
+            
+            if (!text) {
+                alert('Please share your opinion or strategy!');
+                return;
+            }
+            
+            const newOpinion = {
+                id: Date.now(),
+                author: currentUser,
+                text: text,
+                tag: tag,
+                likes: 0,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            opinions.unshift(newOpinion);
+            localStorage.setItem('learningOpinions', JSON.stringify(opinions));
+            
+            document.getElementById('opinionText').value = '';
+            loadOpinions();
+            updateStats();
+            
+            alert('Thank you for sharing your learning strategy! Your wisdom will help others learn better.');
+        }
+
+        function likeOpinion(id) {
+            const opinion = opinions.find(o => o.id === id);
+            if (opinion) {
+                opinion.likes++;
+                localStorage.setItem('learningOpinions', JSON.stringify(opinions));
+                loadOpinions();
+                updateStats();
+            }
+        }
+
+        // Filter and Sort Functions
+        function filterStrategies() {
+            const searchTerm = document.getElementById('searchStrategies').value.toLowerCase();
+            const difficulty = document.getElementById('difficultyFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            const sortBy = document.getElementById('sortStrategies').value;
+            
+            let filtered = [...strategies];
+            
+            if (searchTerm) {
+                filtered = filtered.filter(s => 
+                    s.title.toLowerCase().includes(searchTerm) ||
+                    s.description.toLowerCase().includes(searchTerm) ||
+                    s.tips.some(t => t.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (difficulty) {
+                filtered = filtered.filter(s => s.difficulty === difficulty);
+            }
+            
+            if (timeFilter) {
+                filtered = filtered.filter(s => {
+                    if (timeFilter === 'quick') return s.timeRequired === '5-10 min';
+                    if (timeFilter === 'medium') return s.timeRequired === '15-30 min';
+                    if (timeFilter === 'deep') return s.timeRequired === '1+ hour';
+                    return true;
+                });
+            }
+            
+            filtered.sort((a, b) => {
+                switch(sortBy) {
+                    case 'popular':
+                        return b.views - a.views;
+                    case 'effective':
+                        return b.effectiveness - a.effectiveness;
+                    case 'newest':
+                        return b.id - a.id;
+                    case 'name':
+                        return a.title.localeCompare(b.title);
+                    default:
+                        return 0;
+                }
+            });
+            
+            const activeTab = document.querySelector('.tab-content.active').id;
+            const containerId = activeTab === 'all-tab' ? 'strategiesContainer' :
+                               activeTab === 'reading-tab' ? 'readingContainer' :
+                               activeTab === 'memorization-tab' ? 'memorizationContainer' :
+                               activeTab === 'mastery-tab' ? 'masteryContainer' : null;
+            
+            if (containerId) {
+                const container = document.getElementById(containerId);
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1;">
+                            <div class="empty-icon"><i class="fas fa-search"></i></div>
+                            <h3 class="empty-title">No Strategies Found</h3>
+                            <p class="empty-text">Try adjusting your filters to find more strategies</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = filtered.map(strategy => createStrategyCard(strategy)).join('');
+                }
+            }
+        }
+
+        // Utility Functions
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        function updateStats() {
+            document.getElementById('totalStrategies').textContent = strategies.length;
+            document.getElementById('totalOpinions').textContent = opinions.length;
+            document.getElementById('avgEffectiveness').textContent = 
+                Math.round(strategies.reduce((sum, s) => sum + s.effectiveness, 0) / strategies.length) + '%';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+                btn.innerHTML.includes(tabName === 'all' ? 'All' :
+                                       tabName === 'reading' ? 'Reading' :
+                                       tabName === 'memorization' ? 'Memorization' :
+                                       tabName === 'mastery' ? 'Mastery' : 'Opinions')
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Hide/show filter bar
+            const filterBar = document.getElementById('filterBar');
+            if (tabName === 'opinions') {
+                filterBar.style.display = 'none';
+            } else {
+                filterBar.style.display = 'block';
+                loadStrategies(tabName);
+            }
+            
+            if (tabName === 'opinions') {
+                loadOpinions();
+            }
+        }
+
+        function closeStrategyModal() {
+            document.getElementById('strategyModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('strategyModal');
+            if (event.target === modal) {
+                closeStrategyModal();
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

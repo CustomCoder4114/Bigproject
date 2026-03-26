@@ -1,0 +1,1193 @@
+{% extends "body.html" %}
+
+{% block allcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Hub - eSchool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary-color: #7209b7;
+            --accent-color: #4cc9f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --hover-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .page-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid var(--gray-100);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            padding: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px 25px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border-radius: 45px;
+            min-width: 150px;
+        }
+
+        .tab-btn:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FAQ Section */
+        .faq-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .faq-category {
+            margin-bottom: 30px;
+        }
+
+        .faq-category h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 15px;
+        }
+
+        .faq-question {
+            padding: 15px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            color: var(--primary-color);
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+        }
+
+        .faq-answer {
+            padding: 0 0 15px 0;
+            color: var(--gray-600);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        /* Ticket Form */
+        .ticket-form {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        /* Tickets Grid */
+        .tickets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .ticket-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .ticket-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        .ticket-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-open {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-resolved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .ticket-category {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .ticket-message {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .ticket-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        /* Knowledge Base Articles */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .article-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .article-description {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Live Chat Widget */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--hover-shadow);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: var(--gray-50);
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .chat-message.support {
+            justify-content: flex-start;
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+        }
+
+        .chat-message.support .message-bubble {
+            background: white;
+            color: var(--dark-color);
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-message.user .message-bubble {
+            background: var(--primary-color);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--gray-200);
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+
+        .chat-input button {
+            padding: 10px 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius-sm);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: var(--gray-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tickets-grid,
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                border-radius: var(--border-radius);
+            }
+            
+            .chat-window {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <div class="page-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h1 class="page-title">Support Hub</h1>
+                <p class="page-subtitle">Get help with anything about the web. Submit tickets, browse FAQs, and connect with our support team</p>
+            </div>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="stat-number" id="totalTickets">0</div>
+                <div class="stat-label">Support Tickets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="resolvedTickets">0</div>
+                <div class="stat-label">Resolved Issues</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number" id="avgResponse">2.5h</div>
+                <div class="stat-label">Avg Response Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-smile"></i>
+                </div>
+                <div class="stat-number" id="satisfaction">96%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('tickets')">
+                <i class="fas fa-ticket-alt"></i> My Tickets
+            </button>
+            <button class="tab-btn" onclick="switchTab('faq')">
+                <i class="fas fa-question-circle"></i> FAQ
+            </button>
+            <button class="tab-btn" onclick="switchTab('knowledge')">
+                <i class="fas fa-book"></i> Knowledge Base
+            </button>
+            <button class="tab-btn" onclick="switchTab('new')">
+                <i class="fas fa-plus-circle"></i> New Ticket
+            </button>
+        </div>
+
+        <!-- My Tickets Tab -->
+        <div id="tickets-tab" class="tab-content active">
+            <div class="tickets-grid" id="ticketsContainer">
+                <!-- Tickets will be loaded here -->
+            </div>
+        </div>
+
+        <!-- FAQ Tab -->
+        <div id="faq-tab" class="tab-content">
+            <div class="faq-container">
+                <div class="faq-category">
+                    <h3><i class="fas fa-globe"></i> Web Development FAQs</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            How do I get started with web development?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Start with HTML for structure, then CSS for styling, and JavaScript for interactivity. Practice by building small projects and use online resources like MDN Web Docs and freeCodeCamp.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            What's the difference between frontend and backend?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Frontend deals with what users see and interact with (HTML, CSS, JavaScript). Backend handles server-side operations, databases, and application logic (Python, Node.js, PHP, etc.).
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            How do I debug JavaScript code?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Use browser developer tools (F12), console.log() statements, breakpoints, and debugging tools like Chrome DevTools. Also consider using linters and error tracking tools.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-category">
+                    <h3><i class="fas fa-graduation-cap"></i> Learning & Courses</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            How do I track my course progress?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Your progress is automatically saved as you complete modules and exercises. Check the "My Learning" tab to see your overall progress and completed modules for each course.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            Can I retake quizzes and exercises?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Yes! You can retake quizzes and exercises as many times as you want to improve your score and understanding. Practice makes perfect!
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            How do I get certificates?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Certificates are awarded upon completing all modules, exercises, and passing the final assessment. You can download your certificate from the course completion page.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-category">
+                    <h3><i class="fas fa-cog"></i> Technical Issues</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            The code editor isn't working properly. What should I do?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Try refreshing the page, clearing your browser cache, or using a different browser (Chrome, Firefox, or Edge are recommended). If the issue persists, submit a support ticket.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            My progress isn't being saved. How can I fix this?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Ensure you're logged in and have cookies enabled. Try logging out and back in, or contact support if the issue continues. Your progress is automatically saved in the cloud.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Knowledge Base Tab -->
+        <div id="knowledge-tab" class="tab-content">
+            <div class="articles-grid" id="articlesContainer">
+                <!-- Knowledge base articles will be loaded here -->
+            </div>
+        </div>
+
+        <!-- New Ticket Tab -->
+        <div id="new-tab" class="tab-content">
+            <div class="ticket-form">
+                <div class="form-title">
+                    <i class="fas fa-pen-alt"></i>
+                    Submit a Support Ticket
+                </div>
+                <form id="ticketForm">
+                    <div class="form-group">
+                        <label for="ticketTitle">Subject *</label>
+                        <input type="text" id="ticketTitle" required placeholder="Brief summary of your issue">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketCategory">Category *</label>
+                        <select id="ticketCategory" required>
+                            <option value="">Select a category</option>
+                            <option value="technical">Technical Issue</option>
+                            <option value="account">Account Problem</option>
+                            <option value="course">Course Question</option>
+                            <option value="billing">Billing/Subscription</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketPriority">Priority *</label>
+                        <select id="ticketPriority" required>
+                            <option value="low">Low - General question</option>
+                            <option value="medium">Medium - Minor issue</option>
+                            <option value="high">High - Blocking my work</option>
+                            <option value="urgent">Urgent - Critical issue</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ticketMessage">Message *</label>
+                        <textarea id="ticketMessage" rows="6" required placeholder="Describe your issue in detail. Include steps to reproduce, screenshots, and any error messages..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Submit Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Chat Widget -->
+    <div class="chat-widget">
+        <div class="chat-button" onclick="toggleChat()">
+            <i class="fas fa-comment-dots"></i>
+        </div>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <span><i class="fas fa-headset"></i> Support Chat</span>
+                <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer;"></i>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message support">
+                    <div class="message-bubble">
+                        Hi! 👋 I'm your support assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type your message...">
+                <button onclick="sendChatMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Support Tickets Data
+        let tickets = JSON.parse(localStorage.getItem('supportTickets')) || [
+            {
+                id: 1,
+                title: "Code editor not loading",
+                category: "technical",
+                priority: "high",
+                message: "The code editor in the JavaScript course is stuck on loading. I've tried refreshing multiple times.",
+                status: "in-progress",
+                createdAt: "2024-01-15",
+                updatedAt: "2024-01-16",
+                responses: [
+                    { date: "2024-01-16", message: "We're looking into this issue. Please try clearing your browser cache." }
+                ]
+            },
+            {
+                id: 2,
+                title: "Course progress not updating",
+                category: "course",
+                priority: "medium",
+                message: "My progress in the HTML course isn't updating after completing modules.",
+                status: "open",
+                createdAt: "2024-01-17",
+                updatedAt: "2024-01-17",
+                responses: []
+            }
+        ];
+
+        let currentUser = "{{ firstname }} {{ lastname }}" || "Student User";
+
+        // Knowledge Base Articles
+        const knowledgeBase = [
+            {
+                id: 1,
+                title: "Getting Started with Web Development",
+                description: "A beginner's guide to HTML, CSS, and JavaScript fundamentals.",
+                icon: "fa-rocket",
+                content: "Start with the basics of HTML for structure, CSS for styling, and JavaScript for interactivity..."
+            },
+            {
+                id: 2,
+                title: "Debugging JavaScript Errors",
+                description: "Learn how to find and fix common JavaScript errors.",
+                icon: "fa-bug",
+                content: "Use console.log(), browser dev tools, and error handling techniques..."
+            },
+            {
+                id: 3,
+                title: "Understanding CSS Flexbox",
+                description: "Master CSS Flexbox for responsive layouts.",
+                icon: "fa-arrows-alt",
+                content: "Flexbox provides a powerful way to create flexible layouts..."
+            },
+            {
+                id: 4,
+                title: "Python Best Practices",
+                description: "Write cleaner, more efficient Python code.",
+                icon: "fa-python",
+                content: "Follow PEP 8, use meaningful variable names, and write documentation..."
+            },
+            {
+                id: 5,
+                title: "Database Design Basics",
+                description: "Learn how to design efficient database schemas.",
+                icon: "fa-database",
+                content: "Understand normalization, relationships, and indexing strategies..."
+            },
+            {
+                id: 6,
+                title: "API Integration Guide",
+                description: "How to connect your apps to external APIs.",
+                icon: "fa-plug",
+                content: "Learn about REST APIs, authentication, and handling responses..."
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTickets();
+            loadKnowledgeBase();
+            updateStats();
+            setupTicketForm();
+        });
+
+        function loadTickets() {
+            const container = document.getElementById('ticketsContainer');
+            
+            if (tickets.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-ticket-alt"></i></div>
+                        <h3 class="empty-title">No Tickets Yet</h3>
+                        <p class="empty-text">Submit your first support ticket to get help from our team.</p>
+                        <button class="btn btn-primary" onclick="switchTab('new')">
+                            <i class="fas fa-plus"></i> Create Ticket
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = tickets.map(ticket => createTicketCard(ticket)).join('');
+        }
+
+        function createTicketCard(ticket) {
+            const statusClass = `status-${ticket.status.replace('-', '')}`;
+            const statusText = ticket.status === 'open' ? 'Open' : 
+                              ticket.status === 'in-progress' ? 'In Progress' : 'Resolved';
+            
+            const priorityColors = {
+                low: '#10b981',
+                medium: '#f59e0b',
+                high: '#ef4444',
+                urgent: '#dc2626'
+            };
+            
+            return `
+                <div class="ticket-card" onclick="viewTicketDetails(${ticket.id})">
+                    <div class="ticket-header">
+                        <div class="ticket-title">${ticket.title}</div>
+                        <div class="ticket-status ${statusClass}">${statusText}</div>
+                    </div>
+                    <div class="ticket-category">
+                        <i class="fas ${getCategoryIcon(ticket.category)}"></i> ${ticket.category.toUpperCase()}
+                    </div>
+                    <div class="ticket-message">${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}</div>
+                    <div class="ticket-meta">
+                        <span><i class="fas fa-calendar"></i> ${formatDate(ticket.createdAt)}</span>
+                        <span><i class="fas fa-flag" style="color: ${priorityColors[ticket.priority]}"></i> ${ticket.priority}</span>
+                        <span><i class="fas fa-comment"></i> ${ticket.responses.length} responses</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewTicketDetails(id) {
+            const ticket = tickets.find(t => t.id === id);
+            if (!ticket) return;
+            
+            alert(`Ticket: ${ticket.title}\n\nStatus: ${ticket.status}\nPriority: ${ticket.priority}\n\nMessage: ${ticket.message}\n\nResponses: ${ticket.responses.length}`);
+        }
+
+        function loadKnowledgeBase() {
+            const container = document.getElementById('articlesContainer');
+            container.innerHTML = knowledgeBase.map(article => `
+                <div class="article-card" onclick="viewArticle(${article.id})">
+                    <div class="article-icon">
+                        <i class="fas ${article.icon}"></i>
+                    </div>
+                    <div class="article-title">${article.title}</div>
+                    <div class="article-description">${article.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function viewArticle(id) {
+            const article = knowledgeBase.find(a => a.id === id);
+            if (article) {
+                alert(`${article.title}\n\n${article.content}\n\nCheck the full article in our documentation for more details!`);
+            }
+        }
+
+        function setupTicketForm() {
+            document.getElementById('ticketForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const newTicket = {
+                    id: Date.now(),
+                    title: document.getElementById('ticketTitle').value,
+                    category: document.getElementById('ticketCategory').value,
+                    priority: document.getElementById('ticketPriority').value,
+                    message: document.getElementById('ticketMessage').value,
+                    status: 'open',
+                    createdAt: new Date().toISOString().split('T')[0],
+                    updatedAt: new Date().toISOString().split('T')[0],
+                    responses: []
+                };
+                
+                tickets.unshift(newTicket);
+                localStorage.setItem('supportTickets', JSON.stringify(tickets));
+                
+                // Reset form
+                document.getElementById('ticketForm').reset();
+                
+                alert(`✅ Ticket submitted successfully!\n\nYour ticket ID: #${newTicket.id}\n\nOur team will respond within 24 hours.`);
+                
+                loadTickets();
+                updateStats();
+                switchTab('tickets');
+            });
+        }
+
+        function updateStats() {
+            document.getElementById('totalTickets').textContent = tickets.length;
+            const resolved = tickets.filter(t => t.status === 'resolved').length;
+            document.getElementById('resolvedTickets').textContent = resolved;
+        }
+
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            answer.classList.toggle('active');
+            icon.style.transform = answer.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0)';
+        }
+
+        // Live Chat Functions
+        function toggleChat() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.classList.toggle('active');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            // Simulate support response
+            setTimeout(() => {
+                const response = getSupportResponse(message);
+                addChatMessage(response, 'support');
+            }, 1000);
+        }
+
+        function addChatMessage(message, sender) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    ${message}
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getSupportResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('course') || lowerMessage.includes('learn')) {
+                return "I'd be happy to help with courses! Check out our interactive tutorials in the Browse Courses tab. Is there a specific course you're interested in?";
+            }
+            if (lowerMessage.includes('error') || lowerMessage.includes('bug')) {
+                return "I understand you're experiencing an issue. Please submit a support ticket with the error details, and our technical team will investigate immediately.";
+            }
+            if (lowerMessage.includes('progress') || lowerMessage.includes('complete')) {
+                return "Your progress is automatically saved! Check the My Learning tab to see your completed modules and overall progress.";
+            }
+            if (lowerMessage.includes('thanks') || lowerMessage.includes('thank')) {
+                return "You're welcome! 😊 Is there anything else I can help you with?";
+            }
+            
+            return "Thanks for reaching out! I'll help you find the right resources. Could you please provide more details about what you need help with? You can also submit a support ticket for complex issues.";
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+                btn.innerHTML.toLowerCase().includes(tabName === 'tickets' ? 'tickets' :
+                                                   tabName === 'faq' ? 'faq' :
+                                                   tabName === 'knowledge' ? 'knowledge' : 'new')
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                technical: 'fa-code',
+                account: 'fa-user',
+                course: 'fa-book',
+                billing: 'fa-credit-card',
+                feature: 'fa-star',
+                other: 'fa-question'
+            };
+            return icons[category] || 'fa-tag';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Allow Enter key in chat
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && document.activeElement.id === 'chatInput') {
+                sendChatMessage();
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

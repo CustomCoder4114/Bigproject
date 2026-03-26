@@ -111,7 +111,7 @@
 .dashboard-content, .dashboard-grid {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+   
 }
 
 .dashboard-layout {

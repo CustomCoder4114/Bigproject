@@ -264,9 +264,9 @@ def courses():
 def schedule():
     return render_template('schedule.html')
 
-@app.route('/assignment')
-def assignment():
-    return render_template('assignment.html')
+@app.route('/careerD')
+def careerD():
+    return render_template('careerD.html')
 
 @app.route('/progres')
 def progres():
@@ -275,6 +275,15 @@ def progres():
 @app.route('/settings')
 def settings():
     return render_template('settings.html')
+@app.route('/strategies')
+def strategies():
+    return render_template('strategies.html')
+@app.route('/skills')
+def skills():
+    return render_template('skills.html')
+@app.route('/support')
+def support():
+    return render_template('support.html')
 
 # ============ UPLOAD ROUTES ============
 
