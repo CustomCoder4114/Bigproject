@@ -162,24 +162,26 @@
             overflow: hidden;
             box-shadow: var(--card-shadow);
             padding: 5px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 16px 25px;
+            padding: 16px 20px;
             border: none;
             background: none;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--gray-600);
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             border-radius: 45px;
+            min-width: 120px;
         }
 
         .tab-btn:hover {
@@ -330,6 +332,18 @@
             font-weight: 600;
         }
 
+        .saved-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            background: var(--success-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
         .career-content {
             padding: 25px;
         }
@@ -447,6 +461,28 @@
             transform: translateY(-2px);
         }
 
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059862;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger-outline {
+            background: transparent;
+            color: var(--danger-color);
+            border: 2px solid var(--danger-color);
+        }
+
+        .btn-danger-outline:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         /* Career Details Modal */
         .modal {
             display: none;
@@ -511,105 +547,6 @@
             padding: 30px;
         }
 
-        /* Career Test Section */
-        .test-container {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: var(--border-radius);
-            padding: 40px;
-            color: white;
-            margin-bottom: 40px;
-        }
-
-        .test-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .test-header h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .question-container {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 30px;
-            color: var(--dark-color);
-            margin-bottom: 20px;
-        }
-
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 25px;
-            color: var(--dark-color);
-        }
-
-        .options-grid {
-            display: grid;
-            gap: 15px;
-        }
-
-        .option-btn {
-            padding: 15px 20px;
-            background: var(--gray-100);
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: left;
-            font-size: 1rem;
-            font-weight: 500;
-        }
-
-        .option-btn:hover {
-            background: var(--primary-light);
-            border-color: var(--primary-color);
-            transform: translateX(10px);
-        }
-
-        .test-progress {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .progress-bar-container {
-            background: var(--gray-200);
-            height: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-
-        .test-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .result-container {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 40px;
-            text-align: center;
-        }
-
-        .result-career {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 20px 0;
-        }
-
-        .result-match {
-            font-size: 1.5rem;
-            color: var(--success-color);
-            margin-bottom: 20px;
-        }
-
         /* Chart Container */
         .chart-container {
             background: white;
@@ -639,9 +576,10 @@
         }
 
         .career-bar-label {
-            width: 120px;
+            width: 140px;
             font-weight: 500;
             color: var(--gray-700);
+            font-size: 0.9rem;
         }
 
         .career-bar-track {
@@ -667,6 +605,125 @@
             transition: width 1s ease;
         }
 
+        /* Test Section - FIXED */
+        .test-container {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--border-radius);
+            padding: 40px;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .test-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .test-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .question-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark-color);
+            padding: 10px 0;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .question-text i {
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .option-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+            transform: translateX(10px);
+        }
+
+        .option-btn.selected {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+        }
+
+        .test-progress {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .progress-bar-container {
+            background: var(--gray-200);
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .test-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .result-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .result-career {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .result-match {
+            font-size: 1.5rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
         /* Empty State */
         .empty-state {
             text-align: center;
@@ -689,6 +746,21 @@
             color: var(--gray-400);
         }
 
+        .empty-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--gray-600);
+            margin-bottom: 15px;
+        }
+
+        .empty-text {
+            color: var(--gray-500);
+            max-width: 500px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
         /* Responsive */
         @media (max-width: 968px) {
             .stats-bar {
@@ -701,6 +773,10 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
             .page-title {
                 font-size: 2.2rem;
             }
@@ -725,11 +801,26 @@
             .test-container {
                 padding: 20px;
             }
+            
+            .career-bar-label {
+                width: 100px;
+                font-size: 0.8rem;
+            }
         }
 
         @media (max-width: 576px) {
             .stats-bar {
                 grid-template-columns: 1fr;
+            }
+            
+            .career-bar-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .career-bar-label {
+                width: 100%;
             }
         }
     </style>
@@ -784,14 +875,14 @@
             <button class="tab-btn active" onclick="switchTab('explore')">
                 <i class="fas fa-compass"></i> Explore Careers
             </button>
-            <button class="tab-btn" onclick="switchTab('trending')">
-                <i class="fas fa-fire"></i> Trending Careers
+            <button class="tab-btn" onclick="switchTab('trending-insights')">
+                <i class="fas fa-fire"></i> Trending & Insights
             </button>
             <button class="tab-btn" onclick="switchTab('test')">
                 <i class="fas fa-brain"></i> Career Aptitude Test
             </button>
-            <button class="tab-btn" onclick="switchTab('insights')">
-                <i class="fas fa-chart-pie"></i> Market Insights
+            <button class="tab-btn" onclick="switchTab('saved')">
+                <i class="fas fa-bookmark"></i> Saved Careers
             </button>
         </div>
 
@@ -833,37 +924,17 @@
             </div>
         </div>
 
-        <!-- Trending Careers Tab -->
-        <div id="trending-tab" class="tab-content">
+        <!-- Trending & Insights Tab -->
+        <div id="trending-insights-tab" class="tab-content">
             <div class="chart-container">
                 <div class="chart-title">
-                    <i class="fas fa-chart-line"></i> Most Viewed Careers This Week
+                    <i class="fas fa-fire"></i> Most Viewed Careers This Week
                 </div>
                 <div class="career-bars" id="trendingBars">
                     <!-- Trending bars will be loaded here -->
                 </div>
             </div>
-            <div class="careers-grid" id="trendingContainer">
-                <!-- Trending careers will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Career Aptitude Test Tab -->
-        <div id="test-tab" class="tab-content">
-            <div class="test-container">
-                <div class="test-header">
-                    <h2><i class="fas fa-brain"></i> Career Aptitude Test</h2>
-                    <p>Answer 10 questions to discover your ideal career path based on your interests, skills, and personality</p>
-                </div>
-                
-                <div id="testArea">
-                    <!-- Test questions will be loaded here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Market Insights Tab -->
-        <div id="insights-tab" class="tab-content">
+            
             <div class="chart-container">
                 <div class="chart-title">
                     <i class="fas fa-chart-bar"></i> Top Growing Career Fields
@@ -880,6 +951,45 @@
                 <div class="career-bars" id="salaryChart">
                     <!-- Salary chart will be loaded here -->
                 </div>
+            </div>
+        </div>
+
+        <!-- Career Aptitude Test Tab -->
+        <div id="test-tab" class="tab-content">
+            <div class="test-container">
+                <div class="test-header">
+                    <h2><i class="fas fa-brain"></i> Career Aptitude Test</h2>
+                    <p>Answer 5 questions to discover your ideal career path based on your interests, skills, and personality</p>
+                </div>
+                
+                <div id="testArea">
+                    <!-- Test questions will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Saved Careers Tab -->
+        <div id="saved-tab" class="tab-content">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchSaved" class="form-control" placeholder="Search saved careers...">
+                    </div>
+                    <select id="savedCategoryFilter" class="select-control">
+                        <option value="">All Categories</option>
+                        <option value="technology">Technology & IT</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="business">Business & Finance</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="creative">Creative & Design</option>
+                        <option value="education">Education</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="careers-grid" id="savedContainer">
+                <!-- Saved careers will be loaded here -->
             </div>
         </div>
     </div>
@@ -901,7 +1011,33 @@
     </div>
 
     <script>
-        // Career Database
+        // ===================== STORAGE FUNCTIONS =====================
+        function getStorageKey() {
+            const email = '{{ session.get('email', 'default_user') }}';
+            return `savedCareers_${email}`;
+        }
+
+        function loadSavedCareers() {
+            const key = getStorageKey();
+            const stored = localStorage.getItem(key);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        function saveSavedCareers(saved) {
+            const key = getStorageKey();
+            localStorage.setItem(key, JSON.stringify(saved));
+        }
+
+        let savedCareers = loadSavedCareers();
+
+        // ===================== CAREER DATABASE =====================
         const careers = [
             {
                 id: 1,
@@ -1033,7 +1169,7 @@
             }
         ];
 
-        // Test Questions
+        // ===================== TEST QUESTIONS (FIXED) =====================
         const testQuestions = [
             {
                 id: 1,
@@ -1087,9 +1223,10 @@
             }
         ];
 
+        // ===================== TEST STATE (FIXED) =====================
         let testState = {
             currentQuestion: 0,
-            answers: [],
+            answers: [], // Store which option was selected
             scores: {
                 technology: 0,
                 healthcare: 0,
@@ -1103,12 +1240,12 @@
 
         let testTakers = parseInt(localStorage.getItem('careerTestTakers')) || 0;
 
-        // Initialize page
+        // ===================== INITIALIZATION =====================
         document.addEventListener('DOMContentLoaded', () => {
             loadCareers();
-            loadTrendingCareers();
+            loadTrendingInsights();
             loadTest();
-            loadInsights();
+            loadSavedCareersUI();
             updateStats();
             setupEventListeners();
             incrementViews();
@@ -1119,16 +1256,20 @@
             document.getElementById('categoryFilter').addEventListener('change', filterCareers);
             document.getElementById('salaryFilter').addEventListener('change', filterCareers);
             document.getElementById('sortCareers').addEventListener('change', filterCareers);
+            document.getElementById('searchSaved').addEventListener('input', filterSavedCareers);
+            document.getElementById('savedCategoryFilter').addEventListener('change', filterSavedCareers);
         }
 
+        // ===================== CAREERS FUNCTIONS =====================
         function loadCareers() {
             const container = document.getElementById('careersContainer');
-            container.innerHTML = careers.map(career => createCareerCard(career)).join('');
+            container.innerHTML = careers.map(career => createCareerCard(career, false)).join('');
         }
 
-        function createCareerCard(career) {
+        function createCareerCard(career, isSavedView = false) {
             const salaryNum = parseInt(career.salary.replace(/[^0-9-]/g, '').split('-')[0]);
             const formattedSalary = `$${salaryNum.toLocaleString()}+`;
+            const isSaved = savedCareers.includes(career.id);
             
             return `
                 <div class="career-card" onclick="showCareerDetails(${career.id})">
@@ -1137,6 +1278,7 @@
                             <i class="fas ${career.icon}"></i>
                         </div>
                         ${career.growth > 20 ? '<div class="trending-badge"><i class="fas fa-fire"></i> Trending</div>' : ''}
+                        ${isSaved ? '<div class="saved-badge"><i class="fas fa-check"></i> Saved</div>' : ''}
                     </div>
                     <div class="career-content">
                         <h3 class="career-title">${career.title}</h3>
@@ -1167,21 +1309,104 @@
                             <button class="btn btn-primary" onclick="event.stopPropagation(); showCareerDetails(${career.id})">
                                 <i class="fas fa-eye"></i> View Details
                             </button>
-                            <button class="btn btn-outline" onclick="event.stopPropagation(); saveCareer(${career.id})">
-                                <i class="fas fa-bookmark"></i> Save
-                            </button>
+                            ${isSaved ? 
+                                `<button class="btn btn-danger-outline" onclick="event.stopPropagation(); unsaveCareer(${career.id})">
+                                    <i class="fas fa-bookmark"></i> Unsave
+                                </button>` :
+                                `<button class="btn btn-outline" onclick="event.stopPropagation(); saveCareer(${career.id})">
+                                    <i class="fas fa-bookmark"></i> Save
+                                </button>`
+                            }
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function loadTrendingCareers() {
-            const trending = [...careers].sort((a, b) => b.views - a.views).slice(0, 4);
-            const container = document.getElementById('trendingContainer');
-            container.innerHTML = trending.map(career => createCareerCard(career)).join('');
+        // ===================== SAVED CAREERS FUNCTIONS =====================
+        function saveCareer(careerId) {
+            if (!savedCareers.includes(careerId)) {
+                savedCareers.push(careerId);
+                saveSavedCareers(savedCareers);
+                const career = careers.find(c => c.id === careerId);
+                loadCareers();
+                loadSavedCareersUI();
+                updateStats();
+                alert(`✨ ${career.title} has been saved to your career list!`);
+            }
+        }
+
+        function unsaveCareer(careerId) {
+            const index = savedCareers.indexOf(careerId);
+            if (index > -1) {
+                savedCareers.splice(index, 1);
+                saveSavedCareers(savedCareers);
+                const career = careers.find(c => c.id === careerId);
+                loadCareers();
+                loadSavedCareersUI();
+                alert(`🗑️ ${career.title} has been removed from your saved careers.`);
+            }
+        }
+
+        function loadSavedCareersUI() {
+            const container = document.getElementById('savedContainer');
+            const saved = careers.filter(c => savedCareers.includes(c.id));
             
-            // Update trending bars
+            if (saved.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-bookmark"></i></div>
+                        <h3 class="empty-title">No Saved Careers</h3>
+                        <p class="empty-text">Start exploring careers and save the ones that interest you! Click the "Save" button on any career card.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = saved.map(career => createCareerCard(career, true)).join('');
+        }
+
+        function filterSavedCareers() {
+            const searchTerm = document.getElementById('searchSaved').value.toLowerCase();
+            const category = document.getElementById('savedCategoryFilter').value;
+            
+            let filtered = careers.filter(c => savedCareers.includes(c.id));
+            
+            if (searchTerm) {
+                filtered = filtered.filter(c => 
+                    c.title.toLowerCase().includes(searchTerm) ||
+                    c.description.toLowerCase().includes(searchTerm) ||
+                    c.skills.some(s => s.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            if (category) {
+                filtered = filtered.filter(c => c.category === category);
+            }
+            
+            const container = document.getElementById('savedContainer');
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-search"></i></div>
+                        <h3 class="empty-title">No Saved Careers Found</h3>
+                        <p class="empty-text">Try adjusting your filters to find more saved careers</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filtered.map(career => createCareerCard(career, true)).join('');
+            }
+        }
+
+        // ===================== TRENDING & INSIGHTS =====================
+        function loadTrendingInsights() {
+            loadTrendingBars();
+            loadGrowthChart();
+            loadSalaryChart();
+        }
+
+        function loadTrendingBars() {
+            const trending = [...careers].sort((a, b) => b.views - a.views).slice(0, 5);
             const barsContainer = document.getElementById('trendingBars');
             const maxViews = Math.max(...trending.map(c => c.views));
             barsContainer.innerHTML = trending.map(career => `
@@ -1196,15 +1421,69 @@
             `).join('');
         }
 
+        function loadGrowthChart() {
+            const growthData = [...careers].sort((a, b) => parseFloat(b.growth) - parseFloat(a.growth)).slice(0, 5);
+            const growthContainer = document.getElementById('growthChart');
+            const maxGrowth = Math.max(...growthData.map(c => parseFloat(c.growth)));
+            
+            growthContainer.innerHTML = growthData.map(career => `
+                <div class="career-bar-item">
+                    <div class="career-bar-label">${career.title}</div>
+                    <div class="career-bar-track">
+                        <div class="career-bar-fill" style="width: ${(parseFloat(career.growth) / maxGrowth) * 100}%">
+                            ${career.growth} growth
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadSalaryChart() {
+            const industries = ['technology', 'healthcare', 'business', 'engineering', 'creative'];
+            const industrySalaries = industries.map(industry => {
+                const industryCareers = careers.filter(c => c.category === industry);
+                const avgSalary = industryCareers.reduce((sum, c) => {
+                    const salary = parseInt(c.salary.replace(/[^0-9-]/g, '').split('-')[1] || 
+                                          c.salary.replace(/[^0-9-]/g, '').split('-')[0]);
+                    return sum + salary;
+                }, 0) / industryCareers.length;
+                return { industry, avgSalary: Math.round(avgSalary) };
+            });
+            
+            const salaryContainer = document.getElementById('salaryChart');
+            const maxSalary = Math.max(...industrySalaries.map(s => s.avgSalary));
+            
+            salaryContainer.innerHTML = industrySalaries.map(data => `
+                <div class="career-bar-item">
+                    <div class="career-bar-label">${data.industry.toUpperCase()}</div>
+                    <div class="career-bar-track">
+                        <div class="career-bar-fill" style="width: ${(data.avgSalary / maxSalary) * 100}%">
+                            $${(data.avgSalary / 1000).toFixed(0)}K
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===================== TEST FUNCTIONS (FIXED) =====================
         function loadTest() {
             const testArea = document.getElementById('testArea');
             
+            // Check if test is completed
             if (testState.completed) {
                 showTestResults();
                 return;
             }
             
+            // Check if all questions are answered
+            if (testState.currentQuestion >= testQuestions.length) {
+                testState.completed = true;
+                showTestResults();
+                return;
+            }
+            
             const question = testQuestions[testState.currentQuestion];
+            const selectedOption = testState.answers[testState.currentQuestion];
             
             testArea.innerHTML = `
                 <div class="question-container">
@@ -1213,14 +1492,18 @@
                     </div>
                     <div class="options-grid">
                         ${question.options.map((option, idx) => `
-                            <button class="option-btn" onclick="answerQuestion(${idx})">
+                            <button class="option-btn ${selectedOption === idx ? 'selected' : ''}" 
+                                    onclick="answerQuestion(${idx})">
                                 ${option.text}
                             </button>
                         `).join('')}
                     </div>
                 </div>
                 <div class="test-progress">
-                    <div>Question ${testState.currentQuestion + 1} of ${testQuestions.length}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Question ${testState.currentQuestion + 1} of ${testQuestions.length}</span>
+                        <span>${Math.round(((testState.currentQuestion + 1) / testQuestions.length) * 100)}% Complete</span>
+                    </div>
                     <div class="progress-bar-container">
                         <div class="test-progress-bar" style="width: ${((testState.currentQuestion + 1) / testQuestions.length) * 100}%"></div>
                     </div>
@@ -1232,14 +1515,18 @@
             const question = testQuestions[testState.currentQuestion];
             const selectedOption = question.options[optionIndex];
             
+            // Store the answer
+            testState.answers[testState.currentQuestion] = optionIndex;
+            
             // Update scores
             testState.scores[selectedOption.careerType] = (testState.scores[selectedOption.careerType] || 0) + 1;
-            testState.answers.push(selectedOption);
             
+            // Move to next question or complete test
             if (testState.currentQuestion + 1 < testQuestions.length) {
                 testState.currentQuestion++;
                 loadTest();
             } else {
+                // Mark as completed and show results
                 testState.completed = true;
                 testTakers++;
                 localStorage.setItem('careerTestTakers', testTakers);
@@ -1249,41 +1536,50 @@
         }
 
         function showTestResults() {
-            // Find top matching career categories
             const sortedScores = Object.entries(testState.scores).sort((a, b) => b[1] - a[1]);
             const topCategory = sortedScores[0][0];
             
             // Find best matching career
             const matchingCareers = careers.filter(c => c.category === topCategory);
-            const topCareer = matchingCareers[0];
+            const topCareer = matchingCareers.length > 0 ? matchingCareers[0] : careers[0];
+            
+            // Calculate match percentage
+            const maxScore = testQuestions.length;
+            const topScore = sortedScores[0][1];
+            const matchPercent = Math.round((topScore / maxScore) * 100);
             
             const testArea = document.getElementById('testArea');
             
             testArea.innerHTML = `
                 <div class="result-container">
-                    <div class="empty-icon" style="background: var(--primary-light);">
-                        <i class="fas fa-trophy" style="color: var(--primary-color);"></i>
+                    <div class="empty-icon" style="background: var(--primary-light); margin: 0 auto 25px;">
+                        <i class="fas fa-trophy" style="color: var(--primary-color); font-size: 3rem;"></i>
                     </div>
-                    <h2>Your Career Match!</h2>
+                    <h2 style="font-size: 2rem; color: var(--dark-color);">Your Career Match!</h2>
                     <div class="result-career">${topCareer.title}</div>
-                    <div class="result-match">${Math.floor(sortedScores[0][1] / testQuestions.length * 100)}% Match</div>
-                    <p style="margin-bottom: 20px;">Based on your responses, you're best suited for a career in ${topCategory.toUpperCase()}!</p>
+                    <div class="result-match">${matchPercent}% Match</div>
+                    <p style="margin-bottom: 20px; color: var(--gray-600); font-size: 1.1rem;">
+                        Based on your responses, you're best suited for a career in <strong>${topCategory.toUpperCase()}</strong>!
+                    </p>
                     
-                    <div style="margin: 30px 0;">
-                        <h3>Your Career Matches:</h3>
-                        ${sortedScores.slice(0, 3).map(([category, score]) => `
-                            <div class="career-bar-item" style="margin-top: 15px;">
-                                <div class="career-bar-label">${category.toUpperCase()}</div>
-                                <div class="career-bar-track">
-                                    <div class="career-bar-fill" style="width: ${(score / testQuestions.length) * 100}%">
-                                        ${Math.floor((score / testQuestions.length) * 100)}%
+                    <div style="margin: 30px 0; text-align: left;">
+                        <h3 style="margin-bottom: 15px; color: var(--dark-color);">Your Career Matches:</h3>
+                        ${sortedScores.slice(0, 3).map(([category, score]) => {
+                            const percent = Math.round((score / testQuestions.length) * 100);
+                            return `
+                                <div class="career-bar-item" style="margin-top: 15px;">
+                                    <div class="career-bar-label" style="text-transform: uppercase;">${category}</div>
+                                    <div class="career-bar-track">
+                                        <div class="career-bar-fill" style="width: ${percent}%;">
+                                            ${percent}%
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                     
-                    <div class="career-actions" style="justify-content: center;">
+                    <div class="career-actions" style="justify-content: center; margin-top: 30px;">
                         <button class="btn btn-primary" onclick="viewCareerMatch(${topCareer.id})">
                             <i class="fas fa-eye"></i> View Career Details
                         </button>
@@ -1316,131 +1612,7 @@
             showCareerDetails(careerId);
         }
 
-        function loadInsights() {
-            // Growth chart
-            const growthData = [...careers].sort((a, b) => parseFloat(b.growth) - parseFloat(a.growth)).slice(0, 5);
-            const growthContainer = document.getElementById('growthChart');
-            const maxGrowth = Math.max(...growthData.map(c => parseFloat(c.growth)));
-            
-            growthContainer.innerHTML = growthData.map(career => `
-                <div class="career-bar-item">
-                    <div class="career-bar-label">${career.title}</div>
-                    <div class="career-bar-track">
-                        <div class="career-bar-fill" style="width: ${(parseFloat(career.growth) / maxGrowth) * 100}%">
-                            ${career.growth} growth
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Salary chart by industry
-            const industries = ['technology', 'healthcare', 'business', 'engineering', 'creative'];
-            const industrySalaries = industries.map(industry => {
-                const industryCareers = careers.filter(c => c.category === industry);
-                const avgSalary = industryCareers.reduce((sum, c) => {
-                    const salary = parseInt(c.salary.replace(/[^0-9-]/g, '').split('-')[1] || 
-                                          c.salary.replace(/[^0-9-]/g, '').split('-')[0]);
-                    return sum + salary;
-                }, 0) / industryCareers.length;
-                return { industry, avgSalary: Math.round(avgSalary) };
-            });
-            
-            const salaryContainer = document.getElementById('salaryChart');
-            const maxSalary = Math.max(...industrySalaries.map(s => s.avgSalary));
-            
-            salaryContainer.innerHTML = industrySalaries.map(data => `
-                <div class="career-bar-item">
-                    <div class="career-bar-label">${data.industry.toUpperCase()}</div>
-                    <div class="career-bar-track">
-                        <div class="career-bar-fill" style="width: ${(data.avgSalary / maxSalary) * 100}%">
-                            $${(data.avgSalary / 1000).toFixed(0)}K
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function showCareerDetails(careerId) {
-            const career = careers.find(c => c.id === careerId);
-            if (!career) return;
-            
-            document.getElementById('modalTitle').textContent = career.title;
-            document.getElementById('modalCategory').textContent = career.category.toUpperCase() + " • " + career.demand + " Demand";
-            
-            document.getElementById('modalBody').innerHTML = `
-                <div style="margin-bottom: 30px;">
-                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">${career.longDescription}</p>
-                    
-                    <div class="career-stats" style="margin: 20px 0;">
-                        <div class="career-stat">
-                            <div class="stat-value">${career.salary}</div>
-                            <div class="stat-label-sm">Average Salary</div>
-                        </div>
-                        <div class="career-stat">
-                            <div class="stat-value">${career.growth}</div>
-                            <div class="stat-label-sm">Job Growth</div>
-                        </div>
-                        <div class="career-stat">
-                            <div class="stat-value">${career.demand}</div>
-                            <div class="stat-label-sm">Market Demand</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-code"></i> Key Skills Required</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        ${career.skills.map(skill => `
-                            <span style="padding: 6px 12px; background: white; border-radius: 20px; font-size: 0.9rem;">
-                                ${skill}
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-graduation-cap"></i> Education Requirements</h4>
-                    <ul style="list-style: none;">
-                        ${career.education.map(edu => `
-                            <li style="padding: 8px 0;"><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 10px;"></i> ${edu}</li>
-                        `).join('')}
-                    </ul>
-                </div>
-                
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-building"></i> Top Hiring Companies</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        ${career.topCompanies.map(company => `
-                            <span style="padding: 6px 12px; background: white; border-radius: 20px; font-size: 0.9rem;">
-                                ${company}
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="career-actions" style="margin-top: 30px;">
-                    <button class="btn btn-primary" onclick="saveCareer(${career.id})">
-                        <i class="fas fa-bookmark"></i> Save Career
-                    </button>
-                    <button class="btn btn-outline" onclick="closeCareerModal()">
-                        <i class="fas fa-times"></i> Close
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('careerModal').style.display = 'flex';
-            
-            // Increment views
-            career.views++;
-            loadTrendingCareers();
-            updateStats();
-        }
-
-        function saveCareer(careerId) {
-            const career = careers.find(c => c.id === careerId);
-            alert(`✨ ${career.title} has been saved to your career list!`);
-        }
-
+        // ===================== FILTER FUNCTIONS =====================
         function filterCareers() {
             const searchTerm = document.getElementById('searchCareers').value.toLowerCase();
             const category = document.getElementById('categoryFilter').value;
@@ -1499,13 +1671,109 @@
                     </div>
                 `;
             } else {
-                container.innerHTML = filtered.map(career => createCareerCard(career)).join('');
+                container.innerHTML = filtered.map(career => createCareerCard(career, false)).join('');
             }
         }
 
+        // ===================== CAREER DETAILS =====================
+        function showCareerDetails(careerId) {
+            const career = careers.find(c => c.id === careerId);
+            if (!career) return;
+            
+            document.getElementById('modalTitle').textContent = career.title;
+            document.getElementById('modalCategory').textContent = career.category.toUpperCase() + " • " + career.demand + " Demand";
+            
+            const isSaved = savedCareers.includes(career.id);
+            
+            document.getElementById('modalBody').innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <p style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px;">${career.longDescription}</p>
+                    
+                    <div class="career-stats" style="margin: 20px 0;">
+                        <div class="career-stat">
+                            <div class="stat-value">${career.salary}</div>
+                            <div class="stat-label-sm">Average Salary</div>
+                        </div>
+                        <div class="career-stat">
+                            <div class="stat-value">${career.growth}</div>
+                            <div class="stat-label-sm">Job Growth</div>
+                        </div>
+                        <div class="career-stat">
+                            <div class="stat-value">${career.demand}</div>
+                            <div class="stat-label-sm">Market Demand</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-code"></i> Key Skills Required</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        ${career.skills.map(skill => `
+                            <span style="padding: 6px 12px; background: white; border-radius: 20px; font-size: 0.9rem;">
+                                ${skill}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-graduation-cap"></i> Education Requirements</h4>
+                    <ul style="list-style: none;">
+                        ${career.education.map(edu => `
+                            <li style="padding: 8px 0;"><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 10px;"></i> ${edu}</li>
+                        `).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 15px;"><i class="fas fa-building"></i> Top Hiring Companies</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        ${career.topCompanies.map(company => `
+                            <span style="padding: 6px 12px; background: white; border-radius: 20px; font-size: 0.9rem;">
+                                ${company}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="career-actions" style="margin-top: 30px;">
+                    ${isSaved ? 
+                        `<button class="btn btn-danger-outline" onclick="unsaveCareer(${career.id}); closeCareerModal();">
+                            <i class="fas fa-bookmark"></i> Unsave
+                        </button>` :
+                        `<button class="btn btn-success" onclick="saveCareer(${career.id}); closeCareerModal();">
+                            <i class="fas fa-bookmark"></i> Save Career
+                        </button>`
+                    }
+                    <button class="btn btn-outline" onclick="closeCareerModal()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('careerModal').style.display = 'flex';
+            
+            career.views++;
+            loadTrendingInsights();
+            updateStats();
+        }
+
+        // ===================== STATS =====================
         function updateStats() {
             document.getElementById('totalCareers').textContent = careers.length;
             document.getElementById('totalTestTakers').textContent = testTakers.toLocaleString();
+            
+            // Calculate average salary
+            const totalSalary = careers.reduce((sum, c) => {
+                const salary = parseInt(c.salary.replace(/[^0-9-]/g, '').split('-')[0]);
+                return sum + salary;
+            }, 0);
+            const avgSalary = Math.round(totalSalary / careers.length / 1000);
+            document.getElementById('avgSalary').textContent = `$${avgSalary}K`;
+            
+            // Calculate average growth
+            const avgGrowth = careers.reduce((sum, c) => sum + parseFloat(c.growth), 0) / careers.length;
+            document.getElementById('growthRate').textContent = `${Math.round(avgGrowth)}%`;
         }
 
         function incrementViews() {
@@ -1514,23 +1782,31 @@
             });
         }
 
+        // ===================== TAB SWITCHING =====================
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
-                btn.innerHTML.includes(tabName === 'explore' ? 'Explore' : 
-                                       tabName === 'trending' ? 'Trending' : 
-                                       tabName === 'test' ? 'Aptitude' : 'Insights')
-            );
-            if (activeBtn) activeBtn.classList.add('active');
+            const map = {
+                'explore': 'Explore Careers',
+                'trending-insights': 'Trending & Insights',
+                'test': 'Career Aptitude Test',
+                'saved': 'Saved Careers'
+            };
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.textContent.includes(map[tabName])) {
+                    btn.classList.add('active');
+                }
+            });
             
             document.getElementById(`${tabName}-tab`).classList.add('active');
             
-            if (tabName === 'trending') loadTrendingCareers();
-            if (tabName === 'insights') loadInsights();
+            if (tabName === 'trending-insights') loadTrendingInsights();
+            if (tabName === 'saved') loadSavedCareersUI();
         }
 
+        // ===================== MODAL =====================
         function closeCareerModal() {
             document.getElementById('careerModal').style.display = 'none';
         }

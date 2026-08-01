@@ -8,6 +8,154 @@
     <title>Eschool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Notification Dropdown Styles */
+        .notification-dropdown {
+            position: relative;
+        }
+        
+        .notification-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: 360px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification-dropdown.active .notification-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .notification-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0;
+        }
+        
+        .mark-all-read {
+            font-size: 12px;
+            color: #4361ee;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .mark-all-read:hover {
+            text-decoration: underline;
+        }
+        
+        .notifications-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 14px 20px;
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .notification-item.unread {
+            background-color: #eef2ff;
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon i {
+            font-size: 18px;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+        
+        .notification-time {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+        
+        .notification-footer {
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .view-all-link {
+            font-size: 13px;
+            color: #4361ee;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+        
+        .no-notifications {
+            padding: 40px 20px;
+            text-align: center;
+            color: #9ca3af;
+        }
+        
+        .no-notifications i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        
+        .no-notifications p {
+            font-size: 14px;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -24,10 +172,83 @@
             </div>
             
             <div class="header-actions">
-                <button class="notification-btn">
-                    <i class="far fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </button>
+                <div class="notification-dropdown" id="notificationDropdown">
+                    <button class="notification-btn" id="notificationBtn">
+                        <i class="far fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    
+                    <div class="notification-menu" id="notificationMenu">
+                        <div class="notification-header">
+                            <h4>Notifications</h4>
+                            <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                        </div>
+                        <div class="notifications-list" id="notificationsList">
+                            <!-- Notification 1 -->
+                            <div class="notification-item unread" data-id="1">
+                                <div class="notification-icon" style="background-color: #e0e7ff; color: #4361ee;">
+                                    <i class="fas fa-calendar-plus"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">New assignment posted</div>
+                                    <div class="notification-message">Mathematics: Chapter 5 Problem Set has been posted</div>
+                                    <div class="notification-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification 2 -->
+                            <div class="notification-item unread" data-id="2">
+                                <div class="notification-icon" style="background-color: #dcfce7; color: #4ade80;">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Class announcement</div>
+                                    <div class="notification-message">Physics: Lab session rescheduled to Thursday</div>
+                                    <div class="notification-time">5 hours ago</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification 3 -->
+                            <div class="notification-item unread" data-id="3">
+                                <div class="notification-icon" style="background-color: #fef3c7; color: #f59e0b;">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">New message from Sarah</div>
+                                    <div class="notification-message">Sarah Johnson sent you a message about the group project</div>
+                                    <div class="notification-time">1 day ago</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification 4 -->
+                            <div class="notification-item" data-id="4">
+                                <div class="notification-icon" style="background-color: #e0e7ff; color: #4361ee;">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Achievement unlocked!</div>
+                                    <div class="notification-message">You earned the "Quick Learner" badge</div>
+                                    <div class="notification-time">2 days ago</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Notification 5 -->
+                            <div class="notification-item" data-id="5">
+                                <div class="notification-icon" style="background-color: #fce7f3; color: #ec489a;">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Course completed</div>
+                                    <div class="notification-message">Congratulations! You completed "Introduction to Python"</div>
+                                    <div class="notification-time">3 days ago</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="/notifications" class="view-all-link">View all notifications →</a>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="user-profile-dropdown" id="userProfileDropdown">
                     <div class="user-profile-trigger" id="userProfileTrigger">
@@ -67,9 +288,9 @@
                             <span>Settings</span>
                         </a>
                         
-                        <a href="/upload" class="dropdown-item">
+                        <a href="/progres" class="dropdown-item">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Upload Resources</span>
+                            <span>Progress</span>
                         </a>
                         
                         <div class="dropdown-divider"></div>
@@ -142,7 +363,11 @@
             <i class="fas fa-question-circle"></i>
             <span>Strategies</span>
         </a>
-        
+        <a href="/questions" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Questions</span>
+        </a>
+
         <div class="nav-divider"></div>
         
         <a href="/settings" class="nav-item">
@@ -204,7 +429,11 @@
                 <i class="fas fa-book"></i>
                 <span>Strategies</span>
             </a>
-            
+            <a href="/questions" class="nav-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Questions</span>
+        </a>
+
             <div class="nav-divider"></div>
             
             <a href="/settings" class="nav-item">
@@ -276,7 +505,7 @@
         // Close dropdown when clicking on a dropdown item
         const dropdownItems = document.querySelectorAll('.dropdown-item');
         dropdownItems.forEach(item => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function(e) {
                 userProfileDropdown.classList.remove('active');
                 
                 // Special handling for logout
@@ -295,13 +524,122 @@
             }
         });
 
-        // Notification Button
-        const notificationBtn = document.querySelector('.notification-btn');
-        notificationBtn.addEventListener('click', function() {
-            alert('Notifications panel would open showing:\n1. New assignment posted\n2. Class announcement\n3. Message from Sarah');
+        // ========== NOTIFICATION DROPDOWN FUNCTIONALITY WITH LOCALSTORAGE ==========
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationMenu = document.getElementById('notificationMenu');
+        const notificationBadge = document.querySelector('.notification-badge');
+        
+        // Function to save read status to localStorage
+        function saveReadStatus(notificationIds) {
+            localStorage.setItem('readNotifications', JSON.stringify(notificationIds));
+        }
+        
+        // Function to get read status from localStorage
+        function getReadStatus() {
+            const saved = localStorage.getItem('readNotifications');
+            return saved ? JSON.parse(saved) : [];
+        }
+        
+        // Function to apply read status to notifications on page load
+        function applyReadStatus() {
+            const readIds = getReadStatus();
+            const notificationItems = document.querySelectorAll('.notification-item');
+            
+            notificationItems.forEach(item => {
+                const id = item.dataset.id;
+                if (readIds.includes(id)) {
+                    item.classList.remove('unread');
+                } else {
+                    item.classList.add('unread');
+                }
+            });
+            
+            updateNotificationBadge();
+        }
+        
+        // Toggle notification dropdown - NO ALERT
+        notificationBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationDropdown.classList.toggle('active');
         });
         
-       
+        // Close notification dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!notificationDropdown.contains(e.target)) {
+                notificationDropdown.classList.remove('active');
+            }
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                notificationDropdown.classList.remove('active');
+            }
+        });
+        
+        // Mark individual notification as read when clicked - NO ALERT, saves to localStorage
+        const notificationItems = document.querySelectorAll('.notification-item');
+        notificationItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't trigger if clicking on a link inside
+                if (e.target.tagName === 'A') return;
+                
+                if (this.classList.contains('unread')) {
+                    this.classList.remove('unread');
+                    
+                    // Save to localStorage
+                    const readIds = getReadStatus();
+                    const id = this.dataset.id;
+                    if (!readIds.includes(id)) {
+                        readIds.push(id);
+                        saveReadStatus(readIds);
+                    }
+                    
+                    updateNotificationBadge();
+                }
+                
+                // Close dropdown after clicking
+                notificationDropdown.classList.remove('active');
+            });
+        });
+        
+        // Mark all as read functionality - NO ALERT, saves to localStorage
+        const markAllReadBtn = document.getElementById('markAllRead');
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const unreadItems = document.querySelectorAll('.notification-item.unread');
+                const readIds = getReadStatus();
+                
+                unreadItems.forEach(item => {
+                    item.classList.remove('unread');
+                    const id = item.dataset.id;
+                    if (!readIds.includes(id)) {
+                        readIds.push(id);
+                    }
+                });
+                
+                saveReadStatus(readIds);
+                updateNotificationBadge();
+            });
+        }
+        
+        // Update notification badge count
+        function updateNotificationBadge() {
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            if (notificationBadge) {
+                if (unreadCount > 0) {
+                    notificationBadge.textContent = unreadCount;
+                    notificationBadge.style.display = 'flex';
+                } else {
+                    notificationBadge.style.display = 'none';
+                }
+            }
+        }
+        
+        // Apply saved read status on page load
+        applyReadStatus();
         
         // Assignment Buttons
         const assignmentButtons = document.querySelectorAll('.assignment-actions .btn');
@@ -350,15 +688,23 @@
         
         // Search Functionality
         const searchInput = document.querySelector('.search-bar input');
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                alert(`Searching for: "${this.value}"`);
-                this.value = '';
-            }
-        });
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    alert(`Searching for: "${this.value}"`);
+                    this.value = '';
+                }
+            });
+        }
         
         // Prevent body scroll when dropdown is open
         userProfileDropdown.addEventListener('click', function(e) {
+            if (this.classList.contains('active')) {
+                e.stopPropagation();
+            }
+        });
+        
+        notificationDropdown.addEventListener('click', function(e) {
             if (this.classList.contains('active')) {
                 e.stopPropagation();
             }

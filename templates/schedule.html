@@ -41,7 +41,11 @@
             box-sizing: border-box;
         }
 
-       
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            
+        }
 
         /* Header Styles */
         .page-header {
@@ -330,51 +334,23 @@
         }
 
         .btn-success {
-            background: transparent;
-            color: var(--success-color);
-            border: 2px solid var(--success-color);
-        }
-
-        .btn-success:hover {
-            background-color: var(--success-color);
+            background: var(--success-color);
             color: white;
         }
 
-        /* Schedule View Tabs */
-        .view-tabs {
-            display: flex;
-            background: var(--gray-100);
-            border-radius: var(--border-radius-sm);
-            padding: 4px;
-            margin-bottom: 30px;
+        .btn-success:hover {
+            background: #059862;
+            transform: translateY(-2px);
         }
 
-        .view-tab {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--gray-600);
-            border-radius: 6px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
         }
 
-        .view-tab:hover {
-            background: var(--gray-200);
-        }
-
-        .view-tab.active {
-            background: white;
-            color: var(--primary-color);
-            box-shadow: var(--card-shadow);
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
         }
 
         /* Daily Schedule */
@@ -492,6 +468,12 @@
             border-color: var(--success-color);
         }
 
+        .action-btn.danger:hover {
+            background: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
+        }
+
         .slot-status {
             position: absolute;
             top: 20px;
@@ -515,156 +497,6 @@
         .status-completed {
             background: var(--gray-400);
             color: white;
-        }
-
-        /* Weekly Schedule */
-        .weekly-schedule {
-            display: none;
-        }
-
-        .weekly-grid {
-            display: grid;
-            grid-template-columns: 80px repeat(5, 1fr);
-            gap: 1px;
-            background: var(--gray-200);
-            border-radius: var(--border-radius-sm);
-            overflow: hidden;
-        }
-
-        .time-column {
-            background: white;
-            padding: 15px;
-            font-weight: 500;
-            color: var(--gray-600);
-            border-right: 1px solid var(--gray-200);
-        }
-
-        .day-column {
-            background: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--dark-color);
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .schedule-cell {
-            background: white;
-            padding: 10px;
-            min-height: 80px;
-            border-right: 1px solid var(--gray-200);
-            border-bottom: 1px solid var(--gray-200);
-            position: relative;
-        }
-
-        .event-bubble {
-            position: absolute;
-            width: calc(100% - 20px);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: white;
-            cursor: pointer;
-            transition: var(--transition);
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .event-bubble:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .event-bubble.math {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .event-bubble.physics {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-        }
-
-        .event-bubble.cs {
-            background: linear-gradient(135deg, #1dd1a1, #10b981);
-        }
-
-        .event-bubble.english {
-            background: linear-gradient(135deg, #feca57, #ff9f43);
-        }
-
-        .event-bubble.break {
-            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
-        }
-
-        /* Monthly Schedule */
-        .monthly-schedule {
-            display: none;
-        }
-
-        .monthly-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 12px;
-        }
-
-        .monthly-day {
-            background: white;
-            border: 2px solid var(--gray-200);
-            border-radius: var(--border-radius-sm);
-            padding: 15px;
-            min-height: 120px;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .monthly-day:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow);
-        }
-
-        .monthly-day.other-month {
-            background: var(--gray-50);
-            opacity: 0.6;
-        }
-
-        .monthly-day.today {
-            border-color: var(--primary-color);
-            background: var(--primary-light);
-        }
-
-        .monthly-day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .monthly-day-number {
-            font-weight: 600;
-            color: var(--dark-color);
-            font-size: 1.2rem;
-        }
-
-        .monthly-day-weekday {
-            font-size: 0.85rem;
-            color: var(--gray-500);
-        }
-
-        .monthly-day-events {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .monthly-event {
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: white;
-            cursor: pointer;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         /* Filter Bar */
@@ -736,8 +568,126 @@
             line-height: 1.6;
         }
 
-        /* Responsive Design */
+        /* ===== ADD EVENT MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            color: var(--dark-color);
+            margin-bottom: 8px;
+        }
+
+        .modal-content .modal-subtitle {
+            color: var(--gray-500);
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        .form-group label .required {
+            color: var(--danger-color);
+        }
+
+        .form-control-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-control-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* ===== RESPONSIVE BREAKPOINTS ===== */
         @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
             .schedule-header {
                 flex-direction: column;
                 align-items: stretch;
@@ -755,14 +705,14 @@
             .time-label {
                 min-width: auto;
             }
-            
-            .weekly-grid {
-                grid-template-columns: 60px repeat(5, 1fr);
-                font-size: 0.85rem;
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
-            
-            .monthly-grid {
-                grid-template-columns: repeat(5, 1fr);
+
+            .modal-content {
+                padding: 20px;
+                margin: 10px;
             }
         }
 
@@ -775,14 +725,6 @@
                 font-size: 2rem;
             }
             
-            .weekly-grid {
-                grid-template-columns: 50px repeat(5, 1fr);
-            }
-            
-            .monthly-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
             .filter-group {
                 flex-direction: column;
                 align-items: stretch;
@@ -791,17 +733,31 @@
             .select-control {
                 width: 100%;
             }
+            
+            .schedule-main {
+                padding: 20px;
+            }
+            
+            .calendar-sidebar {
+                padding: 20px;
+            }
         }
 
         /* Print Styles */
         @media print {
-            .btn, .action-btn, .view-tabs, .schedule-actions {
+            .btn, .action-btn, .schedule-actions, .modal-overlay {
                 display: none !important;
             }
             
             .schedule-main, .calendar-sidebar {
                 box-shadow: none !important;
                 border: 1px solid #ddd !important;
+            }
+            
+            .page-header {
+                background: #4361ee !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
         }
     </style>
@@ -895,7 +851,7 @@
                         <p id="scheduleDate">Monday, October 16, 2023</p>
                     </div>
                     <div class="schedule-actions">
-                        <button class="btn btn-primary" onclick="addNewEvent()">
+                        <button class="btn btn-primary" onclick="openAddEventModal()">
                             <i class="fas fa-plus"></i> Add Event
                         </button>
                         <button class="btn btn-success" onclick="printSchedule()">
@@ -907,36 +863,9 @@
                     </div>
                 </div>
 
-                <!-- View Tabs -->
-                <div class="view-tabs">
-                    <button class="view-tab active" onclick="switchView('daily')">
-                        <i class="fas fa-calendar-day"></i> Daily
-                    </button>
-                    <button class="view-tab" onclick="switchView('weekly')">
-                        <i class="fas fa-calendar-week"></i> Weekly
-                    </button>
-                    <button class="view-tab" onclick="switchView('monthly')">
-                        <i class="fas fa-calendar-alt"></i> Monthly
-                    </button>
-                </div>
-
                 <!-- Daily View -->
                 <div id="dailyView" class="daily-schedule">
                     <!-- Schedule items will be loaded here -->
-                </div>
-
-                <!-- Weekly View -->
-                <div id="weeklyView" class="weekly-schedule">
-                    <div class="weekly-grid" id="weeklyGrid">
-                        <!-- Weekly grid will be generated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Monthly View -->
-                <div id="monthlyView" class="monthly-schedule">
-                    <div class="monthly-grid" id="monthlyGrid">
-                        <!-- Monthly grid will be generated by JavaScript -->
-                    </div>
                 </div>
 
                 <!-- Empty State -->
@@ -945,12 +874,100 @@
                         <i class="fas fa-calendar-times"></i>
                     </div>
                     <h3 class="empty-title">No Schedule Items</h3>
-                    <p class="empty-text">No events scheduled for this period. Add new events or check back later.</p>
-                    <button class="btn btn-primary" onclick="addNewEvent()">
+                    <p class="empty-text">No events scheduled for this day. Add new events or check other dates.</p>
+                    <button class="btn btn-primary" onclick="openAddEventModal()">
                         <i class="fas fa-plus"></i> Add New Event
                     </button>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- ===== ADD EVENT MODAL ===== -->
+    <div class="modal-overlay" id="addEventModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-calendar-plus" style="color:var(--primary-color);"></i> Add New Event</h2>
+            <p class="modal-subtitle">Fill in the details to schedule a new event. It will be saved permanently.</p>
+            
+            <form id="addEventForm" onsubmit="submitNewEvent(event)">
+                <div class="form-group">
+                    <label>Event Title <span class="required">*</span></label>
+                    <input type="text" class="form-control-input" id="eventTitle" placeholder="e.g., Calculus Lecture" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Course</label>
+                        <select class="form-control-input" id="eventCourse">
+                            <option value="">No Course</option>
+                            <option value="math101">Mathematics 101</option>
+                            <option value="physics201">Physics 201</option>
+                            <option value="cs301">Computer Science 301</option>
+                            <option value="english101">English Literature 101</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Event Type <span class="required">*</span></label>
+                        <select class="form-control-input" id="eventType" required>
+                            <option value="lecture">Lecture</option>
+                            <option value="lab">Lab</option>
+                            <option value="assignment">Assignment</option>
+                            <option value="exam">Exam</option>
+                            <option value="break">Break</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date <span class="required">*</span></label>
+                        <input type="date" class="form-control-input" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time <span class="required">*</span></label>
+                        <input type="time" class="form-control-input" id="eventTime" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="number" class="form-control-input" id="eventDuration" placeholder="90" value="60" min="0" step="15">
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select class="form-control-input" id="eventPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" class="form-control-input" id="eventLocation" placeholder="e.g., Room 302, Online, Lab 105">
+                </div>
+
+                <div class="form-group">
+                    <label>Instructor</label>
+                    <input type="text" class="form-control-input" id="eventInstructor" placeholder="e.g., Dr. Smith">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control-input" id="eventDescription" rows="3" placeholder="Add details about this event..." style="resize:vertical;"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddEventModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Add Event
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -960,138 +977,56 @@
         // =========================
         let currentDate = new Date();
         let selectedDate = new Date();
-        let currentView = 'daily';
+        let nextEventId = 1;
         
-        const scheduleData = [
-            {
-                id: 1,
-                title: "Calculus Lecture",
-                course: "math101",
-                type: "lecture",
-                description: "Limits and continuity. Chapter 3.1-3.3 discussion.",
-                time: "09:00-10:30",
-                day: 16,
-                month: 9, // October (0-indexed)
-                year: 2023,
-                duration: 90,
-                location: "Room 302",
-                instructor: "Dr. Smith",
-                priority: "high",
-                status: "upcoming"
-            },
-            {
-                id: 2,
-                title: "Physics Lab",
-                course: "physics201",
-                type: "lab",
-                description: "Thermodynamics experiment setup and demonstration.",
-                time: "11:00-13:00",
-                day: 16,
-                month: 9,
-                year: 2023,
-                duration: 120,
-                location: "Lab 105",
-                instructor: "Prof. Johnson",
-                priority: "high",
-                status: "ongoing"
-            },
-            {
-                id: 3,
-                title: "Lunch Break",
-                course: null,
-                type: "break",
-                description: "Take a break and recharge.",
-                time: "13:00-14:00",
-                day: 16,
-                month: 9,
-                year: 2023,
-                duration: 60,
-                location: "Cafeteria",
-                instructor: null,
-                priority: "low",
-                status: "upcoming"
-            },
-            {
-                id: 4,
-                title: "Computer Science Workshop",
-                course: "cs301",
-                type: "lecture",
-                description: "Introduction to algorithms and data structures.",
-                time: "14:30-16:00",
-                day: 16,
-                month: 9,
-                year: 2023,
-                duration: 90,
-                location: "Room 415",
-                instructor: "Dr. Williams",
-                priority: "medium",
-                status: "upcoming"
-            },
-            {
-                id: 5,
-                title: "Math Assignment Due",
-                course: "math101",
-                type: "assignment",
-                description: "Chapter 2 problem set submission deadline.",
-                time: "23:59",
-                day: 16,
-                month: 9,
-                year: 2023,
-                duration: 0,
-                location: "Online",
-                instructor: "Dr. Smith",
-                priority: "high",
-                status: "upcoming"
-            },
-            {
-                id: 6,
-                title: "English Literature",
-                course: "english101",
-                type: "lecture",
-                description: "Romantic poetry analysis - Wordsworth and Coleridge.",
-                time: "10:00-11:30",
-                day: 17,
-                month: 9,
-                year: 2023,
-                duration: 90,
-                location: "Room 210",
-                instructor: "Dr. Brown",
-                priority: "medium",
-                status: "upcoming"
-            },
-            {
-                id: 7,
-                title: "Study Group",
-                course: "math101",
-                type: "assignment",
-                description: "Group study session for upcoming calculus test.",
-                time: "16:00-18:00",
-                day: 17,
-                month: 9,
-                year: 2023,
-                duration: 120,
-                location: "Library Study Room 3",
-                instructor: null,
-                priority: "medium",
-                status: "upcoming"
-            }
-        ];
+        // ===== LOCAL STORAGE FUNCTIONS =====
+        function getStorageKey() {
+            // Get user email from session - ensures each account has separate data
+            const email = '{{ session.get('email', 'default_user') }}';
+            return `scheduleData_${email}`;
+        }
 
-        const courseColors = {
-            math101: '#4361ee',
-            physics201: '#ff6b6b',
-            cs301: '#1dd1a1',
-            english101: '#feca57'
-        };
+        function loadScheduleData() {
+            const key = getStorageKey();
+            const stored = localStorage.getItem(key);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    // Find the highest ID for new events
+                    if (parsed.length > 0) {
+                        const maxId = Math.max(...parsed.map(e => e.id));
+                        nextEventId = maxId + 1;
+                    }
+                    return parsed;
+                } catch (e) {
+                    console.warn('Failed to parse stored schedule data');
+                }
+            }
+            return [];
+        }
+
+        function saveScheduleData(events) {
+            const key = getStorageKey();
+            localStorage.setItem(key, JSON.stringify(events));
+        }
+
+        // ===== INITIALIZE SCHEDULE DATA =====
+        let scheduleData = loadScheduleData();
 
         // =========================
         // INITIALIZATION
         // =========================
         document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('eventDate').value = `${year}-${month}-${day}`;
+            document.getElementById('eventTime').value = '09:00';
+            
             initializeCalendar();
             loadSchedule();
             updateTodayEvents();
-            setupEventListeners();
         });
 
         // =========================
@@ -1099,31 +1034,23 @@
         // =========================
         function initializeCalendar() {
             renderCalendar();
-            highlightSelectedDate();
         }
 
         function renderCalendar() {
             const month = currentDate.getMonth();
             const year = currentDate.getFullYear();
             
-            // Update month display
             const monthNames = ["January", "February", "March", "April", "May", "June",
                                "July", "August", "September", "October", "November", "December"];
             document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
             
-            // Get first day of month
             const firstDay = new Date(year, month, 1).getDay();
-            
-            // Get days in month
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            // Get previous month days
             const prevMonthDays = new Date(year, month, 0).getDate();
             
             const calendarDays = document.getElementById('calendarDays');
             calendarDays.innerHTML = '';
             
-            // Previous month days
             for (let i = firstDay - 1; i >= 0; i--) {
                 const day = prevMonthDays - i;
                 const dayElement = document.createElement('div');
@@ -1133,24 +1060,20 @@
                 calendarDays.appendChild(dayElement);
             }
             
-            // Current month days
             const today = new Date();
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayElement = document.createElement('div');
                 dayElement.className = 'calendar-day';
                 dayElement.textContent = i;
                 
-                // Check if today
                 if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
                     dayElement.classList.add('today');
                 }
                 
-                // Check if selected
                 if (i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
                     dayElement.classList.add('selected');
                 }
                 
-                // Check if has events
                 if (hasEventsOnDate(i, month, year)) {
                     dayElement.classList.add('event');
                 }
@@ -1159,8 +1082,7 @@
                 calendarDays.appendChild(dayElement);
             }
             
-            // Next month days
-            const totalCells = 42; // 6 rows * 7 days
+            const totalCells = 42;
             const nextMonthDays = totalCells - (firstDay + daysInMonth);
             for (let i = 1; i <= nextMonthDays; i++) {
                 const dayElement = document.createElement('div');
@@ -1191,33 +1113,23 @@
             updateScheduleHeader();
         }
 
-        function highlightSelectedDate() {
-            // Already handled in renderCalendar
-        }
-
         // =========================
         // SCHEDULE FUNCTIONS
         // =========================
         function loadSchedule() {
+            // Reload data from localStorage (in case it was changed elsewhere)
+            scheduleData = loadScheduleData();
+            
             const filteredEvents = getFilteredEvents();
             
+            const emptyState = document.getElementById('emptyState');
             if (filteredEvents.length === 0) {
-                document.getElementById('emptyState').style.display = 'block';
+                emptyState.style.display = 'block';
             } else {
-                document.getElementById('emptyState').style.display = 'none';
+                emptyState.style.display = 'none';
             }
             
-            switch(currentView) {
-                case 'daily':
-                    loadDailyView(filteredEvents);
-                    break;
-                case 'weekly':
-                    loadWeeklyView(filteredEvents);
-                    break;
-                case 'monthly':
-                    loadMonthlyView(filteredEvents);
-                    break;
-            }
+            loadDailyView(filteredEvents);
         }
 
         function getFilteredEvents() {
@@ -1226,32 +1138,10 @@
             const priorityFilter = document.getElementById('priorityFilter').value;
             
             return scheduleData.filter(event => {
-                // Date filtering based on current view
-                let dateMatch = false;
+                const dateMatch = event.day === selectedDate.getDate() && 
+                                 event.month === selectedDate.getMonth() && 
+                                 event.year === selectedDate.getFullYear();
                 
-                switch(currentView) {
-                    case 'daily':
-                        dateMatch = event.day === selectedDate.getDate() && 
-                                   event.month === selectedDate.getMonth() && 
-                                   event.year === selectedDate.getFullYear();
-                        break;
-                    case 'weekly':
-                        // Simplified weekly filtering - show events from selected week
-                        const weekStart = new Date(selectedDate);
-                        weekStart.setDate(selectedDate.getDate() - selectedDate.getDay());
-                        const weekEnd = new Date(weekStart);
-                        weekEnd.setDate(weekStart.getDate() + 6);
-                        
-                        const eventDate = new Date(event.year, event.month, event.day);
-                        dateMatch = eventDate >= weekStart && eventDate <= weekEnd;
-                        break;
-                    case 'monthly':
-                        dateMatch = event.month === selectedDate.getMonth() && 
-                                   event.year === selectedDate.getFullYear();
-                        break;
-                }
-                
-                // Additional filters
                 const courseMatch = !courseFilter || event.course === courseFilter;
                 const typeMatch = !typeFilter || event.type === typeFilter;
                 const priorityMatch = !priorityFilter || event.priority === priorityFilter;
@@ -1264,18 +1154,33 @@
             const dailyView = document.getElementById('dailyView');
             dailyView.innerHTML = '';
             
-            // Sort events by time
             events.sort((a, b) => {
                 const timeA = a.time.split('-')[0];
                 const timeB = b.time.split('-')[0];
                 return timeA.localeCompare(timeB);
             });
             
+            if (events.length === 0) {
+                dailyView.innerHTML = `
+                    <div style="text-align:center;padding:40px 20px;color:var(--gray-500);">
+                        <i class="fas fa-calendar-day" style="font-size:2.5rem;margin-bottom:15px;display:block;"></i>
+                        <p>No events scheduled for this day.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const courseColors = {
+                math101: '#4361ee',
+                physics201: '#ff6b6b',
+                cs301: '#1dd1a1',
+                english101: '#feca57'
+            };
+            
             events.forEach(event => {
                 const timeSlot = document.createElement('div');
                 timeSlot.className = `time-slot ${event.type}`;
                 
-                // Determine color based on course
                 const color = event.course ? courseColors[event.course] : '#6b7280';
                 
                 timeSlot.innerHTML = `
@@ -1288,154 +1193,30 @@
                             ${event.course ? `<span class="meta-item"><i class="fas fa-book"></i> ${getCourseName(event.course)}</span>` : ''}
                             ${event.location ? `<span class="meta-item"><i class="fas fa-map-marker-alt"></i> ${event.location}</span>` : ''}
                             ${event.instructor ? `<span class="meta-item"><i class="fas fa-chalkboard-teacher"></i> ${event.instructor}</span>` : ''}
+                            ${event.priority ? `<span class="meta-item"><i class="fas fa-flag"></i> ${event.priority}</span>` : ''}
                         </div>
-                        <p class="slot-description">${event.description}</p>
+                        <p class="slot-description">${event.description || 'No description provided.'}</p>
                         <div class="slot-actions">
                             <button class="action-btn" onclick="viewEventDetails(${event.id})">
                                 <i class="fas fa-info-circle"></i> Details
                             </button>
-                            <button class="action-btn" onclick="joinEvent(${event.id})">
-                                <i class="fas fa-video"></i> Join
-                            </button>
+                            ${event.type === 'lecture' || event.type === 'lab' ? 
+                                `<button class="action-btn" onclick="joinEvent(${event.id})">
+                                    <i class="fas fa-video"></i> Join
+                                </button>` : ''}
                             <button class="action-btn success" onclick="markAsCompleted(${event.id})">
                                 <i class="fas fa-check"></i> Complete
                             </button>
+                            <button class="action-btn danger" onclick="deleteEvent(${event.id})" style="color:var(--danger-color);">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
                         </div>
                     </div>
-                    <span class="slot-status status-${event.status}">${event.status}</span>
+                    <span class="slot-status status-${event.status || 'upcoming'}">${event.status || 'upcoming'}</span>
                 `;
                 
                 dailyView.appendChild(timeSlot);
             });
-        }
-
-        function loadWeeklyView(events) {
-            const weeklyGrid = document.getElementById('weeklyGrid');
-            weeklyGrid.innerHTML = '';
-            
-            // Create time slots (8 AM to 6 PM)
-            const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
-            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-            
-            // Add time column headers
-            weeklyGrid.innerHTML += '<div class="time-column"></div>';
-            days.forEach(day => {
-                weeklyGrid.innerHTML += `<div class="day-column">${day}</div>`;
-            });
-            
-            // Create grid cells
-            timeSlots.forEach(time => {
-                // Time label cell
-                weeklyGrid.innerHTML += `<div class="time-column">${time}</div>`;
-                
-                // Day cells for this time slot
-                days.forEach(() => {
-                    weeklyGrid.innerHTML += '<div class="schedule-cell"></div>';
-                });
-            });
-            
-            // Add events to grid
-            events.forEach(event => {
-                const eventDate = new Date(event.year, event.month, event.day);
-                const dayIndex = (eventDate.getDay() + 6) % 7; // Convert to Mon=0, Sun=6
-                
-                if (dayIndex < 5) { // Monday to Friday
-                    const [startTime] = event.time.split('-');
-                    const [hours, minutes] = startTime.split(':').map(Number);
-                    const timeIndex = hours - 8; // 8:00 is index 0
-                    
-                    if (timeIndex >= 0 && timeIndex < timeSlots.length) {
-                        const cellIndex = 1 + dayIndex + (timeIndex * 6); // 6 columns per row (time + 5 days)
-                        const cell = weeklyGrid.children[cellIndex];
-                        
-                        const eventBubble = document.createElement('div');
-                        eventBubble.className = `event-bubble ${event.course || 'break'}`;
-                        eventBubble.innerHTML = `
-                            <strong>${event.title}</strong><br>
-                            <small>${event.time}</small>
-                        `;
-                        eventBubble.onclick = () => viewEventDetails(event.id);
-                        
-                        // Calculate height based on duration
-                        const height = (event.duration / 60) * 100; // Convert minutes to percentage
-                        eventBubble.style.height = `${height}px`;
-                        eventBubble.style.top = '10px'; // Offset from cell top
-                        
-                        cell.appendChild(eventBubble);
-                    }
-                }
-            });
-        }
-
-        function loadMonthlyView(events) {
-            const monthlyGrid = document.getElementById('monthlyGrid');
-            monthlyGrid.innerHTML = '';
-            
-            const month = selectedDate.getMonth();
-            const year = selectedDate.getFullYear();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const firstDay = new Date(year, month, 1).getDay();
-            
-            // Previous month days
-            const prevMonthDays = new Date(year, month, 0).getDate();
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const day = prevMonthDays - i;
-                createMonthlyDay(day, month - 1, year, true);
-            }
-            
-            // Current month days
-            for (let i = 1; i <= daysInMonth; i++) {
-                createMonthlyDay(i, month, year, false);
-            }
-            
-            // Next month days (fill remaining cells)
-            const totalCells = 35; // 5 rows * 7 days
-            const nextMonthDays = totalCells - (firstDay + daysInMonth);
-            for (let i = 1; i <= nextMonthDays; i++) {
-                createMonthlyDay(i, month + 1, year, true);
-            }
-            
-            function createMonthlyDay(day, month, year, isOtherMonth) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'monthly-day';
-                if (isOtherMonth) dayElement.classList.add('other-month');
-                
-                const date = new Date(year, month, day);
-                const isToday = date.toDateString() === new Date().toDateString();
-                if (isToday) dayElement.classList.add('today');
-                
-                const dayEvents = events.filter(event => 
-                    event.day === day && 
-                    event.month === month && 
-                    event.year === year
-                );
-                
-                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                const dayName = dayNames[date.getDay()];
-                
-                dayElement.innerHTML = `
-                    <div class="monthly-day-header">
-                        <div class="monthly-day-number">${day}</div>
-                        <div class="monthly-day-weekday">${dayName}</div>
-                    </div>
-                    <div class="monthly-day-events">
-                        ${dayEvents.slice(0, 3).map(event => `
-                            <div class="monthly-event" style="background: ${courseColors[event.course] || '#6b7280'}" 
-                                 onclick="viewEventDetails(${event.id})">
-                                ${event.title}
-                            </div>
-                        `).join('')}
-                        ${dayEvents.length > 3 ? `<div style="font-size:0.7rem;color:#666">+${dayEvents.length - 3} more</div>` : ''}
-                    </div>
-                `;
-                
-                dayElement.onclick = () => {
-                    selectDate(date);
-                    switchView('daily');
-                };
-                
-                monthlyGrid.appendChild(dayElement);
-            }
         }
 
         function updateTodayEvents() {
@@ -1444,7 +1225,7 @@
                 event.day === today.getDate() && 
                 event.month === today.getMonth() && 
                 event.year === today.getFullYear()
-            ).slice(0, 3); // Show only first 3 events
+            ).slice(0, 3);
             
             const todayEventsContainer = document.getElementById('todayEvents');
             todayEventsContainer.innerHTML = '';
@@ -1466,50 +1247,10 @@
             });
         }
 
-        // =========================
-        // VIEW MANAGEMENT
-        // =========================
-        function switchView(view) {
-            currentView = view;
-            
-            // Update tabs
-            document.querySelectorAll('.view-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Hide all views
-            document.getElementById('dailyView').style.display = 'none';
-            document.getElementById('weeklyView').style.display = 'none';
-            document.getElementById('monthlyView').style.display = 'none';
-            
-            // Show selected view
-            document.getElementById(`${view}View`).style.display = 'block';
-            
-            // Update title
-            updateScheduleHeader();
-            
-            // Load data for view
-            loadSchedule();
-        }
-
         function updateScheduleHeader() {
             const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('scheduleDate').textContent = selectedDate.toLocaleDateString('en-US', dateOptions);
-            
-            let title = '';
-            switch(currentView) {
-                case 'daily':
-                    title = "Today's Schedule";
-                    break;
-                case 'weekly':
-                    title = "Weekly Schedule";
-                    break;
-                case 'monthly':
-                    title = "Monthly Schedule";
-                    break;
-            }
-            document.getElementById('scheduleTitle').textContent = title;
+            document.getElementById('scheduleTitle').textContent = "Today's Schedule";
         }
 
         // =========================
@@ -1518,15 +1259,17 @@
         function viewEventDetails(eventId) {
             const event = scheduleData.find(e => e.id === eventId);
             if (event) {
-                alert(`Event Details:\n\n` +
+                alert(`📅 Event Details\n\n` +
                       `Title: ${event.title}\n` +
                       `Course: ${getCourseName(event.course)}\n` +
+                      `Type: ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}\n` +
                       `Time: ${event.time}\n` +
-                      `Location: ${event.location}\n` +
-                      `Instructor: ${event.instructor}\n` +
-                      `Description: ${event.description}\n` +
+                      `Date: ${new Date(event.year, event.month, event.day).toLocaleDateString()}\n` +
+                      `Location: ${event.location || 'Not specified'}\n` +
+                      `Instructor: ${event.instructor || 'Not specified'}\n` +
+                      `Description: ${event.description || 'No description'}\n` +
                       `Priority: ${event.priority}\n` +
-                      `Status: ${event.status}`);
+                      `Status: ${event.status || 'upcoming'}`);
             }
         }
 
@@ -1545,14 +1288,142 @@
             const event = scheduleData.find(e => e.id === eventId);
             if (event) {
                 event.status = 'completed';
+                // Update the event in the array
+                const index = scheduleData.indexOf(event);
+                scheduleData[index] = event;
+                saveScheduleData(scheduleData);
                 loadSchedule();
-                alert(`Marked "${event.title}" as completed.`);
+                updateTodayEvents();
+                renderCalendar();
+                alert(`✅ Marked "${event.title}" as completed.`);
             }
         }
 
-        function addNewEvent() {
-            alert('Event creation form would open here.\n\nYou can add:\n- Title\n- Course\n- Date & Time\n- Location\n- Description\n- Priority');
+        function deleteEvent(eventId) {
+            const event = scheduleData.find(e => e.id === eventId);
+            if (event) {
+                if (confirm(`Are you sure you want to delete "${event.title}"? This action cannot be undone.`)) {
+                    const index = scheduleData.indexOf(event);
+                    scheduleData.splice(index, 1);
+                    saveScheduleData(scheduleData);
+                    loadSchedule();
+                    updateTodayEvents();
+                    renderCalendar();
+                    alert(`🗑️ Deleted "${event.title}"`);
+                }
+            }
         }
+
+        // =========================
+        // ADD EVENT MODAL FUNCTIONS
+        // =========================
+        function openAddEventModal() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('eventDate').value = `${year}-${month}-${day}`;
+            document.getElementById('eventTime').value = '09:00';
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventCourse').value = '';
+            document.getElementById('eventType').value = 'lecture';
+            document.getElementById('eventDuration').value = '60';
+            document.getElementById('eventPriority').value = 'medium';
+            document.getElementById('eventLocation').value = '';
+            document.getElementById('eventInstructor').value = '';
+            document.getElementById('eventDescription').value = '';
+            
+            document.getElementById('addEventModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            setTimeout(() => {
+                document.getElementById('eventTitle').focus();
+            }, 100);
+        }
+
+        function closeAddEventModal() {
+            document.getElementById('addEventModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function submitNewEvent(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('eventTitle').value.trim();
+            const course = document.getElementById('eventCourse').value;
+            const type = document.getElementById('eventType').value;
+            const dateStr = document.getElementById('eventDate').value;
+            const timeStr = document.getElementById('eventTime').value;
+            const duration = parseInt(document.getElementById('eventDuration').value) || 60;
+            const priority = document.getElementById('eventPriority').value;
+            const location = document.getElementById('eventLocation').value.trim();
+            const instructor = document.getElementById('eventInstructor').value.trim();
+            const description = document.getElementById('eventDescription').value.trim();
+            
+            if (!title) {
+                alert('Please enter an event title.');
+                return;
+            }
+            
+            if (!dateStr) {
+                alert('Please select a date.');
+                return;
+            }
+            
+            if (!timeStr) {
+                alert('Please select a time.');
+                return;
+            }
+            
+            const dateParts = dateStr.split('-');
+            const year = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]) - 1;
+            const day = parseInt(dateParts[2]);
+            
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            const startMinutes = hours * 60 + minutes;
+            const endMinutes = startMinutes + duration;
+            const endHours = Math.floor(endMinutes / 60);
+            const endMins = endMinutes % 60;
+            const endTime = `${String(endHours).padStart(2, '0')}:${String(endMins).padStart(2, '0')}`;
+            
+            const newEvent = {
+                id: nextEventId++,
+                title: title,
+                course: course || null,
+                type: type,
+                description: description || 'No description provided.',
+                time: duration > 0 ? `${timeStr}-${endTime}` : timeStr,
+                day: day,
+                month: month,
+                year: year,
+                duration: duration,
+                location: location || 'Not specified',
+                instructor: instructor || null,
+                priority: priority,
+                status: 'upcoming'
+            };
+            
+            scheduleData.push(newEvent);
+            saveScheduleData(scheduleData);
+            closeAddEventModal();
+            loadSchedule();
+            updateTodayEvents();
+            renderCalendar();
+            alert(`✅ Event "${title}" added successfully! It has been saved permanently.`);
+        }
+
+        document.getElementById('addEventModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddEventModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAddEventModal();
+            }
+        });
 
         function resetFilters() {
             document.getElementById('courseFilter').value = '';
@@ -1566,16 +1437,13 @@
         }
 
         function shareSchedule() {
-            alert('Share options:\n\n' +
+            alert('📤 Share options:\n\n' +
                   '• Export as PDF\n' +
                   '• Share via Email\n' +
                   '• Export to Calendar\n' +
                   '• Generate Shareable Link');
         }
 
-        // =========================
-        // UTILITY FUNCTIONS
-        // =========================
         function getCourseName(courseId) {
             const courses = {
                 math101: 'Mathematics 101',
@@ -1583,26 +1451,8 @@
                 cs301: 'Computer Science 301',
                 english101: 'English Literature 101'
             };
-            return courses[courseId] || courseId;
+            return courses[courseId] || courseId || 'No Course';
         }
-
-        function setupEventListeners() {
-            // Filter change listeners
-            document.getElementById('courseFilter').addEventListener('change', loadSchedule);
-            document.getElementById('eventTypeFilter').addEventListener('change', loadSchedule);
-            document.getElementById('priorityFilter').addEventListener('change', loadSchedule);
-            
-            // Initialize with daily view
-            switchView('daily');
-        }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeCalendar();
-            loadSchedule();
-            updateTodayEvents();
-            setupEventListeners();
-        });
     </script>
 </body>
 </html>
