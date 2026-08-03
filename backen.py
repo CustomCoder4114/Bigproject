@@ -24,6 +24,7 @@ CHUNK_SIZE = 10 * 1024 * 1024  # 10MB chunks
 # Create upload directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'temp'), exist_ok=True)
+os.makedirs(os.path.join(UPLOAD_FOLDER, 'avatars'), exist_ok=True)
 
 # Allowed file extensions for upload
 def allowed_file(filename):
@@ -96,6 +97,15 @@ def get_thumbnail_url(file_category, course='general'):
     else:
         return thumbnails.get(course, thumbnails['general'])
 
+# SQLite's CURRENT_TIMESTAMP stores naive UTC values like "2026-08-02 10:00:00"
+# with no timezone marker. If sent to the browser as-is, `new Date(...)`
+# interprets it as LOCAL time instead of UTC, throwing every displayed time
+# off by the viewer's UTC offset. Tag it explicitly as UTC before returning it.
+def to_iso_utc(sqlite_timestamp):
+    if not sqlite_timestamp:
+        return sqlite_timestamp
+    return sqlite_timestamp.replace(' ', 'T') + 'Z'
+
 # Initialize database tables
 def init_db():
     conn = sqlite3.connect('users.db')
@@ -139,6 +149,28 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     ''')
+
+    # Messages table for real, persisted direct messages between users
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sender_id INTEGER NOT NULL,
+            receiver_id INTEGER NOT NULL,
+            text TEXT NOT NULL,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            is_read INTEGER DEFAULT 0,
+            FOREIGN KEY (sender_id) REFERENCES users (id),
+            FOREIGN KEY (receiver_id) REFERENCES users (id)
+        )
+    ''')
+
+    # Add an avatar column to the existing users table if it isn't there
+    # yet. ALTER TABLE has no "IF NOT EXISTS" in SQLite, so we just try it
+    # and ignore the error if the column already exists from a prior run.
+    try:
+        cursor.execute('ALTER TABLE users ADD COLUMN avatar_filename TEXT')
+    except sqlite3.OperationalError:
+        pass  # column already exists
     
     conn.commit()
     conn.close()
@@ -246,10 +278,21 @@ def register():
 
 @app.context_processor
 def inject_user():
+    avatar_url = None
+    if 'user_id' in session:
+        conn = sqlite3.connect('users.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT avatar_filename FROM users WHERE id = ?', (session['user_id'],))
+        row = cursor.fetchone()
+        conn.close()
+        if row and row[0]:
+            avatar_url = f"/static/uploads/avatars/{session['user_id']}/{row[0]}"
+
     return dict(
         firstname=session.get('firstname'),
         lastname=session.get('lastname'),
-        user_id=session.get('user_id')
+        user_id=session.get('user_id'),
+        avatar_url=avatar_url
     )
 
 @app.route('/body')
@@ -274,6 +317,9 @@ def progres():
 
 @app.route('/settings')
 def settings():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
     return render_template('settings.html')
 @app.route('/strategies')
 def strategies():
@@ -281,11 +327,293 @@ def strategies():
 @app.route('/skills')
 def skills():
     return render_template('skills.html')
+@app.route('/messages')
+def messages():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('messages.html')
 @app.route('/support')
 def support():
     return render_template('support.html')
 
+# ============ MESSAGING: USER SEARCH ============
+
+@app.route('/messages/search_users', methods=['GET'])
+def search_users():
+    """Search existing accounts by name for the messages page.
+    Excludes the logged-in user and returns a small JSON list the
+    frontend can render directly."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify([])
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Search first name / last name / full name, exclude yourself
+    like_term = f'%{q}%'
+    cursor.execute('''
+        SELECT id, firstname, lastname
+        FROM users
+        WHERE id != ?
+          AND (
+              firstname LIKE ?
+              OR lastname LIKE ?
+              OR (firstname || ' ' || lastname) LIKE ?
+          )
+        ORDER BY firstname, lastname
+        LIMIT 20
+    ''', (session['user_id'], like_term, like_term, like_term))
+
+    rows = cursor.fetchall()
+    conn.close()
+
+    results = []
+    for row in rows:
+        user_id, firstname, lastname = row
+        firstname = (firstname or '').strip()
+        lastname = (lastname or '').strip()
+        full_name = f"{firstname} {lastname}".strip()
+
+        # Skip accounts with no usable name rather than showing a
+        # placeholder like "Unknown User" in the search results.
+        if not full_name:
+            continue
+
+        initial = (firstname[:1] or lastname[:1]).upper()
+
+        results.append({
+            'id': user_id,
+            'name': full_name,
+            'avatar': initial,
+            'online': False,   # no presence tracking yet — see notes
+            'lastSeen': ''      # no last-seen tracking yet — see notes
+        })
+
+    return jsonify(results)
+
+
+@app.route('/messages/send', methods=['POST'])
+def send_message():
+    """Send a message to a specific user and persist it, so it's tied
+    to that account rather than living only in the sender's browser."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    data = request.get_json(silent=True) or {}
+    receiver_id = data.get('receiver_id')
+    text = (data.get('text') or '').strip()
+
+    if not receiver_id or not text:
+        return jsonify({'success': False, 'message': 'receiver_id and text are required'}), 400
+
+    sender_id = session['user_id']
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Make sure the receiver actually exists
+    cursor.execute('SELECT id FROM users WHERE id = ?', (receiver_id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': 'Recipient not found'}), 404
+
+    cursor.execute('''
+        INSERT INTO messages (sender_id, receiver_id, text, is_read)
+        VALUES (?, ?, ?, 0)
+    ''', (sender_id, receiver_id, text))
+    conn.commit()
+
+    message_id = cursor.lastrowid
+    cursor.execute('SELECT id, sender_id, receiver_id, text, timestamp, is_read FROM messages WHERE id = ?', (message_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    message = {
+        'id': row[0],
+        'sender_id': row[1],
+        'receiver_id': row[2],
+        'text': row[3],
+        'timestamp': to_iso_utc(row[4]),
+        'read': bool(row[5])
+    }
+
+    return jsonify({'success': True, 'message': message})
+
+
+@app.route('/messages/conversation/<int:other_user_id>', methods=['GET'])
+def get_conversation(other_user_id):
+    """Return the full message thread between the logged-in user and
+    another specific user, and mark any unread messages from them as read."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    my_id = session['user_id']
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT id, sender_id, receiver_id, text, timestamp, is_read
+        FROM messages
+        WHERE (sender_id = ? AND receiver_id = ?)
+           OR (sender_id = ? AND receiver_id = ?)
+        ORDER BY timestamp ASC, id ASC
+    ''', (my_id, other_user_id, other_user_id, my_id))
+
+    rows = cursor.fetchall()
+
+    # Mark messages the other user sent to me as read
+    cursor.execute('''
+        UPDATE messages SET is_read = 1
+        WHERE sender_id = ? AND receiver_id = ? AND is_read = 0
+    ''', (other_user_id, my_id))
+    conn.commit()
+    conn.close()
+
+    thread = [{
+        'id': row[0],
+        'sender_id': row[1],
+        'receiver_id': row[2],
+        'text': row[3],
+        'timestamp': to_iso_utc(row[4]),
+        'read': bool(row[5])
+    } for row in rows]
+
+    return jsonify(thread)
+
+
+@app.route('/messages/conversations', methods=['GET'])
+def list_conversations():
+    """Return every account the logged-in user has exchanged messages
+    with, each with the other user's name/avatar, the last message
+    preview, and how many messages from them are unread."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    my_id = session['user_id']
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Every distinct user id I've exchanged a message with
+    cursor.execute('''
+        SELECT DISTINCT other_id FROM (
+            SELECT receiver_id AS other_id FROM messages WHERE sender_id = ?
+            UNION
+            SELECT sender_id AS other_id FROM messages WHERE receiver_id = ?
+        )
+    ''', (my_id, my_id))
+    other_ids = [row[0] for row in cursor.fetchall()]
+
+    conversations = []
+    for other_id in other_ids:
+        cursor.execute('SELECT firstname, lastname FROM users WHERE id = ?', (other_id,))
+        user_row = cursor.fetchone()
+        if not user_row:
+            continue
+
+        firstname = (user_row[0] or '').strip()
+        lastname = (user_row[1] or '').strip()
+        full_name = f"{firstname} {lastname}".strip()
+        if not full_name:
+            continue
+        initial = (firstname[:1] or lastname[:1]).upper()
+
+        cursor.execute('''
+            SELECT sender_id, text, timestamp
+            FROM messages
+            WHERE (sender_id = ? AND receiver_id = ?)
+               OR (sender_id = ? AND receiver_id = ?)
+            ORDER BY timestamp DESC, id DESC
+            LIMIT 1
+        ''', (my_id, other_id, other_id, my_id))
+        last_row = cursor.fetchone()
+
+        last_message = None
+        last_timestamp = None
+        if last_row:
+            prefix = 'You: ' if last_row[0] == my_id else ''
+            last_message = f"{prefix}{last_row[1]}"
+            last_timestamp = last_row[2]
+
+        cursor.execute('''
+            SELECT COUNT(*) FROM messages
+            WHERE sender_id = ? AND receiver_id = ? AND is_read = 0
+        ''', (other_id, my_id))
+        unread = cursor.fetchone()[0]
+
+        conversations.append({
+            'id': other_id,
+            'name': full_name,
+            'avatar': initial,
+            'online': False,
+            'lastSeen': '',
+            'lastMessage': last_message,
+            'lastTimestamp': last_timestamp,
+            'unread': unread
+        })
+
+    conn.close()
+
+    # Most recently active conversation first (raw SQLite format sorts fine
+    # lexicographically since it's consistent across all rows)
+    conversations.sort(key=lambda c: c['lastTimestamp'] or '', reverse=True)
+
+    # Normalize to proper UTC ISO strings for the response
+    for c in conversations:
+        c['lastTimestamp'] = to_iso_utc(c['lastTimestamp'])
+
+    return jsonify(conversations)
+
 # ============ UPLOAD ROUTES ============
+
+@app.route('/api/settings/upload-photo', methods=['POST'])
+def upload_profile_photo():
+    """Upload/replace the logged-in user's profile photo and persist it,
+    so it's still there after a page reload (previously nothing saved it)."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    if 'photo' not in request.files:
+        return jsonify({'success': False, 'message': 'No file part'}), 400
+
+    file = request.files['photo']
+    if file.filename == '':
+        return jsonify({'success': False, 'message': 'No selected file'}), 400
+
+    image_exts = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+    if ext not in image_exts:
+        return jsonify({'success': False, 'message': 'Please upload a JPG, PNG, GIF, or WEBP image'}), 400
+
+    user_id = session['user_id']
+    user_dir = os.path.join(UPLOAD_FOLDER, 'avatars', str(user_id))
+    os.makedirs(user_dir, exist_ok=True)
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    # Remove the previous avatar file so old photos don't pile up on disk
+    cursor.execute('SELECT avatar_filename FROM users WHERE id = ?', (user_id,))
+    row = cursor.fetchone()
+    if row and row[0]:
+        old_path = os.path.join(user_dir, row[0])
+        if os.path.exists(old_path):
+            os.remove(old_path)
+
+    new_filename = f"{uuid.uuid4().hex}.{ext}"
+    file.save(os.path.join(user_dir, new_filename))
+
+    cursor.execute('UPDATE users SET avatar_filename = ? WHERE id = ?', (new_filename, user_id))
+    conn.commit()
+    conn.close()
+
+    avatar_url = f"/static/uploads/avatars/{user_id}/{new_filename}"
+    return jsonify({'success': True, 'avatar_url': avatar_url})
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -431,7 +759,8 @@ def upload_file():
 
 @app.route('/uploads/<user_id>/<filename>')
 def serve_file(user_id, filename):
-    """Serve uploaded files - UPDATED: Support HTTP Range requests for video streaming"""
+    """Serve uploaded files - UPDATED: Support HTTP Range requests for video streaming,
+    and serve PDFs/text-like files inline instead of forcing a download."""
     try:
         file_path = os.path.join(UPLOAD_FOLDER, user_id, filename)
         
@@ -446,6 +775,9 @@ def serve_file(user_id, filename):
         video_exts = ['mp4', 'avi', 'mov', 'mkv', 'webm', 'm4v', 'mpg', 'mpeg', 'wmv', 'flv']
         audio_exts = ['mp3', 'wav', 'aac', 'flac', 'm4a', 'wma', 'ogg']
         image_exts = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'svg', 'tiff', 'ico']
+
+        # Extensions that browsers can render inline (not just video/audio/image)
+        inline_exts = ['pdf', 'txt', 'md', 'json', 'xml', 'csv', 'html', 'css', 'js']
         
         # Determine MIME type
         mime_types = {
@@ -620,10 +952,17 @@ def serve_file(user_id, filename):
         if file_info:
             privacy, owner_id = file_info
             if privacy == 'public' or str(session['user_id']) == str(owner_id):
+                # FIX: PDFs and plain-text-ish files render fine inline in
+                # the browser (e.g. inside an <iframe>), so don't force a
+                # download for those. Everything else (docx, zip, code
+                # files, etc.) still downloads as an attachment since
+                # browsers can't display them directly anyway.
+                force_download = file_ext not in inline_exts
+
                 return send_from_directory(
                     os.path.join(UPLOAD_FOLDER, user_id),
                     filename,
-                    as_attachment=True,
+                    as_attachment=force_download,
                     mimetype=mime_type
                 )
         

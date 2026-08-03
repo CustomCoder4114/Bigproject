@@ -1,6 +1,546 @@
 {% extends "body.html" %}
 
 {% block allcontent %}
+<style>
+    .dashboard-content, .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+   
+}
+
+
+/* Dashboard Content */
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .welcome-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .dashboard-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+        }
+
+        .card-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 15px;
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .action-btn:hover {
+            background-color: #e0e7ff;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .action-btn i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .action-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Courses List */
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .course-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f8fafc;
+            transition: var(--transition);
+        }
+
+        .course-item:hover {
+            background-color: #e0e7ff;
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background-color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+
+        .course-info {
+            flex: 1;
+        }
+
+        .course-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .course-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background-color: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 3px;
+        }
+
+        .course-percent {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            font-weight: 500;
+            min-width: 40px;
+        }
+
+        /* Upcoming Assignments */
+        .assignments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .assignment-item {
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--warning-color);
+            background-color: #f8fafc;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .assignment-title {
+            font-weight: 500;
+        }
+
+        .assignment-due {
+            font-size: 0.85rem;
+            color: var(--danger-color);
+            font-weight: 500;
+        }
+
+        .assignment-course {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 10px;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: #e0e7ff;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 15px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        /* Calendar */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 0;
+            color: var(--gray-color);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-day:hover {
+            background-color: #f1f5f9;
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.event {
+            position: relative;
+        }
+
+        .calendar-day.event::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none; /* Would be replaced with mobile menu */
+            }
+            
+            .welcome-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .welcome-stats {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .search-bar {
+                width: 100%;
+                order: 3;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        /* ===== GLOW EFFECT FOR ACTIVE TAB ===== */
+.tab-btn.active {
+    background: #4e54c8;
+    color: white;
+    box-shadow:
+        0 0 10px rgba(78, 84, 200, 0.6),
+        0 0 20px rgba(78, 84, 200, 0.4),
+        0 0 30px rgba(78, 84, 200, 0.2);
+    animation: glowPulse 1.8s infinite alternate;
+}
+
+@keyframes glowPulse {
+    0% {
+        box-shadow:
+            0 0 8px rgba(78, 84, 200, 0.5),
+            0 0 16px rgba(78, 84, 200, 0.3);
+    }
+    100% {
+        box-shadow:
+            0 0 14px rgba(78, 84, 200, 0.8),
+            0 0 28px rgba(78, 84, 200, 0.5);
+    }
+}
+
+/* =====================================================================
+   SITE-WIDE DARK MODE
+   Driven by the "dark-mode" class the settings page (and the init
+   script in body.html) adds to <body> based on the user's saved
+   Appearance > Theme Mode choice. Covers every element this stylesheet
+   defines - the header/notification/dropdown dark styles live in
+   body.html's own <style> block instead.
+===================================================================== */
+body.dark-mode {
+    background-color: #0f172a;
+    color: #f1f5f9;
+}
+
+body.dark-mode .sidebar,
+body.dark-mode .dashboard-card,
+body.dark-mode .mobile-menu {
+    background-color: #1e293b;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .nav-item {
+    color: #e2e8f0;
+}
+
+body.dark-mode .nav-item:hover {
+    background-color: #263449;
+}
+
+body.dark-mode .nav-item.active {
+    background-color: rgba(67, 97, 238, 0.25);
+}
+
+body.dark-mode .nav-divider {
+    background-color: #334155;
+}
+
+body.dark-mode .card-title {
+    color: #f1f5f9;
+}
+
+body.dark-mode .search-bar input {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+body.dark-mode .action-btn {
+    background-color: #263449;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+body.dark-mode .action-btn:hover {
+    background-color: #2d3f5c;
+}
+
+body.dark-mode .course-item,
+body.dark-mode .assignment-item,
+body.dark-mode .activity-icon,
+body.dark-mode .course-icon {
+    background-color: #263449;
+}
+
+body.dark-mode .course-item:hover {
+    background-color: #2d3f5c;
+}
+
+body.dark-mode .activity-item {
+    border-bottom-color: #334155;
+}
+
+body.dark-mode .assignment-course,
+body.dark-mode .course-percent,
+body.dark-mode .activity-time,
+body.dark-mode .user-role,
+body.dark-mode .calendar-header {
+    color: #94a3b8;
+}
+
+body.dark-mode .calendar-day:hover {
+    background-color: #263449;
+}
+
+body.dark-mode .progress-bar {
+    background-color: #334155;
+}
+
+body.dark-mode .btn-outline:hover {
+    background-color: #263449;
+}
+
+body.dark-mode .user-dropdown-menu {
+    background-color: #1e293b;
+}
+
+body.dark-mode .dropdown-item {
+    color: #e2e8f0;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #263449;
+}
+
+body.dark-mode .dropdown-divider {
+    background-color: #334155;
+}
+</style>
 <!-- Main Content -->
             <main class="dashboard-content">
                 <!-- Welcome Section -->

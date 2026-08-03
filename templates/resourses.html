@@ -9,34 +9,28 @@
             <div class="page-icon">
                 <i class="fas fa-book-open"></i>
             </div>
-            <h1 class="page-title">Educatinal Resources</h1>
-            
-            
-            
-      </div>
+            <h1 class="page-title">Educational Resources</h1>
+        </div>
     </header>
 
-
-
     <!-- Main Tabs -->
-   <div class="main-tabs">
-    <button class="main-tab-btn active" onclick="switchTab('all', this)" data-tab="all">
-        <i class="fas fa-th-large"></i> All Resources
-    </button>
-    <button class="main-tab-btn" onclick="switchTab('videos', this)" data-tab="videos">
-        <i class="fas fa-play-circle"></i> Videos
-    </button>
-    <button class="main-tab-btn" onclick="switchTab('documents', this)" data-tab="documents">
-        <i class="fas fa-file-alt"></i> Notes
-    </button>
-    <button class="main-tab-btn" onclick="switchTab('images', this)" data-tab="images">
-        <i class="fas fa-image"></i> Images
-    </button>
-    <button class="main-tab-btn" onclick="switchTab('audio', this)" data-tab="audio">
-        <i class="fas fa-music"></i> questions
-    </button>
-</div>
-
+    <div class="main-tabs">
+        <button class="main-tab-btn active" onclick="switchTab('all', this)" data-tab="all">
+            <i class="fas fa-th-large"></i> All Resources
+        </button>
+        <button class="main-tab-btn" onclick="switchTab('videos', this)" data-tab="videos">
+            <i class="fas fa-play-circle"></i> Videos
+        </button>
+        <button class="main-tab-btn" onclick="switchTab('documents', this)" data-tab="documents">
+            <i class="fas fa-file-alt"></i> Notes
+        </button>
+        <button class="main-tab-btn" onclick="switchTab('images', this)" data-tab="images">
+            <i class="fas fa-image"></i> Images
+        </button>
+        <button class="main-tab-btn" onclick="switchTab('audio', this)" data-tab="audio">
+            <i class="fas fa-music"></i> Questions
+        </button>
+    </div>
 
     <!-- Filter Bar -->
     <div class="filter-bar">
@@ -48,7 +42,7 @@
                 <option value="">All Courses</option>
                 <option value="mathematics">Mathematics</option>
                 <option value="science">Science</option>
-                <option value="programming">Pyscics</option>
+                <option value="programming">Physics</option>
                 <option value="business">Business</option>
                 <option value="arts">Chemistry</option>
                 <option value="languages">Languages</option>
@@ -140,10 +134,16 @@ function setupEventListeners() {
    LOAD RESOURCES
 ===================================================== */
 async function loadAllResources() {
-    const res = await fetch("/api/resources");
-    const data = await res.json();
-    allResources = data.resources || [];
-    renderResources(getActiveTab());
+    try {
+        const res = await fetch("/api/resources");
+        const data = await res.json();
+        allResources = data.resources || [];
+        renderResources(getActiveTab());
+    } catch (err) {
+        console.error("Failed to load resources:", err);
+        allResources = [];
+        renderResources(getActiveTab());
+    }
 }
 
 /* =====================================================
@@ -179,10 +179,11 @@ function renderResources(tab = "all") {
     if (tab !== "all") {
         list = list.filter(r => {
             if (tab === "videos") return r.file_category === "video";
-            if (tab === "documents") return ["pdf","doc"].includes(r.file_category);
+            if (tab === "documents") return ["pdf", "doc"].includes(r.file_category);
             if (tab === "images") return r.file_category === "image";
             if (tab === "audio") return r.file_category === "audio";
-            if (tab === "other") return !["video","pdf","doc","image","audio"].includes(r.file_category);
+            if (tab === "other") return !["video", "pdf", "doc", "image", "audio"].includes(r.file_category);
+            return true;
         });
     }
 
@@ -209,58 +210,168 @@ function createResourceCard(r) {
 }
 
 /* =====================================================
-   PREVIEW RESOURCE  ✅ HEIGHT FIX
+   RESOLVE CATEGORY  ✅ Falls back to file extension if
+   file_category is missing, null, or in an unexpected
+   format (e.g. "application/pdf" instead of "pdf")
 ===================================================== */
-async function previewResource(id) {
-    const res = await fetch(`/api/resources/${id}`);
-    const data = await res.json();
-    const r = data.resource;
+function resolveCategory(r) {
+    const known = ["video", "audio", "image", "pdf", "doc"];
+    const raw = (r.file_category || "").toString().toLowerCase().trim();
 
-    const modal = document.getElementById("previewModal");
-    const content = document.getElementById("previewContent");
+    if (known.includes(raw)) return raw;
 
-    let media = "";
+    // Try to salvage known categories from odd values like
+    // "application/pdf" or "video/mp4"
+    if (raw.includes("pdf")) return "pdf";
+    if (raw.includes("video")) return "video";
+    if (raw.includes("audio")) return "audio";
+    if (raw.includes("image")) return "image";
+    if (raw.includes("word") || raw.includes("doc")) return "doc";
 
-    if (r.file_category === "video") {
-        media = `
-            <div class="preview-media-wrapper">
-                <video id="previewMedia" controls autoplay>
-                    <source src="${r.file_url}">
-                </video>
-            </div>`;
-    }
-    else if (r.file_category === "audio") {
-        media = `
-            <div class="preview-media-wrapper">
-                <audio id="previewMedia" controls autoplay>
-                    <source src="${r.file_url}">
-                </audio>
-            </div>`;
-    }
-    else if (r.file_category === "image") {
-        media = `
-            <div class="preview-media-wrapper">
-                <img src="${r.file_url}" style="max-width:100%; max-height:70vh;">
-            </div>`;
-    }
-    else {
-        media = `<p>No preview available</p>`;
-    }
+    // Fall back to sniffing the file extension from the URL/filename
+    const source = (r.file_url || r.filename || r.title || "").toLowerCase();
+    const ext = source.split("?")[0].split(".").pop();
 
-    content.innerHTML = `
-        <div class="preview-header">
-            <h2>${r.title}</h2>
-            <button onclick="closePreview()">✕</button>
-        </div>
-        <div class="preview-body">${media}</div>
-    `;
+    const extMap = {
+        mp4: "video", mov: "video", webm: "video", avi: "video", mkv: "video",
+        mp3: "audio", wav: "audio", ogg: "audio", m4a: "audio",
+        jpg: "image", jpeg: "image", png: "image", gif: "image", webp: "image", svg: "image",
+        pdf: "pdf",
+        doc: "doc", docx: "doc", odt: "doc", rtf: "doc", txt: "doc"
+    };
 
-    modal.style.display = "block";
-    document.body.style.overflow = "hidden";
+    return extMap[ext] || "other";
 }
 
 /* =====================================================
-   CLOSE PREVIEW  ✅ STOPS AUDIO
+   PREVIEW RESOURCE  ✅ FIXED: handles pdf/doc/other types
+===================================================== */
+async function previewResource(id) {
+    try {
+        const res = await fetch(`/api/resources/${id}`);
+        const data = await res.json();
+        const r = data.resource;
+
+        if (!r) {
+            console.error("Resource not found for id:", id);
+            return;
+        }
+
+        currentPreviewResource = r;
+
+        const modal = document.getElementById("previewModal");
+        const content = document.getElementById("previewContent");
+
+        // Debug: check the browser console to see exactly what the API
+        // returned. If file_category doesn't match what you expect, or
+        // file_url is missing/empty, that's the root cause.
+        console.log("Preview resource data:", r);
+
+        const category = resolveCategory(r);
+
+        let media = "";
+
+        if (!r.file_url) {
+            media = `<p>This resource has no file attached, or the file URL is missing from the server response.</p>`;
+        }
+        else if (category === "video") {
+            media = `
+                <div class="preview-media-wrapper">
+                    <video id="previewMedia" controls autoplay>
+                        <source src="${r.file_url}">
+                        Your browser does not support video playback.
+                    </video>
+                </div>`;
+        }
+        else if (category === "audio") {
+            media = `
+                <div class="preview-media-wrapper">
+                    <audio id="previewMedia" controls autoplay>
+                        <source src="${r.file_url}">
+                        Your browser does not support audio playback.
+                    </audio>
+                </div>`;
+        }
+        else if (category === "image") {
+            media = `
+                <div class="preview-media-wrapper">
+                    <img src="${r.file_url}" style="max-width:100%; max-height:70vh;">
+                </div>`;
+        }
+        else if (category === "pdf") {
+            // PDFs can be embedded directly in-browser via an iframe.
+            media = `
+                <div class="preview-media-wrapper preview-doc-wrapper">
+                    <iframe src="${r.file_url}" style="width:100%; height:70vh; border:none;"
+                        title="${r.title}">
+                        <p>Your browser can't display this PDF inline.</p>
+                    </iframe>
+                    <div class="preview-doc-actions">
+                        <a class="btn btn-secondary" href="${r.file_url}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>`;
+        }
+        else if (category === "doc") {
+            const ext = (r.file_extension || r.file_url.split(".").pop() || "").toLowerCase();
+            const plainTextExts = ["txt", "md", "rtf"];
+
+            if (plainTextExts.includes(ext)) {
+                // These render fine natively in the browser via iframe,
+                // since the backend serves them with a text/* mimetype.
+                media = `
+                    <div class="preview-media-wrapper preview-doc-wrapper">
+                        <iframe src="${r.file_url}" style="width:100%; height:70vh; border:1px solid #ddd;"
+                            title="${r.title}">
+                        </iframe>
+                    </div>`;
+            } else {
+                // True binary formats (.doc, .docx, .odt, .epub) can't be
+                // rendered in-browser without server-side conversion.
+                // Offer a direct download instead.
+                media = `
+                    <div class="preview-media-wrapper preview-doc-wrapper">
+                        <p>Inline preview isn't available for .${ext} files. You can still download it below.</p>
+                        <div class="preview-doc-actions">
+                            <a class="btn btn-secondary" href="/api/resources/${r.id}/download">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>`;
+            }
+        }
+        else {
+            // Unknown/other file types: still give the user a way to
+            // access the file instead of a dead-end message.
+            media = `
+                <div class="preview-media-wrapper preview-doc-wrapper">
+                    <p>No inline preview is available for this file type.</p>
+                    <div class="preview-doc-actions">
+                        <a class="btn btn-secondary" href="${r.file_url}" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>`;
+        }
+
+        content.innerHTML = `
+            <div class="preview-header">
+                <h2>${r.title}</h2>
+                <button onclick="closePreview()">✕</button>
+            </div>
+            <div class="preview-body">${media}</div>
+        `;
+
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    } catch (err) {
+        console.error("Failed to load resource preview:", err);
+    }
+}
+
+/* =====================================================
+   CLOSE PREVIEW  ✅ STOPS AUDIO/VIDEO
 ===================================================== */
 function closePreview() {
     const modal = document.getElementById("previewModal");
@@ -274,6 +385,14 @@ function closePreview() {
 
     modal.style.display = "none";
     document.body.style.overflow = "";
+    currentPreviewResource = null;
+    loadAllResources();
+}
+
+/* =====================================================
+   REFRESH
+===================================================== */
+function refreshResources() {
     loadAllResources();
 }
 
@@ -282,11 +401,11 @@ function closePreview() {
 ===================================================== */
 function getFileTypeText(type) {
     return {
-        video:"Video",
-        pdf:"Document",
-        doc:"Document",
-        image:"Image",
-        audio:"Audio"
+        video: "Video",
+        pdf: "Document",
+        doc: "Document",
+        image: "Image",
+        audio: "Audio"
     }[type] || "File";
 }
 
@@ -296,4 +415,3 @@ function getDefaultThumbnail() {
 </script>
 
 {% endblock %}
-

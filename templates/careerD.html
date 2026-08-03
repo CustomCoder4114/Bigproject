@@ -45,7 +45,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, white 0%,  100%);
             min-height: 100vh;
         }
 
@@ -59,7 +59,7 @@
         .page-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 60px 40px;
+           padding: 20px 10px;
             border-radius: var(--border-radius);
             margin-bottom: 30px;
             position: relative;
@@ -73,8 +73,8 @@
         }
 
         .page-icon {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
@@ -88,9 +88,9 @@
 
         .page-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 15px;
-            font-weight: 800;
+            font-weight: 7500;
             letter-spacing: -0.5px;
         }
 
@@ -100,57 +100,6 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            cursor: pointer;
-            border: 1px solid var(--gray-100);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.8rem;
-            color: white;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         /* Tabs Navigation */
@@ -763,10 +712,6 @@
 
         /* Responsive */
         @media (max-width: 968px) {
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .careers-grid {
                 grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             }
@@ -809,10 +754,6 @@
         }
 
         @media (max-width: 576px) {
-            .stats-bar {
-                grid-template-columns: 1fr;
-            }
-            
             .career-bar-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -837,38 +778,6 @@
                 <p class="page-subtitle">Discover your ideal career path, explore top-performing careers, and find your perfect match with our AI-powered career assessment</p>
             </div>
         </header>
-
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <div class="stat-number" id="totalCareers">0</div>
-                <div class="stat-label">Career Paths</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-number" id="avgSalary">$85K</div>
-                <div class="stat-label">Average Salary</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-trend-up"></i>
-                </div>
-                <div class="stat-number" id="growthRate">22%</div>
-                <div class="stat-label">Job Growth</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-number" id="totalTestTakers">0</div>
-                <div class="stat-label">Test Takers</div>
-            </div>
-        </div>
 
         <!-- Tabs Navigation -->
         <div class="tabs">
@@ -1246,8 +1155,6 @@
             loadTrendingInsights();
             loadTest();
             loadSavedCareersUI();
-            updateStats();
-            setupEventListeners();
             incrementViews();
         });
 
@@ -1331,7 +1238,6 @@
                 const career = careers.find(c => c.id === careerId);
                 loadCareers();
                 loadSavedCareersUI();
-                updateStats();
                 alert(`✨ ${career.title} has been saved to your career list!`);
             }
         }
@@ -1531,7 +1437,6 @@
                 testTakers++;
                 localStorage.setItem('careerTestTakers', testTakers);
                 showTestResults();
-                updateStats();
             }
         }
 
@@ -1755,27 +1660,9 @@
             
             career.views++;
             loadTrendingInsights();
-            updateStats();
         }
 
         // ===================== STATS =====================
-        function updateStats() {
-            document.getElementById('totalCareers').textContent = careers.length;
-            document.getElementById('totalTestTakers').textContent = testTakers.toLocaleString();
-            
-            // Calculate average salary
-            const totalSalary = careers.reduce((sum, c) => {
-                const salary = parseInt(c.salary.replace(/[^0-9-]/g, '').split('-')[0]);
-                return sum + salary;
-            }, 0);
-            const avgSalary = Math.round(totalSalary / careers.length / 1000);
-            document.getElementById('avgSalary').textContent = `$${avgSalary}K`;
-            
-            // Calculate average growth
-            const avgGrowth = careers.reduce((sum, c) => sum + parseFloat(c.growth), 0) / careers.length;
-            document.getElementById('growthRate').textContent = `${Math.round(avgGrowth)}%`;
-        }
-
         function incrementViews() {
             careers.forEach(career => {
                 career.views += Math.floor(Math.random() * 100);

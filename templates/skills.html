@@ -45,21 +45,19 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            
             min-height: 100vh;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-        
         }
 
         /* Header Styles */
         .page-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 60px 40px;
+            padding: 30px 120px;
             border-radius: var(--border-radius);
             margin-bottom: 30px;
             position: relative;
@@ -100,57 +98,6 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            cursor: pointer;
-            border: 1px solid var(--gray-100);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.8rem;
-            color: white;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         /* Tabs Navigation */
@@ -334,6 +281,8 @@
         .skill-content {
             padding: 25px;
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .skill-title {
@@ -347,7 +296,7 @@
         .skill-category {
             display: inline-block;
             padding: 4px 12px;
-            background: var(--primary-light);
+            background: var(--gray-100);
             color: var(--primary-color);
             border-radius: 20px;
             font-size: 0.8rem;
@@ -386,7 +335,7 @@
         .skill-actions {
             display: flex;
             gap: 12px;
-            margin-top: 20px;
+            margin-top: auto;
         }
 
         .btn {
@@ -423,38 +372,41 @@
         }
 
         .btn-outline:hover {
-            background: var(--primary-light);
+            background: var(--gray-100);
             transform: translateY(-2px);
         }
 
-        /* Progress Tracker */
-        .progress-section {
-            margin: 15px 0;
+        .btn-save {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
         }
 
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            color: var(--gray-600);
+        .btn-save:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
         }
 
-        .progress-bar {
-            height: 8px;
-            background: var(--gray-200);
-            border-radius: 10px;
-            overflow: hidden;
+        .btn-save.saved {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            border-radius: 10px;
-            transition: width 0.3s ease;
+        .btn-remove {
+            background: var(--danger-color);
+            color: white;
+            border: 2px solid var(--danger-color);
         }
 
-        /* Interactive Learning Modal */
+        .btn-remove:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* Full Screen Modal */
         .modal {
             display: none;
             position: fixed;
@@ -467,46 +419,73 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            backdrop-filter: blur(8px);
         }
 
         .modal-content {
             background: white;
             border-radius: var(--border-radius);
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
+            width: 98%;
+            max-width: 1200px;
+            height: 96vh;
+            max-height: 98vh;
             position: relative;
-            animation: fadeIn 0.3s ease-out;
+            animation: modalSlideIn 0.4s ease-out;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.95) translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0);
+            }
         }
 
         .modal-header {
-            padding: 25px;
+            padding: 30px 40px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
+            flex-shrink: 0;
             position: sticky;
             top: 0;
             z-index: 10;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .modal-header h2 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .modal-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         .close-modal {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 25px;
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.6rem;
             cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .close-modal:hover {
@@ -515,103 +494,176 @@
         }
 
         .modal-body {
-            padding: 30px;
+            padding: 40px 45px;
+            overflow-y: auto;
+            flex: 1;
         }
 
-        /* Interactive Game Elements */
-        .interactive-game {
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
             background: var(--gray-100);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
+            border-radius: 10px;
         }
 
-        .chess-board {
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            background: #f0d9b5;
-            aspect-ratio: 1;
-            max-width: 500px;
-            margin: 0 auto;
-            border: 2px solid var(--gray-800);
+        .modal-body::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
         }
 
-        .chess-square {
-            aspect-ratio: 1;
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        .modal-body .section {
+            margin-bottom: 30px;
+        }
+
+        .modal-body .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-body .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            cursor: pointer;
-            transition: var(--transition);
+            gap: 12px;
         }
 
-        .chess-square.light { background: #f0d9b5; }
-        .chess-square.dark { background: #b58863; }
-        .chess-square.selected { background: #7b9ae0; }
-
-        .rubik-preview {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .modal-body .section-title i {
+            font-size: 1.5rem;
         }
 
-        .rubik-face {
-            width: 100px;
-            height: 100px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            gap: 2px;
-            background: #333;
-            padding: 2px;
-            border-radius: 8px;
-        }
-
-        .rubik-sticker {
-            background: white;
-            border-radius: 4px;
-        }
-
-        /* Achievements Section */
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .achievement-card {
-            background: white;
-            border-radius: var(--border-radius);
+        .modal-body .description-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--gray-700);
             padding: 20px;
-            text-align: center;
-            box-shadow: var(--card-shadow);
+            background: var(--gray-50);
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .modal-body .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-body .step-item {
+            padding: 15px 18px;
+            background: var(--gray-50);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 15px;
             transition: var(--transition);
+            border: 1px solid var(--gray-200);
         }
 
-        .achievement-card.locked {
-            opacity: 0.5;
-            filter: grayscale(0.5);
+        .modal-body .step-item:hover {
+            background: white;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
         }
 
-        .achievement-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-light);
+        .modal-body .step-number {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.8rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .modal-body .step-text {
+            font-size: 1rem;
+            color: var(--gray-700);
+        }
+
+        .modal-body .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-body .tip-item {
+            padding: 15px 18px;
+            background: white;
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid var(--warning-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-body .tip-item i {
+            color: var(--warning-color);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .modal-body .tip-item span {
+            font-size: 0.95rem;
+            color: var(--gray-700);
+        }
+
+        .modal-body .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .modal-body .stat-card-modal {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--border-radius-sm);
+            text-align: center;
+            border: 1px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .modal-body .stat-card-modal:hover {
+            background: white;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .modal-body .stat-number-modal {
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--primary-color);
         }
 
-        .achievement-title {
-            font-weight: 600;
-            margin-bottom: 5px;
+        .modal-body .stat-label-modal {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-top: 5px;
+        }
+
+        .modal-body .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .modal-body .modal-actions .btn {
+            flex: 1;
+            min-width: 180px;
+            padding: 14px 28px;
+            font-size: 1.05rem;
         }
 
         /* Empty State */
@@ -636,14 +688,53 @@
             color: var(--gray-400);
         }
 
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark-color);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--hover-shadow);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 9999;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
         /* Responsive */
         @media (max-width: 968px) {
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .skills-grid {
                 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+
+            .modal-body .steps-grid,
+            .modal-body .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-body .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-header h2 {
+                font-size: 1.6rem;
+            }
+
+            .modal-body {
+                padding: 25px;
             }
         }
 
@@ -668,6 +759,54 @@
             .skill-actions {
                 flex-direction: column;
             }
+
+            .modal-content {
+                width: 100%;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .modal-header {
+                padding: 20px;
+                border-radius: 0;
+            }
+
+            .modal-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .close-modal {
+                top: 12px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .modal-body .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .modal-body .modal-actions .btn {
+                min-width: 100%;
+            }
+
+            .modal-body .description-text {
+                font-size: 1rem;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-body .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -684,38 +823,6 @@
             </div>
         </header>
 
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="stat-number" id="totalSkills">0</div>
-                <div class="stat-label">Skills to Learn</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-number" id="activeLearners">0</div>
-                <div class="stat-label">Active Learners</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-medal"></i>
-                </div>
-                <div class="stat-number" id="achievementsUnlocked">0</div>
-                <div class="stat-label">Achievements</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-number" id="hoursPracticed">0</div>
-                <div class="stat-label">Hours Practiced</div>
-            </div>
-        </div>
-
         <!-- Tabs Navigation -->
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('explore')">
@@ -723,12 +830,6 @@
             </button>
             <button class="tab-btn" onclick="switchTab('mySkills')">
                 <i class="fas fa-user-graduate"></i> My Skills
-            </button>
-            <button class="tab-btn" onclick="switchTab('achievements')">
-                <i class="fas fa-medal"></i> Achievements
-            </button>
-            <button class="tab-btn" onclick="switchTab('practice')">
-                <i class="fas fa-gamepad"></i> Practice Zone
             </button>
         </div>
 
@@ -769,6 +870,17 @@
 
         <!-- My Skills Tab -->
         <div id="mySkills-tab" class="tab-content">
+            <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="filterMySkills('all')" style="flex: 0 1 auto; padding: 10px 20px;">
+                    <i class="fas fa-list"></i> All
+                </button>
+                <button class="btn btn-outline" onclick="filterMySkills('learning')" style="flex: 0 1 auto; padding: 10px 20px;">
+                    <i class="fas fa-play-circle"></i> Learning
+                </button>
+                <button class="btn btn-outline" onclick="filterMySkills('saved')" style="flex: 0 1 auto; padding: 10px 20px;">
+                    <i class="fas fa-bookmark"></i> Saved
+                </button>
+            </div>
             <div class="skills-grid" id="mySkillsContainer">
                 <!-- User's skills will be loaded here -->
             </div>
@@ -783,23 +895,9 @@
                 </button>
             </div>
         </div>
-
-        <!-- Achievements Tab -->
-        <div id="achievements-tab" class="tab-content">
-            <div class="achievements-grid" id="achievementsContainer">
-                <!-- Achievements will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Practice Zone Tab -->
-        <div id="practice-tab" class="tab-content">
-            <div class="skills-grid" id="practiceContainer">
-                <!-- Practice games will be loaded here -->
-            </div>
-        </div>
     </div>
 
-    <!-- Skill Learning Modal -->
+    <!-- Full Screen Skill Modal -->
     <div id="skillModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -813,6 +911,12 @@
                 <!-- Skill details will be loaded here -->
             </div>
         </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+        <span id="toastMessage">Skill saved!</span>
     </div>
 
     <script>
@@ -1037,30 +1141,17 @@
         ];
 
         // User's learned skills with progress
-        let mySkills = JSON.parse(localStorage.getItem('mySkills')) || [
-            { skillId: 1, progress: 65, startedAt: "2024-01-15", practiceMinutes: 780, completed: false },
-            { skillId: 2, progress: 32, startedAt: "2024-02-01", practiceMinutes: 320, completed: false }
-        ];
+        let mySkills = JSON.parse(localStorage.getItem('mySkills')) || [];
 
-        // Achievements
-        let achievements = [
-            { id: 1, title: "First Steps", description: "Start learning your first skill", icon: "fa-star", unlocked: true },
-            { id: 2, title: "Practice Makes Perfect", description: "Complete 5 practice sessions", icon: "fa-clock", unlocked: false },
-            { id: 3, title: "Skill Master", description: "Reach 100% in any skill", icon: "fa-trophy", unlocked: false },
-            { id: 4, title: "Diverse Learner", description: "Learn 3 different skills", icon: "fa-globe", unlocked: false },
-            { id: 5, title: "Dedicated Student", description: "Practice 10 hours total", icon: "fa-hourglass-half", unlocked: false },
-            { id: 6, title: "Speed Demon", description: "Complete a skill in under 10 hours", icon: "fa-rocket", unlocked: false }
-        ];
+        // Saved skills (for bookmarking)
+        let savedSkills = JSON.parse(localStorage.getItem('savedSkills')) || [];
 
-        let totalPracticeHours = mySkills.reduce((sum, s) => sum + s.practiceMinutes, 0) / 60;
+        let currentMySkillsFilter = 'all';
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', () => {
             loadSkills();
             loadMySkills();
-            loadAchievements();
-            loadPracticeZone();
-            updateStats();
             setupEventListeners();
         });
 
@@ -1076,24 +1167,62 @@
             container.innerHTML = skills.map(skill => createSkillCard(skill)).join('');
         }
 
-        function createSkillCard(skill, showProgress = false) {
+        function createSkillCard(skill, isMySkills = false) {
             const userSkill = mySkills.find(s => s.skillId === skill.id);
-            const progress = userSkill ? userSkill.progress : 0;
+            const isSaved = savedSkills.includes(skill.id);
+            const isLearning = !!userSkill;
             
             const difficultyClass = `difficulty-${skill.difficulty}`;
             
+            let actionButtons = '';
+            
+            if (isMySkills) {
+                // In My Skills tab, show appropriate buttons
+                if (isLearning) {
+                    actionButtons = `
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); viewSkillDetails(${skill.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button class="btn btn-remove" onclick="event.stopPropagation(); removeFromMySkills(${skill.id})">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    `;
+                } else if (isSaved) {
+                    actionButtons = `
+                        <button class="btn btn-primary" onclick="event.stopPropagation(); viewSkillDetails(${skill.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button class="btn btn-remove" onclick="event.stopPropagation(); toggleSave(${skill.id})">
+                            <i class="fas fa-bookmark"></i> Unsave
+                        </button>
+                    `;
+                }
+            } else {
+                // In Explore tab
+                actionButtons = `
+                    <button class="btn btn-primary" onclick="event.stopPropagation(); viewSkillDetails(${skill.id})">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                    <button class="btn btn-save ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); toggleSave(${skill.id})">
+                        <i class="fas ${isSaved ? 'fa-check-circle' : 'fa-bookmark'}"></i> ${isSaved ? 'Saved' : 'Save'}
+                    </button>
+                `;
+            }
+            
             return `
-                <div class="skill-card" onclick="viewSkillDetails(${skill.id})">
-                    <div class="skill-banner">
+                <div class="skill-card">
+                    <div class="skill-banner" onclick="viewSkillDetails(${skill.id})">
                         <div class="skill-icon">
                             <i class="fas ${skill.icon}"></i>
                         </div>
                         <div class="difficulty-badge ${difficultyClass}">
                             ${skill.difficulty.toUpperCase()}
                         </div>
+                        ${isSaved ? `<div style="position: absolute; top: 15px; left: 15px; background: var(--success-color); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600;"><i class="fas fa-bookmark"></i> Saved</div>` : ''}
+                        ${isLearning ? `<div style="position: absolute; bottom: 15px; left: 15px; background: var(--primary-color); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600;"><i class="fas fa-graduation-cap"></i> Learning</div>` : ''}
                     </div>
                     <div class="skill-content">
-                        <h3 class="skill-title">${skill.title}</h3>
+                        <h3 class="skill-title" onclick="viewSkillDetails(${skill.id})">${skill.title}</h3>
                         <span class="skill-category">${skill.category.toUpperCase()}</span>
                         <p class="skill-description">${skill.description}</p>
                         
@@ -1112,85 +1241,100 @@
                             </div>
                         </div>
                         
-                        ${showProgress ? `
-                            <div class="progress-section">
-                                <div class="progress-header">
-                                    <span>Your Progress</span>
-                                    <span>${progress}%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${progress}%"></div>
-                                </div>
-                                <div style="font-size: 0.8rem; margin-top: 8px; color: var(--gray-500);">
-                                    <i class="fas fa-hourglass-half"></i> ${Math.floor(userSkill.practiceMinutes / 60)}h ${userSkill.practiceMinutes % 60}m practiced
-                                </div>
-                            </div>
-                        ` : ''}
-                        
                         <div class="skill-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); startLearning(${skill.id})">
-                                <i class="fas ${userSkill ? 'fa-play-circle' : 'fa-rocket'}"></i> ${userSkill ? 'Continue' : 'Start Learning'}
-                            </button>
-                            <button class="btn btn-outline" onclick="event.stopPropagation(); viewSkillDetails(${skill.id})">
-                                <i class="fas fa-info-circle"></i> Details
-                            </button>
+                            ${actionButtons}
                         </div>
                     </div>
                 </div>
             `;
         }
 
+        function toggleSave(skillId) {
+            const index = savedSkills.indexOf(skillId);
+            const skill = skills.find(s => s.id === skillId);
+            
+            if (index > -1) {
+                savedSkills.splice(index, 1);
+                showToast(`Removed "${skill.title}" from saved skills`);
+            } else {
+                savedSkills.push(skillId);
+                showToast(`Saved "${skill.title}" to your skills library`);
+            }
+            
+            localStorage.setItem('savedSkills', JSON.stringify(savedSkills));
+            loadSkills();
+            loadMySkills();
+        }
+
+        function removeFromMySkills(skillId) {
+            const skill = skills.find(s => s.id === skillId);
+            const index = mySkills.findIndex(s => s.skillId === skillId);
+            
+            if (index > -1) {
+                mySkills.splice(index, 1);
+                localStorage.setItem('mySkills', JSON.stringify(mySkills));
+                showToast(`Removed "${skill.title}" from your learning list`);
+                loadMySkills();
+                loadSkills();
+            }
+        }
+
         function loadMySkills() {
             const container = document.getElementById('mySkillsContainer');
             const empty = document.getElementById('mySkillsEmpty');
             
-            if (mySkills.length === 0) {
+            // Get all skill IDs that are either being learned or saved
+            const learningIds = mySkills.map(s => s.skillId);
+            const allMySkillIds = [...new Set([...learningIds, ...savedSkills])];
+            
+            if (allMySkillIds.length === 0) {
                 container.innerHTML = '';
                 empty.style.display = 'block';
                 return;
             }
             
             empty.style.display = 'none';
-            const userSkills = mySkills.map(s => skills.find(skill => skill.id === s.skillId)).filter(s => s);
+            
+            let userSkills = allMySkillIds.map(id => skills.find(skill => skill.id === id)).filter(s => s);
+            
+            // Apply filter
+            if (currentMySkillsFilter === 'learning') {
+                userSkills = userSkills.filter(skill => mySkills.some(s => s.skillId === skill.id));
+            } else if (currentMySkillsFilter === 'saved') {
+                userSkills = userSkills.filter(skill => savedSkills.includes(skill.id));
+            }
+            
+            if (userSkills.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon"><i class="fas fa-filter"></i></div>
+                        <h3 class="empty-title">No ${currentMySkillsFilter === 'learning' ? 'Learning' : 'Saved'} Skills</h3>
+                        <p class="empty-text">You don't have any ${currentMySkillsFilter === 'learning' ? 'skills in progress' : 'saved skills'} yet.</p>
+                    </div>
+                `;
+                return;
+            }
+            
             container.innerHTML = userSkills.map(skill => createSkillCard(skill, true)).join('');
         }
 
-        function loadAchievements() {
-            const container = document.getElementById('achievementsContainer');
-            container.innerHTML = achievements.map(achievement => `
-                <div class="achievement-card ${!achievement.unlocked ? 'locked' : ''}">
-                    <div class="achievement-icon">
-                        <i class="fas ${achievement.icon}"></i>
-                    </div>
-                    <div class="achievement-title">${achievement.title}</div>
-                    <div style="font-size: 0.85rem; color: var(--gray-500);">${achievement.description}</div>
-                    ${!achievement.unlocked ? '<div style="margin-top: 10px; font-size: 0.8rem;"><i class="fas fa-lock"></i> Locked</div>' : '<div style="margin-top: 10px; color: var(--success-color);"><i class="fas fa-check-circle"></i> Unlocked</div>'}
-                </div>
-            `).join('');
-        }
-
-        function loadPracticeZone() {
-            const container = document.getElementById('practiceContainer');
-            const practiceSkills = skills.slice(0, 4);
-            
-            container.innerHTML = practiceSkills.map(skill => `
-                <div class="skill-card" onclick="openPracticeGame(${skill.id})">
-                    <div class="skill-banner">
-                        <div class="skill-icon">
-                            <i class="fas ${skill.icon}"></i>
-                        </div>
-                    </div>
-                    <div class="skill-content">
-                        <h3 class="skill-title">Practice ${skill.title}</h3>
-                        <p class="skill-description">Interactive practice sessions to improve your ${skill.title.toLowerCase()} skills.</p>
-                        <div class="skill-actions">
-                            <button class="btn btn-primary" onclick="event.stopPropagation(); openPracticeGame(${skill.id})">
-                                <i class="fas fa-play"></i> Start Practice
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        function filterMySkills(filter) {
+            currentMySkillsFilter = filter;
+            // Reset all filter buttons
+            document.querySelectorAll('#mySkills-tab .btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = '';
+                btn.style.color = '';
+            });
+            // Find and highlight the active filter button
+            const buttons = document.querySelectorAll('#mySkills-tab .btn');
+            const filterMap = { 'all': 0, 'learning': 1, 'saved': 2 };
+            if (buttons[filterMap[filter]]) {
+                buttons[filterMap[filter]].classList.add('active');
+                buttons[filterMap[filter]].style.background = 'var(--primary-color)';
+                buttons[filterMap[filter]].style.color = 'white';
+            }
+            loadMySkills();
         }
 
         function viewSkillDetails(id) {
@@ -1198,75 +1342,86 @@
             if (!skill) return;
             
             const userSkill = mySkills.find(s => s.skillId === id);
-            const progress = userSkill ? userSkill.progress : 0;
+            const isSaved = savedSkills.includes(id);
+            const isLearning = !!userSkill;
             
             document.getElementById('modalTitle').textContent = skill.title;
             document.getElementById('modalCategory').textContent = `${skill.category.toUpperCase()} • ${skill.difficulty.toUpperCase()} • ${skill.timeToLearn}`;
             
             document.getElementById('modalBody').innerHTML = `
-                <div style="margin-bottom: 30px;">
-                    <p style="font-size: 1.1rem; line-height: 1.6;">${skill.longDescription}</p>
+                <!-- Description Section -->
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-info-circle" style="color: var(--primary-color);"></i>
+                        About This Skill
+                    </div>
+                    <div class="description-text">
+                        ${skill.longDescription}
+                    </div>
                 </div>
                 
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-list-ol"></i> Learning Path</h4>
-                    <ul style="list-style: none;">
+                <!-- Learning Path Section -->
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-list-ol" style="color: var(--primary-color);"></i>
+                        Learning Path
+                    </div>
+                    <div class="steps-grid">
                         ${skill.steps.map((step, index) => `
-                            <li style="padding: 8px 0; display: flex; align-items: center; gap: 10px;">
-                                <span style="width: 28px; height: 28px; background: var(--primary-light); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 600;">${index + 1}</span>
-                                ${step}
-                            </li>
+                            <div class="step-item">
+                                <div class="step-number">${index + 1}</div>
+                                <div class="step-text">${step}</div>
+                            </div>
                         `).join('')}
-                    </ul>
+                    </div>
                 </div>
                 
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-lightbulb"></i> Pro Tips</h4>
-                    <div style="display: grid; gap: 10px;">
+                <!-- Pro Tips Section -->
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-lightbulb" style="color: var(--warning-color);"></i>
+                        Pro Tips
+                    </div>
+                    <div class="tips-grid">
                         ${skill.tips.map(tip => `
-                            <div style="padding: 10px; background: white; border-radius: 8px; border-left: 3px solid var(--primary-color);">
-                                <i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 8px;"></i>
-                                ${tip}
+                            <div class="tip-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>${tip}</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>
                 
-                <div class="detail-section" style="background: var(--gray-50); padding: 20px; border-radius: 12px;">
-                    <h4 style="margin-bottom: 15px;"><i class="fas fa-chart-line"></i> Practice Statistics</h4>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
-                        <div>
-                            <div class="stat-value" style="font-size: 1.5rem;">${skill.lessons}</div>
-                            <div class="stat-label-sm">Lessons</div>
+                <!-- Statistics Section -->
+                <div class="section">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line" style="color: var(--success-color);"></i>
+                        Practice Statistics
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card-modal">
+                            <div class="stat-number-modal">${skill.lessons}</div>
+                            <div class="stat-label-modal">Lessons</div>
                         </div>
-                        <div>
-                            <div class="stat-value" style="font-size: 1.5rem;">${skill.learners.toLocaleString()}</div>
-                            <div class="stat-label-sm">Learners</div>
+                        <div class="stat-card-modal">
+                            <div class="stat-number-modal">${skill.learners.toLocaleString()}</div>
+                            <div class="stat-label-modal">Learners</div>
                         </div>
-                        <div>
-                            <div class="stat-value" style="font-size: 1.5rem;">${skill.practiceTime}</div>
-                            <div class="stat-label-sm">Daily Practice</div>
+                        <div class="stat-card-modal">
+                            <div class="stat-number-modal">${skill.practiceTime}</div>
+                            <div class="stat-label-modal">Daily Practice</div>
+                        </div>
+                        <div class="stat-card-modal">
+                            <div class="stat-number-modal">${skill.popularity}%</div>
+                            <div class="stat-label-modal">Popularity</div>
                         </div>
                     </div>
-                    ${userSkill ? `
-                        <div class="progress-section" style="margin-top: 20px;">
-                            <div class="progress-header">
-                                <span>Your Progress</span>
-                                <span>${progress}%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%"></div>
-                            </div>
-                            <div style="margin-top: 10px; text-align: center; color: var(--gray-600);">
-                                <i class="fas fa-hourglass-half"></i> Practiced: ${Math.floor(userSkill.practiceMinutes / 60)}h ${userSkill.practiceMinutes % 60}m
-                            </div>
-                        </div>
-                    ` : ''}
                 </div>
                 
-                <div class="skill-actions" style="margin-top: 30px;">
-                    <button class="btn btn-primary" onclick="startLearning(${skill.id})">
-                        <i class="fas ${userSkill ? 'fa-play-circle' : 'fa-rocket'}"></i> ${userSkill ? 'Continue Learning' : 'Start Learning'}
+                <!-- Action Buttons -->
+                <div class="modal-actions">
+                    <button class="btn btn-save ${isSaved ? 'saved' : ''}" onclick="toggleSave(${skill.id}); closeSkillModal();">
+                        <i class="fas ${isSaved ? 'fa-check-circle' : 'fa-bookmark'}"></i> ${isSaved ? 'Saved' : 'Save Skill'}
                     </button>
                     <button class="btn btn-outline" onclick="closeSkillModal()">
                         <i class="fas fa-times"></i> Close
@@ -1275,44 +1430,7 @@
             `;
             
             document.getElementById('skillModal').style.display = 'flex';
-        }
-
-        function startLearning(id) {
-            const skill = skills.find(s => s.id === id);
-            if (!skill) return;
-            
-            let userSkill = mySkills.find(s => s.skillId === id);
-            
-            if (!userSkill) {
-                userSkill = {
-                    skillId: id,
-                    progress: 0,
-                    startedAt: new Date().toISOString().split('T')[0],
-                    practiceMinutes: 0,
-                    completed: false
-                };
-                mySkills.push(userSkill);
-                localStorage.setItem('mySkills', JSON.stringify(mySkills));
-                alert(`✨ Started learning ${skill.title}! Check the My Skills tab to track your progress.`);
-            }
-            
-            closeSkillModal();
-            loadMySkills();
-            updateStats();
-            
-            // Show practice session
-            openPracticeSession(skill);
-        }
-
-        function openPracticeSession(skill) {
-            alert(`🎯 Practice Session: ${skill.title}\n\nComplete the following:\n1. Review lesson materials\n2. Practice ${skill.practiceTime} of focused practice\n3. Complete the quiz\n\nKeep practicing daily to build your skills!`);
-        }
-
-        function openPracticeGame(id) {
-            const skill = skills.find(s => s.id === id);
-            if (skill) {
-                alert(`🎮 Interactive ${skill.title} Practice\n\nOpen the practice module to improve your ${skill.title.toLowerCase()} skills!\n\nFeatures:\n• Step-by-step tutorials\n• Interactive exercises\n• Progress tracking\n• Achievement rewards`);
-            }
+            document.body.style.overflow = 'hidden';
         }
 
         function filterSkills() {
@@ -1365,33 +1483,38 @@
             }
         }
 
-        function updateStats() {
-            document.getElementById('totalSkills').textContent = skills.length;
-            document.getElementById('activeLearners').textContent = (Math.random() * 5000 + 5000).toFixed(0);
-            document.getElementById('achievementsUnlocked').textContent = achievements.filter(a => a.unlocked).length;
-            document.getElementById('hoursPracticed').textContent = totalPracticeHours.toFixed(0);
-        }
-
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
             const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
                 btn.innerHTML.toLowerCase().includes(tabName === 'explore' ? 'explore' :
-                                                   tabName === 'mySkills' ? 'my skills' :
-                                                   tabName === 'achievements' ? 'achievements' : 'practice')
+                                                   tabName === 'mySkills' ? 'my skills' : '')
             );
             if (activeBtn) activeBtn.classList.add('active');
             
             document.getElementById(`${tabName}-tab`).classList.add('active');
             
-            if (tabName === 'mySkills') loadMySkills();
-            if (tabName === 'achievements') loadAchievements();
-            if (tabName === 'practice') loadPracticeZone();
+            if (tabName === 'mySkills') {
+                // Reset filter when switching to My Skills
+                currentMySkillsFilter = 'all';
+                loadMySkills();
+            }
         }
 
         function closeSkillModal() {
             document.getElementById('skillModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         window.onclick = function(event) {
@@ -1400,6 +1523,13 @@
                 closeSkillModal();
             }
         }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSkillModal();
+            }
+        });
     </script>
 </body>
 </html>

@@ -45,7 +45,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, white 0%,  100%);
             min-height: 100vh;
         }
 
@@ -58,7 +58,7 @@
         .page-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 60px 40px;
+            padding: 30px 120px;
             border-radius: var(--border-radius);
             margin-bottom: 30px;
             position: relative;
@@ -99,57 +99,6 @@
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.6;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: var(--border-radius);
-            text-align: center;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            cursor: pointer;
-            border: 1px solid var(--gray-100);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            font-size: 1.8rem;
-            color: white;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         /* Tabs Navigation */
@@ -693,10 +642,6 @@
 
         /* Responsive */
         @media (max-width: 968px) {
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .strategies-grid {
                 grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             }
@@ -728,12 +673,6 @@
                 grid-template-columns: 1fr;
             }
         }
-
-        @media (max-width: 576px) {
-            .stats-bar {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
 <body>
@@ -748,38 +687,6 @@
                 <p class="page-subtitle">Discover proven techniques to master subjects faster, memorize effectively, and unlock your full learning potential</p>
             </div>
         </header>
-
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div class="stat-number" id="totalStrategies">0</div>
-                <div class="stat-label">Learning Strategies</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="stat-number" id="totalOpinions">0</div>
-                <div class="stat-label">Community Opinions</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-number" id="avgEffectiveness">94%</div>
-                <div class="stat-label">Avg Effectiveness</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <div class="stat-number" id="activeUsers">2,345</div>
-                <div class="stat-label">Active Learners</div>
-            </div>
-        </div>
 
         <!-- Tabs Navigation -->
         <div class="tabs">
@@ -1116,41 +1023,8 @@
             }
         ];
 
-        // Community Opinions
-        let opinions = JSON.parse(localStorage.getItem('learningOpinions')) || [
-            {
-                id: 1,
-                author: "Sarah Johnson",
-                text: "The Pomodoro technique completely transformed my study sessions! I used to study for hours without breaks and would burn out quickly. Now I do 25-minute focused sessions with 5-minute breaks, and I can study for 4+ hours with better retention!",
-                tag: "mastery",
-                likes: 45,
-                date: "2024-01-15"
-            },
-            {
-                id: 2,
-                author: "Michael Chen",
-                text: "For memorizing formulas, I use the Memory Palace technique. I visualize my house and place each formula in a different room with vivid imagery. Works incredibly well for physics and math!",
-                tag: "memorization",
-                likes: 32,
-                date: "2024-01-14"
-            },
-            {
-                id: 3,
-                author: "Emily Rodriguez",
-                text: "Active recall changed my life! Instead of re-reading textbooks, I create question banks and test myself. My exam scores improved by 30% in just one semester.",
-                tag: "memorization",
-                likes: 67,
-                date: "2024-01-13"
-            },
-            {
-                id: 4,
-                author: "David Kim",
-                text: "For dense textbooks, I use SQ3R. Surveying the chapter first helps me understand the structure, and reciting in my own words ensures I actually understood what I read.",
-                tag: "reading",
-                likes: 28,
-                date: "2024-01-12"
-            }
-        ];
+        // Community Opinions - Load from localStorage or start empty
+        let opinions = JSON.parse(localStorage.getItem('learningOpinions')) || [];
 
         let currentUser = "{{ firstname }} {{ lastname }}" || "Anonymous Learner";
 
@@ -1158,7 +1032,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadStrategies('all');
             loadOpinions();
-            updateStats();
             setupEventListeners();
         });
 
@@ -1294,7 +1167,6 @@
             
             // Increment views
             strategy.views++;
-            updateStats();
         }
 
         function likeStrategy(id) {
@@ -1305,7 +1177,6 @@
                 loadStrategies('reading');
                 loadStrategies('memorization');
                 loadStrategies('mastery');
-                updateStats();
             }
         }
 
@@ -1385,7 +1256,6 @@
             
             document.getElementById('opinionText').value = '';
             loadOpinions();
-            updateStats();
             
             alert('Thank you for sharing your learning strategy! Your wisdom will help others learn better.');
         }
@@ -1396,7 +1266,6 @@
                 opinion.likes++;
                 localStorage.setItem('learningOpinions', JSON.stringify(opinions));
                 loadOpinions();
-                updateStats();
             }
         }
 
@@ -1477,13 +1346,6 @@
             if (diffDays === 1) return 'Yesterday';
             if (diffDays < 7) return `${diffDays} days ago`;
             return date.toLocaleDateString();
-        }
-
-        function updateStats() {
-            document.getElementById('totalStrategies').textContent = strategies.length;
-            document.getElementById('totalOpinions').textContent = opinions.length;
-            document.getElementById('avgEffectiveness').textContent = 
-                Math.round(strategies.reduce((sum, s) => sum + s.effectiveness, 0) / strategies.length) + '%';
         }
 
         function switchTab(tabName) {
