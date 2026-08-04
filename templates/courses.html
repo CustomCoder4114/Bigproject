@@ -1,1490 +1,1526 @@
 {% extends "body.html" %}
 
 {% block allcontent %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Learning · eSchool</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4361ee;
-            --primary-dark: #2a44c7;
-            --primary-light: #e0e7ff;
-            --secondary-color: #4361ee;
-            --code-bg: #1d2a35;
-            --success-color: #04AA6D;
-            --warning-color: #ffc107;
-            --danger-color: #f44336;
-            --light-color: #f1f1f1;
-            --dark-color: #282A35;
-            --gray-50: #f8f9fa;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --border-radius: 16px;
-            --border-radius-sm: 8px;
-            --card-shadow: 0 2px 5px 0 rgba(0,0,0,0.12), 0 2px 10px 0 rgba(0,0,0,0.08);
-            --transition: all 0.3s ease;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --primary-dark: #2a44c7;
+        --primary-light: #e0e7ff;
+        --secondary-color: #4361ee;
+        --code-bg: #1d2a35;
+        --success-color: #04AA6D;
+        --warning-color: #ffc107;
+        --danger-color: #f44336;
+        --light-color: #f1f1f1;
+        --dark-color: #282A35;
+        --gray-50: #f8f9fa;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --border-radius: 16px;
+        --border-radius-sm: 8px;
+        --card-shadow: 0 2px 5px 0 rgba(0,0,0,0.12), 0 2px 10px 0 rgba(0,0,0,0.08);
+        --transition: all 0.3s ease;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f4f7fc; }
+    /* Scoped under .learning-container so nothing here collides
+       with the base template's own class names. */
+    .learning-container * {
+        box-sizing: border-box;
+    }
 
-        .learning-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem 3rem;
-        }
+    .learning-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem 3rem;
+        font-family: 'Inter', sans-serif;
+    }
 
-        /* Header */
-        .page-header {
-            background: linear-gradient(135deg, var(--secondary-color), #1e3a5f);
-            color: white;
-            padding: 30px 120px;
-            border-radius: var(--border-radius);
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-        }
-        .page-header::after {
-            content: "∑";
-            position: absolute;
-            right: 20px;
-            bottom: -30px;
-            font-size: 10rem;
-            opacity: 0.08;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-        }
-        .header-content { position: relative; z-index: 2; text-align: center; }
-        .page-icon {
-            width: 90px; height: 90px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2.6rem;
-            border: 4px solid rgba(255,255,255,0.2);
-        }
-        .page-title { font-family: 'Poppins', sans-serif; font-size: 2.8rem; margin-bottom: 10px; font-weight: 700; }
-        .page-subtitle { font-size: 1.1rem; opacity: 0.92; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    /* Header */
+    .learning-container .page-header {
+        background: linear-gradient(135deg, var(--secondary-color), #1e3a5f);
+        color: white;
+        padding: 30px 120px;
+        border-radius: var(--border-radius);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+    }
+    .learning-container .page-header::after {
+        content: "∑";
+        position: absolute;
+        right: 20px;
+        bottom: -30px;
+        font-size: 10rem;
+        opacity: 0.08;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+    }
+    .learning-container .header-content { position: relative; z-index: 2; text-align: center; }
+    .learning-container .page-icon {
+        width: 90px; height: 90px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2.6rem;
+        border: 4px solid rgba(255,255,255,0.2);
+    }
+    .learning-container .page-title { font-family: 'Poppins', sans-serif; font-size: 2.8rem; margin-bottom: 10px; font-weight: 700; }
+    .learning-container .page-subtitle { font-size: 1.1rem; opacity: 0.92; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* Tabs */
-        .tabs {
-            display: flex;
-            background: white;
-            border-radius: 50px;
-            margin-bottom: 35px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            padding: 5px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            border-radius: 45px;
-            min-width: 120px;
-        }
-        .tab-btn:hover { background: var(--gray-100); color: var(--primary-color); }
-        .tab-btn.active { background: var(--primary-color); color: white; }
-        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    /* Tabs */
+    .learning-container .tabs {
+        display: flex;
+        background: white;
+        border-radius: 50px;
+        margin-bottom: 35px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        padding: 5px;
+        flex-wrap: wrap;
+    }
+    .learning-container .tab-btn {
+        flex: 1;
+        padding: 14px 20px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--gray-600);
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-radius: 45px;
+        min-width: 120px;
+    }
+    .learning-container .tab-btn:hover { background: var(--gray-100); color: var(--primary-color); }
+    .learning-container .tab-btn.active { background: var(--primary-color); color: white; }
+    .learning-container .tab-content { display: none; animation: learningFadeIn 0.4s ease-out; }
+    .learning-container .tab-content.active { display: block; }
+    @keyframes learningFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Filter Bar */
-        .filter-bar {
-            background: white;
-            padding: 20px 25px;
-            border-radius: var(--border-radius);
-            margin-bottom: 35px;
-            box-shadow: var(--card-shadow);
-        }
-        .filter-group {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .search-box {
-            flex: 2;
-            min-width: 260px;
-            position: relative;
-        }
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray-400);
-            font-size: 1rem;
-        }
-        .form-control {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border: 2px solid var(--gray-200);
-            border-radius: 50px;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            background: #fafcfd;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.10);
-        }
-        .select-control {
-            flex: 1;
-            min-width: 160px;
-            padding: 12px 18px;
-            border: 2px solid var(--gray-200);
-            border-radius: 50px;
-            font-size: 0.9rem;
-            background: white;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
-            color: var(--gray-700);
-        }
-        .select-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+    /* Filter Bar */
+    .learning-container .filter-bar {
+        background: white;
+        padding: 20px 25px;
+        border-radius: var(--border-radius);
+        margin-bottom: 35px;
+        box-shadow: var(--card-shadow);
+    }
+    .learning-container .filter-group {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .learning-container .search-box {
+        flex: 2;
+        min-width: 260px;
+        position: relative;
+    }
+    .learning-container .search-box i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-400);
+        font-size: 1rem;
+    }
+    .learning-container .form-control {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        border: 2px solid var(--gray-200);
+        border-radius: 50px;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        background: #fafcfd;
+    }
+    .learning-container .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.10);
+    }
+    .learning-container .select-control {
+        flex: 1;
+        min-width: 160px;
+        padding: 12px 18px;
+        border: 2px solid var(--gray-200);
+        border-radius: 50px;
+        font-size: 0.9rem;
+        background: white;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+        color: var(--gray-700);
+    }
+    .learning-container .select-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
 
-        /* Courses Grid */
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 28px;
-            margin-top: 10px;
-        }
+    /* Courses Grid */
+    .learning-container .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 28px;
+        margin-top: 10px;
+    }
 
-        /* Course Card */
-        .course-card {
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border: none;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .course-card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
-        .course-header {
-            padding: 26px 22px 18px;
-            background: linear-gradient(135deg, var(--secondary-color), #1e2a3a);
-            color: white;
-            position: relative;
-        }
-        .course-icon {
-            width: 64px; height: 64px;
-            background: var(--primary-color);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 16px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-        }
-        .course-header h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            font-family: 'Poppins', sans-serif;
-        }
-        .course-code {
-            display: inline-block;
-            padding: 4px 14px;
-            background: rgba(255,255,255,0.18);
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        .course-badge {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            background: #f9b84a;
-            color: var(--dark-color);
-        }
-        .course-badge.green { background: var(--success-color); color: white; }
+    /* Course Card */
+    .learning-container .course-card {
+        background: white;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        border: none;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    .learning-container .course-card:hover { transform: translateY(-5px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); }
+    .learning-container .course-card.highlight-match {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+    .learning-container .course-header {
+        padding: 26px 22px 18px;
+        background: linear-gradient(135deg, var(--secondary-color), #1e2a3a);
+        color: white;
+        position: relative;
+    }
+    .learning-container .course-icon {
+        width: 64px; height: 64px;
+        background: var(--primary-color);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        margin-bottom: 16px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    .learning-container .course-header h3 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .learning-container .course-code {
+        display: inline-block;
+        padding: 4px 14px;
+        background: rgba(255,255,255,0.18);
+        border-radius: 30px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+    .learning-container .course-badge {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        padding: 6px 14px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        background: #f9b84a;
+        color: var(--dark-color);
+    }
+    .learning-container .course-badge.green { background: var(--success-color); color: white; }
 
-        .course-content {
-            padding: 22px 22px 24px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .course-content p { color: var(--gray-600); margin-bottom: 14px; line-height: 1.5; }
+    .learning-container .course-content {
+        padding: 22px 22px 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .learning-container .course-content p { color: var(--gray-600); margin-bottom: 14px; line-height: 1.5; }
 
-        .progress-section { margin-bottom: 16px; }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            color: var(--gray-600);
-            font-weight: 500;
-        }
-        .progress-bar {
-            height: 8px;
-            background: var(--gray-200);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
+    .learning-container .progress-section { margin-bottom: 16px; }
+    .learning-container .progress-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        font-size: 0.85rem;
+        color: var(--gray-600);
+        font-weight: 500;
+    }
+    .learning-container .progress-bar {
+        height: 8px;
+        background: var(--gray-200);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .learning-container .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+        border-radius: 10px;
+        width: 0%;
+        transition: width 0.4s ease;
+    }
 
-        .modules-list { margin: 14px 0 16px; }
-        .module-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        .module-item:last-child { border-bottom: none; }
-        .module-icon {
-            width: 30px; height: 30px;
-            background: var(--primary-light);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            margin-right: 12px;
-            font-size: 0.9rem;
-        }
-        .module-info { flex: 1; }
-        .module-title { font-weight: 600; color: var(--gray-800); font-size: 0.95rem; }
-        .module-meta { font-size: 0.75rem; color: var(--gray-500); display: flex; gap: 10px; margin-top: 2px; }
-        .module-status {
-            width: 24px; height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-        }
-        .status-completed { background: var(--success-color); color: white; }
-        .status-inprogress { background: var(--warning-color); color: white; }
-        .status-locked { background: var(--gray-300); color: white; }
+    .learning-container .modules-list { margin: 14px 0 16px; }
+    .learning-container .module-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--gray-200);
+    }
+    .learning-container .module-item:last-child { border-bottom: none; }
+    .learning-container .module-icon {
+        width: 30px; height: 30px;
+        background: var(--primary-light);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        margin-right: 12px;
+        font-size: 0.9rem;
+    }
+    .learning-container .module-info { flex: 1; }
+    .learning-container .module-title { font-weight: 600; color: var(--gray-800); font-size: 0.95rem; }
+    .learning-container .module-meta { font-size: 0.75rem; color: var(--gray-500); display: flex; gap: 10px; margin-top: 2px; }
+    .learning-container .module-status {
+        width: 24px; height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+    }
+    .learning-container .status-completed { background: var(--success-color); color: white; }
+    .learning-container .status-inprogress { background: var(--warning-color); color: white; }
+    .learning-container .status-locked { background: var(--gray-300); color: white; }
 
-        .course-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 14px;
-            margin: 12px 0 18px;
-        }
-        .stat-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 4px 12px;
-            background: var(--gray-100);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--gray-600);
-        }
-        .stat-tag i { color: var(--primary-color); }
+    .learning-container .course-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin: 12px 0 18px;
+    }
+    .learning-container .stat-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        background: var(--gray-100);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: var(--gray-600);
+    }
+    .learning-container .stat-tag i { color: var(--primary-color); }
 
-        .course-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: auto;
-        }
-        .btn {
-            padding: 12px 20px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex: 1;
-            text-decoration: none;
-            font-family: 'Inter', sans-serif;
-        }
-        .btn-primary { background: var(--primary-color); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(67, 97, 238, 0.30); }
-        .btn-outline { background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); }
-        .btn-outline:hover { background: var(--primary-light); transform: translateY(-2px); }
-        .btn-success { background: var(--success-color); color: white; }
-        .btn-success:hover { background: #059862; transform: translateY(-2px); }
+    .learning-container .course-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: auto;
+    }
+    .learning-container .btn {
+        padding: 12px 20px;
+        border-radius: 12px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        font-size: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex: 1;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif;
+    }
+    .learning-container .btn-primary { background: var(--primary-color); color: white; }
+    .learning-container .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(67, 97, 238, 0.30); }
+    .learning-container .btn-outline { background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); }
+    .learning-container .btn-outline:hover { background: var(--primary-light); transform: translateY(-2px); }
+    .learning-container .btn-success { background: var(--success-color); color: white; }
+    .learning-container .btn-success:hover { background: #059862; transform: translateY(-2px); }
 
-        .interactive-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
-            background: #e8f0fe;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--primary-color);
-        }
+    .learning-container .interactive-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        background: #e8f0fe;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
 
-        /* Quiz-specific badge */
-        .quiz-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 14px;
-            background: #fef3c7;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: #d97706;
-        }
+    /* Quiz-specific badge */
+    .learning-container .quiz-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        background: #fef3c7;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #d97706;
+    }
 
-        /* Learning Path */
-        .learning-path {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-top: 10px;
-        }
-        .path-item {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px 24px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-            transition: var(--transition);
-            border-left: 5px solid var(--primary-color);
-            flex-wrap: wrap;
-        }
-        .path-item:hover { transform: translateX(6px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-        .path-icon {
-            width: 48px; height: 48px;
-            background: var(--primary-light);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: var(--primary-color);
-            flex-shrink: 0;
-        }
-        .path-content { flex: 1; min-width: 180px; }
-        .path-title { font-weight: 600; color: var(--dark-color); font-size: 1.1rem; }
-        .path-progress { font-size: 0.85rem; color: var(--gray-500); }
-        .path-action {
-            padding: 10px 28px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 40px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: 'Inter', sans-serif;
-        }
-        .path-action:hover { background: var(--primary-dark); transform: scale(1.02); }
+    /* Learning Path */
+    .learning-container .learning-path {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 10px;
+    }
+    .learning-container .path-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 24px;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        transition: var(--transition);
+        border-left: 5px solid var(--primary-color);
+        flex-wrap: wrap;
+    }
+    .learning-container .path-item:hover { transform: translateX(6px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+    .learning-container .path-icon {
+        width: 48px; height: 48px;
+        background: var(--primary-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: var(--primary-color);
+        flex-shrink: 0;
+    }
+    .learning-container .path-content { flex: 1; min-width: 180px; }
+    .learning-container .path-title { font-weight: 600; color: var(--dark-color); font-size: 1.1rem; }
+    .learning-container .path-progress { font-size: 0.85rem; color: var(--gray-500); }
+    .learning-container .path-action {
+        padding: 10px 28px;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 40px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+    }
+    .learning-container .path-action:hover { background: var(--primary-dark); transform: scale(1.02); }
 
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 70px 20px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--card-shadow);
-        }
-        .empty-icon {
-            width: 100px; height: 100px;
-            background: var(--gray-100);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 2.6rem;
-            color: var(--gray-400);
-        }
-        .empty-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--gray-600); margin-bottom: 12px; }
-        .empty-text { color: var(--gray-500); max-width: 480px; margin: 0 auto 24px; font-size: 1rem; line-height: 1.6; }
+    /* Empty State */
+    .learning-container .empty-state {
+        text-align: center;
+        padding: 70px 20px;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+    }
+    .learning-container .empty-icon {
+        width: 100px; height: 100px;
+        background: var(--gray-100);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+        font-size: 2.6rem;
+        color: var(--gray-400);
+    }
+    .learning-container .empty-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; color: var(--gray-600); margin-bottom: 12px; }
+    .learning-container .empty-text { color: var(--gray-500); max-width: 480px; margin: 0 auto 24px; font-size: 1rem; line-height: 1.6; }
 
-        /* ===== FULL SCREEN MODAL WITH LEFT SIDEBAR ===== */
-        .fullscreen-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0b1a2a;
-            z-index: 99999;
-            padding: 0;
-            overflow: hidden;
-        }
-        .fullscreen-modal.active { display: flex; }
+    /* ===== FULL SCREEN MODAL WITH LEFT SIDEBAR ===== */
+    .fullscreen-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0b1a2a;
+        z-index: 99999;
+        padding: 0;
+        overflow: hidden;
+    }
+    .fullscreen-modal.active { display: flex; }
 
-        /* left sidebar – substructures */
+    /* left sidebar – substructures */
+    .fs-sidebar {
+        flex: 0 0 280px;
+        background: #0f2635;
+        height: 100%;
+        overflow-y: auto;
+        padding: 1.5rem 0;
+        border-right: 1px solid #1a3345;
+        flex-shrink: 0;
+    }
+    .fs-sidebar-header {
+        padding: 0 1.5rem 1rem;
+        border-bottom: 1px solid #1a3345;
+        margin-bottom: 0.8rem;
+    }
+    .fs-sidebar-header h4 {
+        color: #d6e5f5;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+    .fs-sidebar-header .course-title-side {
+        color: white;
+        font-size: 1rem;
+        font-weight: 700;
+        margin-top: 4px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .fs-module-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 1.5rem;
+        cursor: pointer;
+        transition: var(--transition);
+        border-left: 3px solid transparent;
+        color: #9bb7d4;
+        font-size: 0.9rem;
+    }
+    .fs-module-item:hover { background: rgba(255,255,255,0.04); color: white; }
+    .fs-module-item.active {
+        background: rgba(67, 97, 238, 0.15);
+        border-left-color: var(--primary-color);
+        color: white;
+    }
+    .fs-module-item .module-num {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #7a9bbf;
+        flex-shrink: 0;
+    }
+    .fs-module-item.active .module-num {
+        background: var(--primary-color);
+        color: white;
+    }
+    .fs-module-item .module-label {
+        flex: 1;
+        font-weight: 500;
+    }
+    .fs-module-item .module-status-icon {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+    }
+    .fs-module-item.active .module-status-icon { color: var(--primary-color); }
+    .fs-module-item.completed .module-status-icon { color: var(--success-color); }
+
+    /* right content */
+    .fs-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem 2.5rem;
+        color: #e8edf2;
+    }
+
+    .fs-content .modal-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .fs-content .modal-header-bar h2 {
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.8rem;
+        margin: 0;
+    }
+    .fs-content .modal-header-bar .sub {
+        color: #9bb7d4;
+        font-size: 0.95rem;
+    }
+    .fs-content .close-full {
+        background: rgba(255,255,255,0.08);
+        border: none;
+        color: white;
+        width: 44px;
+        height: 44px;
+        border-radius: 40px;
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .fs-content .close-full:hover { background: #c2410c; transform: rotate(90deg); }
+
+    .fs-content .desc { color: #b0c7dd; line-height: 1.7; font-size: 1.05rem; margin-bottom: 1.8rem; }
+
+    .fs-content .exercise-container {
+        background: #142b3b;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 1.5rem 0;
+    }
+    .fs-content .exercise-container h4 { color: #d6e5f5; margin-bottom: 1rem; }
+    .fs-content .code-editor {
+        background: #0d1c28;
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+    .fs-content .code-editor textarea {
+        width: 100%;
+        min-height: 180px;
+        background: #0d1c28;
+        border: 1px solid #2a4053;
+        color: #d4e2f0;
+        padding: 1rem;
+        font-family: 'Source Code Pro', monospace;
+        font-size: 0.95rem;
+        border-radius: 12px;
+        resize: vertical;
+    }
+    .fs-content .code-editor textarea:focus { outline: none; border-color: #f9b84a; }
+    .fs-content .run-btn {
+        margin-top: 1rem;
+        padding: 0.8rem 2.2rem;
+        background: #f9b84a;
+        border: none;
+        border-radius: 40px;
+        font-weight: 700;
+        color: #0b1a2a;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .fs-content .run-btn:hover { background: #f0a832; }
+    .fs-content #fsOutput {
+        background: #0d1c28;
+        color: #d4e2f0;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-top: 1rem;
+        font-family: 'Source Code Pro', monospace;
+        border: 1px solid #2a4053;
+    }
+
+    .fs-content .notes-section {
+        background: #1d3345;
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin: 1.5rem 0;
+    }
+    .fs-content .notes-section .notes-title { color: #f9b84a; font-weight: 600; margin-bottom: 0.8rem; }
+    .fs-content .notes-section .notes-content {
+        background: #0f2635;
+        padding: 1.2rem;
+        border-radius: 12px;
+        color: #d4e2f0;
+    }
+    .fs-content .notes-section .notes-content input[type="radio"] { accent-color: #f9b84a; margin-right: 6px; }
+
+    .fs-content .modal-footer {
+        display: flex;
+        gap: 1.2rem;
+        margin-top: 2.5rem;
+        flex-wrap: wrap;
+    }
+    .fs-content .modal-footer .btn {
+        padding: 0.9rem 2rem;
+        border-radius: 40px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .fs-content .modal-footer .btn-outline-light {
+        background: transparent;
+        border: 2px solid #5a7a96;
+        color: #d4e2f0;
+    }
+    .fs-content .modal-footer .btn-outline-light:hover { background: rgba(255,255,255,0.06); }
+    .fs-content .modal-footer .btn-primary-light {
+        background: #f9b84a;
+        color: #0b1a2a;
+    }
+    .fs-content .modal-footer .btn-primary-light:hover { background: #f0a832; }
+
+    /* Quiz Modal */
+    .quiz-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(4px);
+        z-index: 100000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .quiz-modal.active { display: flex; }
+    .quiz-modal-content {
+        background: white;
+        border-radius: var(--border-radius);
+        max-width: 700px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .quiz-modal-content h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.8rem;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+    }
+    .quiz-modal-content .quiz-subtitle {
+        color: var(--gray-500);
+        margin-bottom: 1.5rem;
+    }
+    .quiz-question {
+        background: var(--gray-50);
+        padding: 1.5rem;
+        border-radius: var(--border-radius-sm);
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+    }
+    .quiz-question .q-text {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
+    }
+    .quiz-question .q-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .quiz-question .q-options label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid var(--gray-200);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .quiz-question .q-options label:hover {
+        border-color: var(--primary-color);
+        background: var(--primary-light);
+    }
+    .quiz-question .q-options input[type="radio"] {
+        accent-color: var(--primary-color);
+        width: 18px;
+        height: 18px;
+    }
+    .quiz-question .q-options label.correct {
+        border-color: var(--success-color);
+        background: #dcfce7;
+    }
+    .quiz-question .q-options label.wrong {
+        border-color: var(--danger-color);
+        background: #fee2e2;
+    }
+    .quiz-question .q-options label.disabled {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+    .quiz-result {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--gray-50);
+        border-radius: var(--border-radius-sm);
+        margin-top: 1.5rem;
+    }
+    .quiz-result .score {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    .quiz-result .pass { color: var(--success-color); }
+    .quiz-result .fail { color: var(--danger-color); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .fs-sidebar { flex: 0 0 200px; }
+        .fs-content { padding: 1.5rem; }
+        .fs-content .modal-header-bar h2 { font-size: 1.4rem; }
+        .fs-content .code-editor textarea { min-height: 120px; }
+        .fs-module-item { padding: 10px 1rem; font-size: 0.8rem; }
+        .quiz-modal-content { padding: 1.5rem; margin: 1rem; }
+    }
+    @media (max-width: 576px) {
+        .fullscreen-modal { flex-direction: column; }
         .fs-sidebar {
-            flex: 0 0 280px;
-            background: #0f2635;
-            height: 100%;
-            overflow-y: auto;
-            padding: 1.5rem 0;
-            border-right: 1px solid #1a3345;
-            flex-shrink: 0;
-        }
-        .fs-sidebar-header {
-            padding: 0 1.5rem 1rem;
+            flex: 0 0 auto;
+            height: auto;
+            max-height: 180px;
+            border-right: none;
             border-bottom: 1px solid #1a3345;
-            margin-bottom: 0.8rem;
+            padding: 0.8rem 0;
         }
-        .fs-sidebar-header h4 {
-            color: #d6e5f5;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-        .fs-sidebar-header .course-title-side {
-            color: white;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-top: 4px;
-            font-family: 'Poppins', sans-serif;
-        }
+        .fs-sidebar-header { padding: 0 1rem 0.6rem; }
+        .fs-module-item { padding: 8px 1rem; }
+        .fs-content { padding: 1rem; }
+        .learning-container .courses-grid { grid-template-columns: 1fr; }
+        .learning-container { padding: 1rem 1rem 2rem; }
+        .learning-container .page-title { font-size: 2rem; }
+        .learning-container .tabs { flex-direction: column; border-radius: var(--border-radius); }
+        .learning-container .tab-btn { justify-content: center; }
+        .learning-container .filter-group { flex-direction: column; }
+        .learning-container .search-box, .learning-container .select-control { width: 100%; }
+        .learning-container .course-actions { flex-direction: column; }
+        .learning-container .course-header h3 { font-size: 1.4rem; }
+        .learning-container .path-item { flex-direction: column; align-items: flex-start; }
+        .learning-container .path-action { width: 100%; justify-content: center; }
+        .quiz-modal-content { padding: 1rem; }
+    }
+</style>
 
-        .fs-module-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            border-left: 3px solid transparent;
-            color: #9bb7d4;
-            font-size: 0.9rem;
-        }
-        .fs-module-item:hover { background: rgba(255,255,255,0.04); color: white; }
-        .fs-module-item.active {
-            background: rgba(67, 97, 238, 0.15);
-            border-left-color: var(--primary-color);
-            color: white;
-        }
-        .fs-module-item .module-num {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #7a9bbf;
-            flex-shrink: 0;
-        }
-        .fs-module-item.active .module-num {
-            background: var(--primary-color);
-            color: white;
-        }
-        .fs-module-item .module-label {
-            flex: 1;
-            font-weight: 500;
-        }
-        .fs-module-item .module-status-icon {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-        .fs-module-item.active .module-status-icon { color: var(--primary-color); }
-        .fs-module-item.completed .module-status-icon { color: var(--success-color); }
-
-        /* right content */
-        .fs-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2rem 2.5rem;
-            color: #e8edf2;
-        }
-
-        .fs-content .modal-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .fs-content .modal-header-bar h2 {
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            margin: 0;
-        }
-        .fs-content .modal-header-bar .sub {
-            color: #9bb7d4;
-            font-size: 0.95rem;
-        }
-        .fs-content .close-full {
-            background: rgba(255,255,255,0.08);
-            border: none;
-            color: white;
-            width: 44px;
-            height: 44px;
-            border-radius: 40px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .fs-content .close-full:hover { background: #c2410c; transform: rotate(90deg); }
-
-        .fs-content .desc { color: #b0c7dd; line-height: 1.7; font-size: 1.05rem; margin-bottom: 1.8rem; }
-
-        .fs-content .exercise-container {
-            background: #142b3b;
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 1.5rem 0;
-        }
-        .fs-content .exercise-container h4 { color: #d6e5f5; margin-bottom: 1rem; }
-        .fs-content .code-editor {
-            background: #0d1c28;
-            border-radius: 16px;
-            padding: 1.5rem;
-        }
-        .fs-content .code-editor textarea {
-            width: 100%;
-            min-height: 180px;
-            background: #0d1c28;
-            border: 1px solid #2a4053;
-            color: #d4e2f0;
-            padding: 1rem;
-            font-family: 'Source Code Pro', monospace;
-            font-size: 0.95rem;
-            border-radius: 12px;
-            resize: vertical;
-        }
-        .fs-content .code-editor textarea:focus { outline: none; border-color: #f9b84a; }
-        .fs-content .run-btn {
-            margin-top: 1rem;
-            padding: 0.8rem 2.2rem;
-            background: #f9b84a;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            color: #0b1a2a;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .fs-content .run-btn:hover { background: #f0a832; }
-        .fs-content #fsOutput {
-            background: #0d1c28;
-            color: #d4e2f0;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            margin-top: 1rem;
-            font-family: 'Source Code Pro', monospace;
-            border: 1px solid #2a4053;
-        }
-
-        .fs-content .notes-section {
-            background: #1d3345;
-            padding: 1.5rem;
-            border-radius: 16px;
-            margin: 1.5rem 0;
-        }
-        .fs-content .notes-section .notes-title { color: #f9b84a; font-weight: 600; margin-bottom: 0.8rem; }
-        .fs-content .notes-section .notes-content {
-            background: #0f2635;
-            padding: 1.2rem;
-            border-radius: 12px;
-            color: #d4e2f0;
-        }
-        .fs-content .notes-section .notes-content input[type="radio"] { accent-color: #f9b84a; margin-right: 6px; }
-
-        .fs-content .modal-footer {
-            display: flex;
-            gap: 1.2rem;
-            margin-top: 2.5rem;
-            flex-wrap: wrap;
-        }
-        .fs-content .modal-footer .btn {
-            padding: 0.9rem 2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .fs-content .modal-footer .btn-outline-light {
-            background: transparent;
-            border: 2px solid #5a7a96;
-            color: #d4e2f0;
-        }
-        .fs-content .modal-footer .btn-outline-light:hover { background: rgba(255,255,255,0.06); }
-        .fs-content .modal-footer .btn-primary-light {
-            background: #f9b84a;
-            color: #0b1a2a;
-        }
-        .fs-content .modal-footer .btn-primary-light:hover { background: #f0a832; }
-
-        /* Quiz Modal */
-        .quiz-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            z-index: 100000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .quiz-modal.active { display: flex; }
-        .quiz-modal-content {
-            background: white;
-            border-radius: var(--border-radius);
-            max-width: 700px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 2rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .quiz-modal-content h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.8rem;
-            color: var(--dark-color);
-            margin-bottom: 0.5rem;
-        }
-        .quiz-modal-content .quiz-subtitle {
-            color: var(--gray-500);
-            margin-bottom: 1.5rem;
-        }
-        .quiz-question {
-            background: var(--gray-50);
-            padding: 1.5rem;
-            border-radius: var(--border-radius-sm);
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--primary-color);
-        }
-        .quiz-question .q-text {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
-        }
-        .quiz-question .q-options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .quiz-question .q-options label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid var(--gray-200);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .quiz-question .q-options label:hover {
-            border-color: var(--primary-color);
-            background: var(--primary-light);
-        }
-        .quiz-question .q-options input[type="radio"] {
-            accent-color: var(--primary-color);
-            width: 18px;
-            height: 18px;
-        }
-        .quiz-question .q-options label.correct {
-            border-color: var(--success-color);
-            background: #dcfce7;
-        }
-        .quiz-question .q-options label.wrong {
-            border-color: var(--danger-color);
-            background: #fee2e2;
-        }
-        .quiz-question .q-options label.disabled {
-            pointer-events: none;
-            opacity: 0.7;
-        }
-        .quiz-result {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--gray-50);
-            border-radius: var(--border-radius-sm);
-            margin-top: 1.5rem;
-        }
-        .quiz-result .score {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        .quiz-result .pass { color: var(--success-color); }
-        .quiz-result .fail { color: var(--danger-color); }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .fs-sidebar { flex: 0 0 200px; }
-            .fs-content { padding: 1.5rem; }
-            .fs-content .modal-header-bar h2 { font-size: 1.4rem; }
-            .fs-content .code-editor textarea { min-height: 120px; }
-            .fs-module-item { padding: 10px 1rem; font-size: 0.8rem; }
-            .quiz-modal-content { padding: 1.5rem; margin: 1rem; }
-        }
-        @media (max-width: 576px) {
-            .fullscreen-modal { flex-direction: column; }
-            .fs-sidebar {
-                flex: 0 0 auto;
-                height: auto;
-                max-height: 180px;
-                border-right: none;
-                border-bottom: 1px solid #1a3345;
-                padding: 0.8rem 0;
-            }
-            .fs-sidebar-header { padding: 0 1rem 0.6rem; }
-            .fs-module-item { padding: 8px 1rem; }
-            .fs-content { padding: 1rem; }
-            .courses-grid { grid-template-columns: 1fr; }
-            .learning-container { padding: 1rem 1rem 2rem; }
-            .page-title { font-size: 2rem; }
-            .tabs { flex-direction: column; border-radius: var(--border-radius); }
-            .tab-btn { justify-content: center; }
-            .filter-group { flex-direction: column; }
-            .search-box, .select-control { width: 100%; }
-            .course-actions { flex-direction: column; }
-            .course-header h3 { font-size: 1.4rem; }
-            .path-item { flex-direction: column; align-items: flex-start; }
-            .path-action { width: 100%; justify-content: center; }
-            .quiz-modal-content { padding: 1rem; }
-        }
-    </style>
-</head>
-<body>
-    <div class="learning-container">
-        <!-- Header -->
-        <header class="page-header">
-            <div class="header-content">
-                <div class="page-icon"><i class="fas fa-book-open"></i></div>
-                <h1 class="page-title">Learn through courses</h1>
-                <p class="page-subtitle">Interactive tutorials, quizzes, and exercises. Learn by doing with real-time feedback.</p>
-            </div>
-        </header>
-
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('explore')"><i class="fas fa-compass"></i> Browse Courses</button>
-            <button class="tab-btn" onclick="switchTab('mylearning')"><i class="fas fa-user-graduate"></i> My Learning</button>
-            <button class="tab-btn" onclick="switchTab('quizzes')"><i class="fas fa-question-circle"></i> Quizzes</button>
+<div class="learning-container">
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="page-icon"><i class="fas fa-book-open"></i></div>
+            <h1 class="page-title">Learn through courses</h1>
+            <p class="page-subtitle">Interactive tutorials, quizzes, and exercises.</p>
         </div>
+    </header>
 
-        <!-- Explore -->
-        <div id="explore-tab" class="tab-content active">
-            <div class="filter-bar">
-                <div class="filter-group">
-                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchCourses" class="form-control" placeholder="Search courses..." oninput="filterCourses()"></div>
-                    <select id="filterLevel" class="select-control" onchange="filterCourses()"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
-                    <select id="sortCourses" class="select-control" onchange="filterCourses()"><option value="popular">Most Popular</option><option value="name">Course Name</option></select>
-                </div>
-            </div>
-            <div class="courses-grid" id="coursesContainer"></div>
-        </div>
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('explore')"><i class="fas fa-compass"></i> Browse Courses</button>
+        <button class="tab-btn" onclick="switchTab('mylearning')"><i class="fas fa-user-graduate"></i> My Learning</button>
+        <button class="tab-btn" onclick="switchTab('quizzes')"><i class="fas fa-question-circle"></i> Quizzes</button>
+    </div>
 
-        <!-- My Learning -->
-        <div id="mylearning-tab" class="tab-content">
-            <div class="learning-path" id="learningPathContainer"></div>
-            <div class="empty-state" id="myLearningEmpty" style="display:none;">
-                <div class="empty-icon"><i class="fas fa-graduation-cap"></i></div>
-                <h3 class="empty-title">Start Your Learning Journey</h3>
-                <p class="empty-text">Enroll in a course and track your progress here. Interactive exercises and quizzes await!</p>
-                <button class="btn btn-primary" onclick="switchTab('explore')"><i class="fas fa-compass"></i> Browse Courses</button>
+    <!-- Explore -->
+    <div id="explore-tab" class="tab-content active">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchCourses" class="form-control" placeholder="Search courses..." oninput="filterCourses()"></div>
+                <select id="filterLevel" class="select-control" onchange="filterCourses()"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
+                <select id="sortCourses" class="select-control" onchange="filterCourses()"><option value="popular">Most Popular</option><option value="name">Course Name</option></select>
             </div>
         </div>
+        <div class="courses-grid" id="coursesContainer"></div>
+    </div>
 
-        <!-- Quizzes Tab -->
-        <div id="quizzes-tab" class="tab-content">
-            <div class="filter-bar">
-                <div class="filter-group">
-                    <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchQuizzes" class="form-control" placeholder="Search quizzes..." oninput="filterQuizzes()"></div>
-                    <select id="filterQuizLevel" class="select-control" onchange="filterQuizzes()"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
-                </div>
-            </div>
-            <div class="courses-grid" id="quizzesContainer"></div>
+    <!-- My Learning -->
+    <div id="mylearning-tab" class="tab-content">
+        <div class="learning-path" id="learningPathContainer"></div>
+        <div class="empty-state" id="myLearningEmpty" style="display:none;">
+            <div class="empty-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h3 class="empty-title">Start Your Learning Journey</h3>
+            <p class="empty-text">Enroll in a course and track your progress here. Interactive exercises and quizzes await!</p>
+            <button class="btn btn-primary" onclick="switchTab('explore')"><i class="fas fa-compass"></i> Browse Courses</button>
         </div>
     </div>
 
-    <!-- FULL SCREEN MODAL with LEFT SIDEBAR for substructures -->
-    <div id="fullscreenModal" class="fullscreen-modal">
-        <div class="fs-sidebar" id="fsSidebar">
-            <div class="fs-sidebar-header">
-                <h4>Substructures</h4>
-                <div class="course-title-side" id="fsSidebarTitle">Course</div>
+    <!-- Quizzes Tab -->
+    <div id="quizzes-tab" class="tab-content">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchQuizzes" class="form-control" placeholder="Search quizzes..." oninput="filterQuizzes()"></div>
+                <select id="filterQuizLevel" class="select-control" onchange="filterQuizzes()"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
             </div>
-            <div id="fsModuleList"></div>
         </div>
-        <div class="fs-content">
-            <div class="modal-header-bar">
-                <div>
-                    <h2 id="fsModalTitle">Course Title</h2>
-                    <span class="sub" id="fsModalSubtitle">Course Code · Level</span>
-                </div>
-                <button class="close-full" onclick="closeFullModal()"><i class="fas fa-times"></i></button>
+        <div class="courses-grid" id="quizzesContainer"></div>
+    </div>
+</div>
+
+<!-- FULL SCREEN MODAL with LEFT SIDEBAR for substructures -->
+<div id="fullscreenModal" class="fullscreen-modal">
+    <div class="fs-sidebar" id="fsSidebar">
+        <div class="fs-sidebar-header">
+            <h4>Substructures</h4>
+            <div class="course-title-side" id="fsSidebarTitle">Course</div>
+        </div>
+        <div id="fsModuleList"></div>
+    </div>
+    <div class="fs-content">
+        <div class="modal-header-bar">
+            <div>
+                <h2 id="fsModalTitle">Course Title</h2>
+                <span class="sub" id="fsModalSubtitle">Course Code · Level</span>
             </div>
-            <div id="fsModalBody"></div>
+            <button class="close-full" onclick="closeFullModal()"><i class="fas fa-times"></i></button>
         </div>
+        <div id="fsModalBody"></div>
     </div>
+</div>
 
-    <!-- QUIZ MODAL -->
-    <div id="quizModal" class="quiz-modal">
-        <div class="quiz-modal-content">
-            <h2 id="quizModalTitle">Quiz</h2>
-            <p class="quiz-subtitle" id="quizModalSubtitle">Test your knowledge</p>
-            <div id="quizModalBody"></div>
-            <button class="btn btn-outline" onclick="closeQuizModal()" style="margin-top:1.5rem; width:100%;"><i class="fas fa-times"></i> Close Quiz</button>
-        </div>
+<!-- QUIZ MODAL -->
+<div id="quizModal" class="quiz-modal">
+    <div class="quiz-modal-content">
+        <h2 id="quizModalTitle">Quiz</h2>
+        <p class="quiz-subtitle" id="quizModalSubtitle">Test your knowledge</p>
+        <div id="quizModalBody"></div>
+        <button class="btn btn-outline" onclick="closeQuizModal()" style="margin-top:1.5rem; width:100%;"><i class="fas fa-times"></i> Close Quiz</button>
     </div>
+</div>
 
-    <script>
-        // ---------- COURSE DATA ----------
-        const courses = [
-            { id:'html', name:'HTML Tutorial', code:'HTML5', level:'beginner', icon:'fa-html5', color:'#e44d26',
-              description:'Learn HTML, the standard markup language for web pages.',
-              longDescription:'HTML is the foundation of all web pages. From basic tags to semantic elements and forms.',
-              modules:[{name:'HTML Introduction',type:'lesson',duration:'10 min',exercises:5,quiz:true},{name:'HTML Elements',type:'lesson',duration:'15 min',exercises:8,quiz:true},{name:'HTML Attributes',type:'lesson',duration:'12 min',exercises:6,quiz:true},{name:'HTML Headings',type:'lesson',duration:'8 min',exercises:4,quiz:true},{name:'HTML Paragraphs',type:'lesson',duration:'10 min',exercises:5,quiz:true},{name:'HTML Styles',type:'lesson',duration:'15 min',exercises:7,quiz:true},{name:'HTML Formatting',type:'lesson',duration:'12 min',exercises:6,quiz:true},{name:'HTML Quotations',type:'lesson',duration:'10 min',exercises:4,quiz:true},{name:'HTML Comments',type:'lesson',duration:'8 min',exercises:3,quiz:true},{name:'HTML Colors',type:'lesson',duration:'15 min',exercises:6,quiz:true}],
-              stats:{lessons:25,exercises:45,quizzes:10,projects:3,duration:'20 hours',learners:45231}, popular:true, new:true, rating:4.9,
-              quizQuestions:[
-                  { question: 'What does HTML stand for?', options: ['Hyper Text Markup Language', 'High Tech Modern Language', 'Hyper Transfer Markup Language'], correct: 0 },
-                  { question: 'Which tag is used for the largest heading?', options: ['<h1>', '<h6>', '<head>'], correct: 0 },
-                  { question: 'What is the correct HTML element for inserting a line break?', options: ['<br>', '<break>', '<lb>'], correct: 0 },
-                  { question: 'Which attribute is used to specify a unique identifier for an element?', options: ['id', 'class', 'name'], correct: 0 },
-                  { question: 'What is the correct HTML for creating a hyperlink?', options: ['<a href="url">link</a>', '<a url="url">link</a>', '<link href="url">link</link>'], correct: 0 }
-              ]},
-            { id:'css', name:'CSS Tutorial', code:'CSS3', level:'beginner', icon:'fa-css3-alt', color:'#264de4',
-              description:'Learn CSS to style and layout beautiful web pages.',
-              longDescription:'CSS is the language used to style HTML documents. Covers selectors to animations and responsive design.',
-              modules:[{name:'CSS Introduction',type:'lesson',duration:'10 min',exercises:4,quiz:true},{name:'CSS Syntax',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Selectors',type:'lesson',duration:'20 min',exercises:10,quiz:true},{name:'CSS Colors',type:'lesson',duration:'15 min',exercises:6,quiz:true},{name:'CSS Backgrounds',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Borders',type:'lesson',duration:'15 min',exercises:7,quiz:true},{name:'CSS Margins',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Padding',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Box Model',type:'lesson',duration:'15 min',exercises:8,quiz:true},{name:'CSS Flexbox',type:'lesson',duration:'25 min',exercises:12,quiz:true}],
-              stats:{lessons:30,exercises:52,quizzes:12,projects:4,duration:'25 hours',learners:38456}, popular:true, rating:4.8,
-              quizQuestions:[
-                  { question: 'Which CSS property is used to change the text color?', options: ['color', 'text-color', 'font-color'], correct: 0 },
-                  { question: 'What does CSS stand for?', options: ['Cascading Style Sheets', 'Creative Style Sheets', 'Computer Style Sheets'], correct: 0 },
-                  { question: 'Which CSS property controls the spacing between elements?', options: ['margin', 'padding', 'spacing'], correct: 0 },
-                  { question: 'What is the correct CSS syntax to select an element with id "demo"?', options: ['#demo', '.demo', '*demo'], correct: 0 },
-                  { question: 'Which property is used to change the font of an element?', options: ['font-family', 'font-style', 'font-weight'], correct: 0 }
-              ]},
-            { id:'javascript', name:'JavaScript Tutorial', code:'JS', level:'intermediate', icon:'fa-js', color:'#f7df1e',
-              description:'Learn JavaScript, the programming language of the web.',
-              longDescription:'Master variables, functions, loops, DOM manipulation, and modern ES6+ features.',
-              modules:[{name:'JS Introduction',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'JS Variables',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS Data Types',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'JS Functions',type:'lesson',duration:'25 min',exercises:10,quiz:true},{name:'JS Objects',type:'lesson',duration:'22 min',exercises:9,quiz:true},{name:'JS Events',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS Strings',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'JS Arrays',type:'lesson',duration:'22 min',exercises:9,quiz:true},{name:'JS Loops',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS DOM',type:'lesson',duration:'30 min',exercises:12,quiz:true}],
-              stats:{lessons:40,exercises:68,quizzes:15,projects:5,duration:'35 hours',learners:35678}, popular:true, rating:4.9,
-              quizQuestions:[
-                  { question: 'Which method is used to output a message to the console?', options: ['console.log()', 'print()', 'echo()'], correct: 0 },
-                  { question: 'How do you declare a variable in JavaScript?', options: ['let x;', 'var x;', 'Both let and var'], correct: 2 },
-                  { question: 'What is the correct way to write a function?', options: ['function myFunc() {}', 'function:myFunc() {}', 'myFunc = function() {}'], correct: 0 },
-                  { question: 'Which operator is used for strict equality?', options: ['===', '==', '='], correct: 0 },
-                  { question: 'What is the output of typeof null?', options: ['object', 'null', 'undefined'], correct: 0 }
-              ]},
-            { id:'python', name:'Python Tutorial', code:'PY3', level:'beginner', icon:'fa-python', color:'#306998',
-              description:'Learn Python, one of the most popular programming languages.',
-              longDescription:'Great for beginners and powerful for experts. Learn syntax, data structures, OOP, and more.',
-              modules:[{name:'Python Intro',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'Python Syntax',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'Python Variables',type:'lesson',duration:'15 min',exercises:6,quiz:true},{name:'Python Data Types',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'Python Lists',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'Python Tuples',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'Python Dictionaries',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'Python If...Else',type:'lesson',duration:'16 min',exercises:6,quiz:true},{name:'Python Loops',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'Python Functions',type:'lesson',duration:'22 min',exercises:8,quiz:true}],
-              stats:{lessons:35,exercises:58,quizzes:14,projects:4,duration:'30 hours',learners:29876}, new:true, rating:4.7,
-              quizQuestions:[
-                  { question: 'How do you create a variable in Python?', options: ['x = 5', 'var x = 5', 'let x = 5'], correct: 0 },
-                  { question: 'What is the correct file extension for Python files?', options: ['.py', '.python', '.p'], correct: 0 },
-                  { question: 'Which function is used to output text in Python?', options: ['print()', 'echo()', 'console.log()'], correct: 0 },
-                  { question: 'What is the correct way to create a list in Python?', options: ['mylist = []', 'mylist = list()', 'Both'], correct: 2 },
-                  { question: 'What is the output of len("Hello")?', options: ['5', '6', '4'], correct: 0 }
-              ]},
-            { id:'sql', name:'SQL Tutorial', code:'SQL', level:'intermediate', icon:'fa-database', color:'#00758f',
-              description:'Learn SQL to manage and query databases.',
-              longDescription:'SQL is the standard language for relational databases. Master queries, joins, and database design.',
-              modules:[{name:'SQL Intro',type:'lesson',duration:'10 min',exercises:3,quiz:true},{name:'SQL Syntax',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL SELECT',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'SQL WHERE',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'SQL AND/OR',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL ORDER BY',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL INSERT INTO',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'SQL UPDATE',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL DELETE',type:'lesson',duration:'10 min',exercises:3,quiz:true},{name:'SQL JOIN',type:'lesson',duration:'25 min',exercises:8,quiz:true}],
-              stats:{lessons:28,exercises:42,quizzes:10,projects:3,duration:'22 hours',learners:23456}, rating:4.6,
-              quizQuestions:[
-                  { question: 'What does SQL stand for?', options: ['Structured Query Language', 'Simple Query Language', 'System Query Language'], correct: 0 },
-                  { question: 'Which SQL statement is used to retrieve data?', options: ['SELECT', 'GET', 'EXTRACT'], correct: 0 },
-                  { question: 'Which clause is used to filter records?', options: ['WHERE', 'FILTER', 'CONDITION'], correct: 0 },
-                  { question: 'How do you sort records in SQL?', options: ['ORDER BY', 'SORT BY', 'GROUP BY'], correct: 0 },
-                  { question: 'Which function returns the number of rows?', options: ['COUNT()', 'SUM()', 'AVG()'], correct: 0 }
-              ]},
-            { id:'react', name:'React Tutorial', code:'REACT', level:'advanced', icon:'fa-react', color:'#61dafb',
-              description:'Learn React, the popular JavaScript library for building UIs.',
-              longDescription:'Build interactive UIs with components, props, state, hooks, and more.',
-              modules:[{name:'React Intro',type:'lesson',duration:'15 min',exercises:4,quiz:true},{name:'React ES6',type:'lesson',duration:'20 min',exercises:6,quiz:true},{name:'React JSX',type:'lesson',duration:'18 min',exercises:5,quiz:true},{name:'React Components',type:'lesson',duration:'22 min',exercises:7,quiz:true},{name:'React Props',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'React State',type:'lesson',duration:'20 min',exercises:7,quiz:true},{name:'React Hooks',type:'lesson',duration:'25 min',exercises:8,quiz:true},{name:'React Forms',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'React Router',type:'lesson',duration:'22 min',exercises:7,quiz:true},{name:'React API Calls',type:'lesson',duration:'20 min',exercises:6,quiz:true}],
-              stats:{lessons:32,exercises:48,quizzes:12,projects:4,duration:'28 hours',learners:18765}, popular:true, rating:4.8,
-              quizQuestions:[
-                  { question: 'What is React?', options: ['A JavaScript library for building UIs', 'A JavaScript framework', 'A database'], correct: 0 },
-                  { question: 'Which hook is used for state in functional components?', options: ['useState', 'useEffect', 'useContext'], correct: 0 },
-                  { question: 'What is JSX?', options: ['JavaScript XML', 'JavaScript Extension', 'Java XML'], correct: 0 },
-                  { question: 'Which method is used to render a React component?', options: ['ReactDOM.render()', 'React.render()', 'DOM.render()'], correct: 0 },
-                  { question: 'What is the correct way to pass data to a component?', options: ['props', 'state', 'context'], correct: 0 }
-              ]}
+<script>
+    // ---------- COURSE DATA ----------
+    const courses = [
+        { id:'html', name:'HTML Tutorial', code:'HTML5', level:'beginner', icon:'fa-html5', color:'#e44d26',
+          description:'Learn HTML, the standard markup language for web pages.',
+          longDescription:'HTML is the foundation of all web pages. From basic tags to semantic elements and forms.',
+          modules:[{name:'HTML Introduction',type:'lesson',duration:'10 min',exercises:5,quiz:true},{name:'HTML Elements',type:'lesson',duration:'15 min',exercises:8,quiz:true},{name:'HTML Attributes',type:'lesson',duration:'12 min',exercises:6,quiz:true},{name:'HTML Headings',type:'lesson',duration:'8 min',exercises:4,quiz:true},{name:'HTML Paragraphs',type:'lesson',duration:'10 min',exercises:5,quiz:true},{name:'HTML Styles',type:'lesson',duration:'15 min',exercises:7,quiz:true},{name:'HTML Formatting',type:'lesson',duration:'12 min',exercises:6,quiz:true},{name:'HTML Quotations',type:'lesson',duration:'10 min',exercises:4,quiz:true},{name:'HTML Comments',type:'lesson',duration:'8 min',exercises:3,quiz:true},{name:'HTML Colors',type:'lesson',duration:'15 min',exercises:6,quiz:true}],
+          stats:{lessons:25,exercises:45,quizzes:10,projects:3,duration:'20 hours',learners:45231}, popular:true, new:true, rating:4.9,
+          quizQuestions:[
+              { question: 'What does HTML stand for?', options: ['Hyper Text Markup Language', 'High Tech Modern Language', 'Hyper Transfer Markup Language'], correct: 0 },
+              { question: 'Which tag is used for the largest heading?', options: ['<h1>', '<h6>', '<head>'], correct: 0 },
+              { question: 'What is the correct HTML element for inserting a line break?', options: ['<br>', '<break>', '<lb>'], correct: 0 },
+              { question: 'Which attribute is used to specify a unique identifier for an element?', options: ['id', 'class', 'name'], correct: 0 },
+              { question: 'What is the correct HTML for creating a hyperlink?', options: ['<a href="url">link</a>', '<a url="url">link</a>', '<link href="url">link</link>'], correct: 0 }
+          ]},
+        { id:'css', name:'CSS Tutorial', code:'CSS3', level:'beginner', icon:'fa-css3-alt', color:'#264de4',
+          description:'Learn CSS to style and layout beautiful web pages.',
+          longDescription:'CSS is the language used to style HTML documents. Covers selectors to animations and responsive design.',
+          modules:[{name:'CSS Introduction',type:'lesson',duration:'10 min',exercises:4,quiz:true},{name:'CSS Syntax',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Selectors',type:'lesson',duration:'20 min',exercises:10,quiz:true},{name:'CSS Colors',type:'lesson',duration:'15 min',exercises:6,quiz:true},{name:'CSS Backgrounds',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Borders',type:'lesson',duration:'15 min',exercises:7,quiz:true},{name:'CSS Margins',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Padding',type:'lesson',duration:'12 min',exercises:5,quiz:true},{name:'CSS Box Model',type:'lesson',duration:'15 min',exercises:8,quiz:true},{name:'CSS Flexbox',type:'lesson',duration:'25 min',exercises:12,quiz:true}],
+          stats:{lessons:30,exercises:52,quizzes:12,projects:4,duration:'25 hours',learners:38456}, popular:true, rating:4.8,
+          quizQuestions:[
+              { question: 'Which CSS property is used to change the text color?', options: ['color', 'text-color', 'font-color'], correct: 0 },
+              { question: 'What does CSS stand for?', options: ['Cascading Style Sheets', 'Creative Style Sheets', 'Computer Style Sheets'], correct: 0 },
+              { question: 'Which CSS property controls the spacing between elements?', options: ['margin', 'padding', 'spacing'], correct: 0 },
+              { question: 'What is the correct CSS syntax to select an element with id "demo"?', options: ['#demo', '.demo', '*demo'], correct: 0 },
+              { question: 'Which property is used to change the font of an element?', options: ['font-family', 'font-style', 'font-weight'], correct: 0 }
+          ]},
+        { id:'javascript', name:'JavaScript Tutorial', code:'JS', level:'intermediate', icon:'fa-js', color:'#f7df1e',
+          description:'Learn JavaScript, the programming language of the web.',
+          longDescription:'Master variables, functions, loops, DOM manipulation, and modern ES6+ features.',
+          modules:[{name:'JS Introduction',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'JS Variables',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS Data Types',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'JS Functions',type:'lesson',duration:'25 min',exercises:10,quiz:true},{name:'JS Objects',type:'lesson',duration:'22 min',exercises:9,quiz:true},{name:'JS Events',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS Strings',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'JS Arrays',type:'lesson',duration:'22 min',exercises:9,quiz:true},{name:'JS Loops',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'JS DOM',type:'lesson',duration:'30 min',exercises:12,quiz:true}],
+          stats:{lessons:40,exercises:68,quizzes:15,projects:5,duration:'35 hours',learners:35678}, popular:true, rating:4.9,
+          quizQuestions:[
+              { question: 'Which method is used to output a message to the console?', options: ['console.log()', 'print()', 'echo()'], correct: 0 },
+              { question: 'How do you declare a variable in JavaScript?', options: ['let x;', 'var x;', 'Both let and var'], correct: 2 },
+              { question: 'What is the correct way to write a function?', options: ['function myFunc() {}', 'function:myFunc() {}', 'myFunc = function() {}'], correct: 0 },
+              { question: 'Which operator is used for strict equality?', options: ['===', '==', '='], correct: 0 },
+              { question: 'What is the output of typeof null?', options: ['object', 'null', 'undefined'], correct: 0 }
+          ]},
+        { id:'python', name:'Python Tutorial', code:'PY3', level:'beginner', icon:'fa-python', color:'#306998',
+          description:'Learn Python, one of the most popular programming languages.',
+          longDescription:'Great for beginners and powerful for experts. Learn syntax, data structures, OOP, and more.',
+          modules:[{name:'Python Intro',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'Python Syntax',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'Python Variables',type:'lesson',duration:'15 min',exercises:6,quiz:true},{name:'Python Data Types',type:'lesson',duration:'20 min',exercises:8,quiz:true},{name:'Python Lists',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'Python Tuples',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'Python Dictionaries',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'Python If...Else',type:'lesson',duration:'16 min',exercises:6,quiz:true},{name:'Python Loops',type:'lesson',duration:'18 min',exercises:7,quiz:true},{name:'Python Functions',type:'lesson',duration:'22 min',exercises:8,quiz:true}],
+          stats:{lessons:35,exercises:58,quizzes:14,projects:4,duration:'30 hours',learners:29876}, new:true, rating:4.7,
+          quizQuestions:[
+              { question: 'How do you create a variable in Python?', options: ['x = 5', 'var x = 5', 'let x = 5'], correct: 0 },
+              { question: 'What is the correct file extension for Python files?', options: ['.py', '.python', '.p'], correct: 0 },
+              { question: 'Which function is used to output text in Python?', options: ['print()', 'echo()', 'console.log()'], correct: 0 },
+              { question: 'What is the correct way to create a list in Python?', options: ['mylist = []', 'mylist = list()', 'Both'], correct: 2 },
+              { question: 'What is the output of len("Hello")?', options: ['5', '6', '4'], correct: 0 }
+          ]},
+        { id:'sql', name:'SQL Tutorial', code:'SQL', level:'intermediate', icon:'fa-database', color:'#00758f',
+          description:'Learn SQL to manage and query databases.',
+          longDescription:'SQL is the standard language for relational databases. Master queries, joins, and database design.',
+          modules:[{name:'SQL Intro',type:'lesson',duration:'10 min',exercises:3,quiz:true},{name:'SQL Syntax',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL SELECT',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'SQL WHERE',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'SQL AND/OR',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL ORDER BY',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL INSERT INTO',type:'lesson',duration:'15 min',exercises:5,quiz:true},{name:'SQL UPDATE',type:'lesson',duration:'12 min',exercises:4,quiz:true},{name:'SQL DELETE',type:'lesson',duration:'10 min',exercises:3,quiz:true},{name:'SQL JOIN',type:'lesson',duration:'25 min',exercises:8,quiz:true}],
+          stats:{lessons:28,exercises:42,quizzes:10,projects:3,duration:'22 hours',learners:23456}, rating:4.6,
+          quizQuestions:[
+              { question: 'What does SQL stand for?', options: ['Structured Query Language', 'Simple Query Language', 'System Query Language'], correct: 0 },
+              { question: 'Which SQL statement is used to retrieve data?', options: ['SELECT', 'GET', 'EXTRACT'], correct: 0 },
+              { question: 'Which clause is used to filter records?', options: ['WHERE', 'FILTER', 'CONDITION'], correct: 0 },
+              { question: 'How do you sort records in SQL?', options: ['ORDER BY', 'SORT BY', 'GROUP BY'], correct: 0 },
+              { question: 'Which function returns the number of rows?', options: ['COUNT()', 'SUM()', 'AVG()'], correct: 0 }
+          ]},
+        { id:'react', name:'React Tutorial', code:'REACT', level:'advanced', icon:'fa-react', color:'#61dafb',
+          description:'Learn React, the popular JavaScript library for building UIs.',
+          longDescription:'Build interactive UIs with components, props, state, hooks, and more.',
+          modules:[{name:'React Intro',type:'lesson',duration:'15 min',exercises:4,quiz:true},{name:'React ES6',type:'lesson',duration:'20 min',exercises:6,quiz:true},{name:'React JSX',type:'lesson',duration:'18 min',exercises:5,quiz:true},{name:'React Components',type:'lesson',duration:'22 min',exercises:7,quiz:true},{name:'React Props',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'React State',type:'lesson',duration:'20 min',exercises:7,quiz:true},{name:'React Hooks',type:'lesson',duration:'25 min',exercises:8,quiz:true},{name:'React Forms',type:'lesson',duration:'18 min',exercises:6,quiz:true},{name:'React Router',type:'lesson',duration:'22 min',exercises:7,quiz:true},{name:'React API Calls',type:'lesson',duration:'20 min',exercises:6,quiz:true}],
+          stats:{lessons:32,exercises:48,quizzes:12,projects:4,duration:'28 hours',learners:18765}, popular:true, rating:4.8,
+          quizQuestions:[
+              { question: 'What is React?', options: ['A JavaScript library for building UIs', 'A JavaScript framework', 'A database'], correct: 0 },
+              { question: 'Which hook is used for state in functional components?', options: ['useState', 'useEffect', 'useContext'], correct: 0 },
+              { question: 'What is JSX?', options: ['JavaScript XML', 'JavaScript Extension', 'Java XML'], correct: 0 },
+              { question: 'Which method is used to render a React component?', options: ['ReactDOM.render()', 'React.render()', 'DOM.render()'], correct: 0 },
+              { question: 'What is the correct way to pass data to a component?', options: ['props', 'state', 'context'], correct: 0 }
+          ]}
+    ];
+
+    // ===== PERSISTENT STORAGE =====
+    function getStorageKey() {
+        const email = '{{ session.get('email', 'default_user') }}';
+        return `myCoursesData_${email}`;
+    }
+
+    function saveMyCourses() {
+        localStorage.setItem(getStorageKey(), JSON.stringify(myCourses));
+    }
+
+    function loadMyCoursesFromStorage() {
+        const stored = localStorage.getItem(getStorageKey());
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                myCourses = parsed.map(enr => ({
+                    ...enr,
+                    completed: enr.completed || [],
+                    currentModule: enr.currentModule || 0,
+                    exercisesCompleted: enr.exercisesCompleted || 0,
+                    quizzesPassed: enr.quizzesPassed || 0
+                }));
+                return true;
+            } catch (e) { console.warn('Failed to parse stored data'); }
+        }
+        return false;
+    }
+
+    let myCourses = [];
+    if (!loadMyCoursesFromStorage()) {
+        myCourses = [
+            { courseId:'html', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 },
+            { courseId:'css', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 },
+            { courseId:'javascript', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 }
         ];
+        saveMyCourses();
+    }
 
-        // ===== PERSISTENT STORAGE =====
-        function getStorageKey() {
-            const email = '{{ session.get('email', 'default_user') }}';
-            return `myCoursesData_${email}`;
-        }
+    let fsCourseId = null;
+    let fsCurrentModuleIndex = 0;
 
-        function saveMyCourses() {
-            localStorage.setItem(getStorageKey(), JSON.stringify(myCourses));
-        }
+    function getCourse(id) { return courses.find(c => c.id === id); }
+    function getEnrolled(id) { return myCourses.find(m => m.courseId === id); }
 
-        function loadMyCoursesFromStorage() {
-            const stored = localStorage.getItem(getStorageKey());
-            if (stored) {
-                try {
-                    const parsed = JSON.parse(stored);
-                    myCourses = parsed.map(enr => ({
-                        ...enr,
-                        completed: enr.completed || [],
-                        currentModule: enr.currentModule || 0,
-                        exercisesCompleted: enr.exercisesCompleted || 0,
-                        quizzesPassed: enr.quizzesPassed || 0
-                    }));
-                    return true;
-                } catch (e) { console.warn('Failed to parse stored data'); }
-            }
-            return false;
-        }
+    function updateCourseProgress(courseId) {
+        const enrolled = getEnrolled(courseId);
+        if (!enrolled) return;
+        const course = getCourse(courseId);
+        if (!course) return;
+        const totalModules = course.modules.length;
+        const completedCount = enrolled.completed.length;
+        enrolled.progress = Math.round((completedCount / totalModules) * 100);
+        saveMyCourses();
+        updateAllUI();
+    }
 
-        let myCourses = [];
-        if (!loadMyCoursesFromStorage()) {
-            myCourses = [
-                { courseId:'html', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 },
-                { courseId:'css', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 },
-                { courseId:'javascript', progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 }
-            ];
-            saveMyCourses();
-        }
-
-        let fsCourseId = null;
-        let fsCurrentModuleIndex = 0;
-
-        function getCourse(id) { return courses.find(c => c.id === id); }
-        function getEnrolled(id) { return myCourses.find(m => m.courseId === id); }
-
-        function updateCourseProgress(courseId) {
-            const enrolled = getEnrolled(courseId);
-            if (!enrolled) return;
-            const course = getCourse(courseId);
-            if (!course) return;
-            const totalModules = course.modules.length;
-            const completedCount = enrolled.completed.length;
-            enrolled.progress = Math.round((completedCount / totalModules) * 100);
-            saveMyCourses();
-            updateAllUI();
-        }
-
-        function updateAllUI() {
-            loadCourses();
-            loadMyLearning();
-            loadQuizzes();
-            if (document.getElementById('fullscreenModal').classList.contains('active')) {
-                const course = getCourse(fsCourseId);
-                if (course) {
-                    const enrolled = getEnrolled(fsCourseId);
-                    renderFSContent(course, enrolled);
-                    const moduleList = document.getElementById('fsModuleList');
-                    if (moduleList) {
-                        moduleList.innerHTML = course.modules.map((m, idx) => {
-                            const isActive = idx === fsCurrentModuleIndex;
-                            const isCompleted = enrolled && enrolled.completed.includes(idx);
-                            return `<div class="fs-module-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="fsNavigateModule(${idx})">
-                                <span class="module-num">${idx + 1}</span>
-                                <span class="module-label">${m.name}</span>
-                                <span class="module-status-icon"><i class="fas ${isCompleted ? 'fa-check-circle' : isActive ? 'fa-play-circle' : 'fa-circle'}"></i></span>
-                            </div>`;
-                        }).join('');
-                    }
+    function updateAllUI() {
+        loadCourses();
+        loadMyLearning();
+        loadQuizzes();
+        if (document.getElementById('fullscreenModal').classList.contains('active')) {
+            const course = getCourse(fsCourseId);
+            if (course) {
+                const enrolled = getEnrolled(fsCourseId);
+                renderFSContent(course, enrolled);
+                const moduleList = document.getElementById('fsModuleList');
+                if (moduleList) {
+                    moduleList.innerHTML = course.modules.map((m, idx) => {
+                        const isActive = idx === fsCurrentModuleIndex;
+                        const isCompleted = enrolled && enrolled.completed.includes(idx);
+                        return `<div class="fs-module-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="fsNavigateModule(${idx})">
+                            <span class="module-num">${idx + 1}</span>
+                            <span class="module-label">${m.name}</span>
+                            <span class="module-status-icon"><i class="fas ${isCompleted ? 'fa-check-circle' : isActive ? 'fa-play-circle' : 'fa-circle'}"></i></span>
+                        </div>`;
+                    }).join('');
                 }
             }
         }
+    }
 
-        function loadCourses() {
-            const container = document.getElementById('coursesContainer');
-            if (!container) return;
-            container.innerHTML = courses.map(c => createCourseCard(c)).join('');
-        }
+    function loadCourses() {
+        const container = document.getElementById('coursesContainer');
+        if (!container) return;
+        container.innerHTML = courses.map(c => createCourseCard(c)).join('');
+    }
 
-        function createCourseCard(course) {
-            const enrolled = getEnrolled(course.id);
-            const progress = enrolled ? enrolled.progress : 0;
-            return `
-                <div class="course-card" data-id="${course.id}">
-                    <div class="course-header" style="background:linear-gradient(135deg, ${course.color}22, #1e2a3a);">
-                        <div class="course-icon" style="background:${course.color};"><i class="fab ${course.icon}"></i></div>
-                        <h3>${course.name}</h3>
-                        <span class="course-code">${course.code}</span>
-                        ${course.popular ? '<div class="course-badge"><i class="fas fa-fire"></i> Popular</div>' : ''}
-                        ${course.new ? '<div class="course-badge green"><i class="fas fa-star"></i> New</div>' : ''}
+    function createCourseCard(course) {
+        const enrolled = getEnrolled(course.id);
+        const progress = enrolled ? enrolled.progress : 0;
+        return `
+            <div class="course-card" data-id="${course.id}">
+                <div class="course-header" style="background:linear-gradient(135deg, ${course.color}22, #1e2a3a);">
+                    <div class="course-icon" style="background:${course.color};"><i class="fab ${course.icon}"></i></div>
+                    <h3>${course.name}</h3>
+                    <span class="course-code">${course.code}</span>
+                    ${course.popular ? '<div class="course-badge"><i class="fas fa-fire"></i> Popular</div>' : ''}
+                    ${course.new ? '<div class="course-badge green"><i class="fas fa-star"></i> New</div>' : ''}
+                </div>
+                <div class="course-content">
+                    <p>${course.description}</p>
+                    ${enrolled ? `
+                        <div class="progress-section">
+                            <div class="progress-header"><span>Your Progress</span><span>${progress}%</span></div>
+                            <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+                        </div>
+                    ` : ''}
+                    <div class="modules-list">
+                        ${course.modules.slice(0,5).map((m,i) => {
+                            const comp = enrolled && enrolled.completed.includes(i);
+                            const cur = enrolled && enrolled.currentModule === i;
+                            const status = comp ? 'completed' : cur ? 'inprogress' : 'locked';
+                            return `<div class="module-item"><div class="module-icon"><i class="fas ${m.type==='lesson'?'fa-book':'fa-code'}"></i></div>
+                                <div class="module-info"><div class="module-title">${m.name}</div><div class="module-meta"><span><i class="far fa-clock"></i> ${m.duration}</span><span>${m.exercises} ex</span></div></div>
+                                <div class="module-status status-${status}"><i class="fas ${comp?'fa-check':cur?'fa-play':'fa-lock'}"></i></div></div>`;
+                        }).join('')}
+                        ${course.modules.length > 5 ? `<div style="text-align:center; padding:6px 0; color:var(--gray-500); font-size:0.8rem;">+ ${course.modules.length - 5} more modules</div>` : ''}
                     </div>
-                    <div class="course-content">
-                        <p>${course.description}</p>
+                    <div class="course-stats">
+                        <span class="stat-tag"><i class="fas fa-book"></i> ${course.stats.lessons} lessons</span>
+                        <span class="stat-tag"><i class="fas fa-code"></i> ${course.stats.exercises} ex</span>
+                        <span class="stat-tag"><i class="fas fa-question"></i> ${course.stats.quizzes} quizzes</span>
+                        <span class="stat-tag"><i class="fas fa-clock"></i> ${course.stats.duration}</span>
+                    </div>
+                    <div class="course-actions">
                         ${enrolled ? `
-                            <div class="progress-section">
-                                <div class="progress-header"><span>Your Progress</span><span>${progress}%</span></div>
-                                <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
-                            </div>
-                        ` : ''}
-                        <div class="modules-list">
-                            ${course.modules.slice(0,5).map((m,i) => {
-                                const comp = enrolled && enrolled.completed.includes(i);
-                                const cur = enrolled && enrolled.currentModule === i;
-                                const status = comp ? 'completed' : cur ? 'inprogress' : 'locked';
-                                return `<div class="module-item"><div class="module-icon"><i class="fas ${m.type==='lesson'?'fa-book':'fa-code'}"></i></div>
-                                    <div class="module-info"><div class="module-title">${m.name}</div><div class="module-meta"><span><i class="far fa-clock"></i> ${m.duration}</span><span>${m.exercises} ex</span></div></div>
-                                    <div class="module-status status-${status}"><i class="fas ${comp?'fa-check':cur?'fa-play':'fa-lock'}"></i></div></div>`;
-                            }).join('')}
-                            ${course.modules.length > 5 ? `<div style="text-align:center; padding:6px 0; color:var(--gray-500); font-size:0.8rem;">+ ${course.modules.length - 5} more modules</div>` : ''}
-                        </div>
-                        <div class="course-stats">
-                            <span class="stat-tag"><i class="fas fa-book"></i> ${course.stats.lessons} lessons</span>
-                            <span class="stat-tag"><i class="fas fa-code"></i> ${course.stats.exercises} ex</span>
-                            <span class="stat-tag"><i class="fas fa-question"></i> ${course.stats.quizzes} quizzes</span>
-                            <span class="stat-tag"><i class="fas fa-clock"></i> ${course.stats.duration}</span>
-                        </div>
-                        <div class="course-actions">
-                            ${enrolled ? `
-                                <button class="btn btn-primary" onclick="continueCourse('${course.id}')"><i class="fas fa-play-circle"></i> Continue</button>
-                                <button class="btn btn-outline" onclick="openFullPreview('${course.id}')"><i class="fas fa-expand"></i> Preview</button>
-                            ` : `
-                                <button class="btn btn-primary" onclick="enrollCourse('${course.id}')"><i class="fas fa-graduation-cap"></i> Start Learning</button>
-                                <button class="btn btn-outline" onclick="openFullPreview('${course.id}')"><i class="fas fa-expand"></i> Preview</button>
-                            `}
-                        </div>
+                            <button class="btn btn-primary" onclick="continueCourse('${course.id}')"><i class="fas fa-play-circle"></i> Continue</button>
+                            <button class="btn btn-outline" onclick="openFullPreview('${course.id}')"><i class="fas fa-expand"></i> Preview</button>
+                        ` : `
+                            <button class="btn btn-primary" onclick="enrollCourse('${course.id}')"><i class="fas fa-graduation-cap"></i> Start Learning</button>
+                            <button class="btn btn-outline" onclick="openFullPreview('${course.id}')"><i class="fas fa-expand"></i> Preview</button>
+                        `}
                     </div>
                 </div>
-            `;
-        }
+            </div>
+        `;
+    }
 
-        function loadMyLearning() {
-            const container = document.getElementById('learningPathContainer');
-            const empty = document.getElementById('myLearningEmpty');
-            if (!container) return;
-            if (!myCourses.length) { container.innerHTML=''; if(empty) empty.style.display='block'; return; }
-            if(empty) empty.style.display='none';
-            container.innerHTML = myCourses.map(enr => {
-                const c = getCourse(enr.courseId);
-                if (!c) return '';
-                return `
-                    <div class="path-item">
-                        <div class="path-icon" style="background:${c.color}22; color:${c.color};"><i class="fab ${c.icon}"></i></div>
-                        <div class="path-content">
-                            <div class="path-title">${c.name}</div>
-                            <div class="path-progress"><i class="fas fa-tasks"></i> ${enr.exercisesCompleted}/${c.stats.exercises} exercises • <i class="fas fa-question"></i> ${enr.quizzesPassed}/${c.stats.quizzes} quizzes • ${enr.progress}% complete</div>
-                            <div style="margin-top:8px; max-width:300px;">
-                                <div class="progress-bar"><div class="progress-fill" style="width:${enr.progress}%"></div></div>
-                            </div>
+    function loadMyLearning() {
+        const container = document.getElementById('learningPathContainer');
+        const empty = document.getElementById('myLearningEmpty');
+        if (!container) return;
+        if (!myCourses.length) { container.innerHTML=''; if(empty) empty.style.display='block'; return; }
+        if(empty) empty.style.display='none';
+        container.innerHTML = myCourses.map(enr => {
+            const c = getCourse(enr.courseId);
+            if (!c) return '';
+            return `
+                <div class="path-item">
+                    <div class="path-icon" style="background:${c.color}22; color:${c.color};"><i class="fab ${c.icon}"></i></div>
+                    <div class="path-content">
+                        <div class="path-title">${c.name}</div>
+                        <div class="path-progress"><i class="fas fa-tasks"></i> ${enr.exercisesCompleted}/${c.stats.exercises} exercises • <i class="fas fa-question"></i> ${enr.quizzesPassed}/${c.stats.quizzes} quizzes • ${enr.progress}% complete</div>
+                        <div style="margin-top:8px; max-width:300px;">
+                            <div class="progress-bar"><div class="progress-fill" style="width:${enr.progress}%"></div></div>
                         </div>
-                        <button class="path-action" onclick="continueCourse('${c.id}')">Continue <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <button class="path-action" onclick="continueCourse('${c.id}')">Continue <i class="fas fa-arrow-right"></i></button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ===== QUIZZES =====
+    function loadQuizzes() {
+        const container = document.getElementById('quizzesContainer');
+        if (!container) return;
+        container.innerHTML = courses.map(c => createQuizCard(c)).join('');
+    }
+
+    function createQuizCard(course) {
+        const enrolled = getEnrolled(course.id);
+        const quizCount = course.quizQuestions ? course.quizQuestions.length : 0;
+        const passed = enrolled ? enrolled.quizzesPassed : 0;
+        return `
+            <div class="course-card" data-id="${course.id}">
+                <div class="course-header" style="background:linear-gradient(135deg, ${course.color}22, #1e2a3a);">
+                    <div class="course-icon" style="background:${course.color};"><i class="fas ${course.icon}"></i></div>
+                    <h3>${course.name} Quiz</h3>
+                    <span class="course-code">${course.code}</span>
+                </div>
+                <div class="course-content">
+                    <div style="margin-bottom:16px;">
+                        <span class="quiz-badge"><i class="fas fa-question-circle"></i> ${quizCount} Questions</span>
+                        ${enrolled ? `<span class="quiz-badge" style="background:#dcfce7; color:#059862; margin-left:8px;"><i class="fas fa-check-circle"></i> ${passed} passed</span>` : ''}
+                    </div>
+                    <p>Test your knowledge on ${course.name}. Answer ${quizCount} questions to complete this quiz.</p>
+                    <div class="course-stats">
+                        <span class="stat-tag"><i class="fas fa-question"></i> ${quizCount} questions</span>
+                        <span class="stat-tag"><i class="fas fa-clock"></i> ~${Math.round(quizCount * 0.5)} min</span>
+                    </div>
+                    <div class="course-actions">
+                        <button class="btn btn-success" onclick="startQuiz('${course.id}')">
+                            <i class="fas fa-play"></i> Start Quiz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function filterQuizzes() {
+        const term = document.getElementById('searchQuizzes')?.value?.toLowerCase() || '';
+        const level = document.getElementById('filterQuizLevel')?.value || '';
+        let filtered = courses.filter(c => {
+            const match = c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term);
+            return match && (level ? c.level === level : true);
+        });
+        const container = document.getElementById('quizzesContainer');
+        if (!container) return;
+        if (!filtered.length) {
+            container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon"><i class="fas fa-search"></i></div><h3 class="empty-title">No Quizzes Found</h3><p class="empty-text">Try adjusting your search or filters</p></div>`;
+            return;
+        }
+        container.innerHTML = filtered.map(c => createQuizCard(c)).join('');
+    }
+
+    // ===== START QUIZ =====
+    function startQuiz(courseId) {
+        const course = getCourse(courseId);
+        if (!course || !course.quizQuestions) return;
+
+        const questions = course.quizQuestions;
+        let currentQ = 0;
+        let score = 0;
+        let answered = [];
+
+        const modal = document.getElementById('quizModal');
+        const title = document.getElementById('quizModalTitle');
+        const subtitle = document.getElementById('quizModalSubtitle');
+        const body = document.getElementById('quizModalBody');
+
+        title.textContent = `${course.name} Quiz`;
+        subtitle.textContent = `Test your knowledge • ${questions.length} questions`;
+
+        function renderQuestion() {
+            if (currentQ >= questions.length) {
+                // Show results
+                const passed = score >= Math.ceil(questions.length * 0.6);
+                body.innerHTML = `
+                    <div class="quiz-result">
+                        <div class="score ${passed ? 'pass' : 'fail'}">${score}/${questions.length}</div>
+                        <p style="font-size:1.2rem; margin:0.5rem 0;">${passed ? '🎉 Congratulations! You passed!' : '💪 Keep practicing! Try again.'}</p>
+                        <p style="color:var(--gray-500);">You need ${Math.ceil(questions.length * 0.6)} correct to pass.</p>
+                        <button class="btn btn-primary" onclick="closeQuizModal()" style="margin-top:1rem;"><i class="fas fa-times"></i> Close</button>
                     </div>
                 `;
+                // Update progress
+                const enrolled = getEnrolled(courseId);
+                if (enrolled && passed && !enrolled.completed.includes(-1)) {
+                    enrolled.quizzesPassed += 1;
+                    enrolled.completed.push(-1); // Mark quiz as completed
+                    updateCourseProgress(courseId);
+                }
+                return;
+            }
+
+            const q = questions[currentQ];
+            const isAnswered = answered[currentQ] !== undefined;
+            const selectedAnswer = answered[currentQ];
+
+            body.innerHTML = `
+                <div class="quiz-question">
+                    <div class="q-text">Question ${currentQ + 1} of ${questions.length}: ${q.question}</div>
+                    <div class="q-options">
+                        ${q.options.map((opt, idx) => {
+                            let classes = '';
+                            if (isAnswered) {
+                                if (idx === q.correct) classes = 'correct disabled';
+                                else if (idx === selectedAnswer && idx !== q.correct) classes = 'wrong disabled';
+                                else classes = 'disabled';
+                            }
+                            const checked = selectedAnswer === idx ? 'checked' : '';
+                            return `<label class="${classes}">
+                                <input type="radio" name="quiz_question" value="${idx}" ${checked} ${isAnswered ? 'disabled' : ''}>
+                                ${opt}
+                            </label>`;
+                        }).join('')}
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; justify-content:space-between;">
+                    <span style="color:var(--gray-500); font-size:0.9rem;">Question ${currentQ + 1}/${questions.length}</span>
+                    ${!isAnswered ? `
+                        <button class="btn btn-primary" onclick="submitQuizAnswer('${courseId}')">
+                            <i class="fas fa-check"></i> Submit Answer
+                        </button>
+                    ` : `
+                        <button class="btn btn-primary" onclick="nextQuizQuestion()">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    `}
+                </div>
+            `;
+
+            modal.classList.add('active');
+        }
+
+        // Make functions available globally
+        window.submitQuizAnswer = function(cid) {
+            const selected = document.querySelector('input[name="quiz_question"]:checked');
+            if (!selected) {
+                alert('Please select an answer!');
+                return;
+            }
+            const value = parseInt(selected.value);
+            const q = questions[currentQ];
+            if (value === q.correct) score++;
+            answered[currentQ] = value;
+            renderQuestion();
+        };
+
+        window.nextQuizQuestion = function() {
+            currentQ++;
+            renderQuestion();
+        };
+
+        window.closeQuizModal = function() {
+            modal.classList.remove('active');
+            updateAllUI();
+        };
+
+        renderQuestion();
+    }
+
+    function closeQuizModal() {
+        document.getElementById('quizModal').classList.remove('active');
+        updateAllUI();
+    }
+
+    // ===== FILTER COURSES =====
+    function filterCourses() {
+        const term = document.getElementById('searchCourses')?.value?.toLowerCase() || '';
+        const level = document.getElementById('filterLevel')?.value || '';
+        const sort = document.getElementById('sortCourses')?.value || 'popular';
+        let filtered = courses.filter(c => {
+            const match = c.name.toLowerCase().includes(term) || c.description.toLowerCase().includes(term) || c.code.toLowerCase().includes(term);
+            return match && (level ? c.level === level : true);
+        });
+        if (sort === 'popular') filtered.sort((a,b) => b.stats.learners - a.stats.learners);
+        else if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+        const container = document.getElementById('coursesContainer');
+        if (!container) return;
+        if (!filtered.length) {
+            container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon"><i class="fas fa-search"></i></div><h3 class="empty-title">No Courses Found</h3><p class="empty-text">Try adjusting your search or filters</p></div>`;
+            return;
+        }
+        container.innerHTML = filtered.map(c => createCourseCard(c)).join('');
+    }
+
+    function enrollCourse(id) {
+        if (!getEnrolled(id)) {
+            myCourses.push({ courseId:id, progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 });
+            saveMyCourses();
+            alert(`✅ Enrolled in ${getCourse(id).name}!`);
+            updateAllUI();
+        }
+    }
+
+    function continueCourse(id) {
+        const c = getCourse(id);
+        const enr = getEnrolled(id);
+        if (!enr) { enrollCourse(id); return; }
+        openFullPreview(id);
+    }
+
+    // ===== FULL SCREEN PREVIEW =====
+    function openFullPreview(courseId) {
+        const course = getCourse(courseId);
+        if (!course) return;
+        fsCourseId = courseId;
+        const enrolled = getEnrolled(courseId);
+        fsCurrentModuleIndex = enrolled ? enrolled.currentModule : 0;
+
+        const sidebarTitle = document.getElementById('fsSidebarTitle');
+        if (sidebarTitle) sidebarTitle.textContent = course.name;
+
+        const moduleList = document.getElementById('fsModuleList');
+        if (moduleList) {
+            moduleList.innerHTML = course.modules.map((m, idx) => {
+                const isActive = idx === fsCurrentModuleIndex;
+                const isCompleted = enrolled && enrolled.completed.includes(idx);
+                return `<div class="fs-module-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="fsNavigateModule(${idx})">
+                    <span class="module-num">${idx + 1}</span>
+                    <span class="module-label">${m.name}</span>
+                    <span class="module-status-icon"><i class="fas ${isCompleted ? 'fa-check-circle' : isActive ? 'fa-play-circle' : 'fa-circle'}"></i></span>
+                </div>`;
             }).join('');
         }
 
-        // ===== QUIZZES =====
-        function loadQuizzes() {
-            const container = document.getElementById('quizzesContainer');
-            if (!container) return;
-            container.innerHTML = courses.map(c => createQuizCard(c)).join('');
-        }
+        renderFSContent(course, enrolled);
+        document.getElementById('fullscreenModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
 
-        function createQuizCard(course) {
-            const enrolled = getEnrolled(course.id);
-            const quizCount = course.quizQuestions ? course.quizQuestions.length : 0;
-            const passed = enrolled ? enrolled.quizzesPassed : 0;
-            return `
-                <div class="course-card" data-id="${course.id}">
-                    <div class="course-header" style="background:linear-gradient(135deg, ${course.color}22, #1e2a3a);">
-                        <div class="course-icon" style="background:${course.color};"><i class="fas ${course.icon}"></i></div>
-                        <h3>${course.name} Quiz</h3>
-                        <span class="course-code">${course.code}</span>
-                    </div>
-                    <div class="course-content">
-                        <div style="margin-bottom:16px;">
-                            <span class="quiz-badge"><i class="fas fa-question-circle"></i> ${quizCount} Questions</span>
-                            ${enrolled ? `<span class="quiz-badge" style="background:#dcfce7; color:#059862; margin-left:8px;"><i class="fas fa-check-circle"></i> ${passed} passed</span>` : ''}
-                        </div>
-                        <p>Test your knowledge on ${course.name}. Answer ${quizCount} questions to complete this quiz.</p>
-                        <div class="course-stats">
-                            <span class="stat-tag"><i class="fas fa-question"></i> ${quizCount} questions</span>
-                            <span class="stat-tag"><i class="fas fa-clock"></i> ~${Math.round(quizCount * 0.5)} min</span>
-                        </div>
-                        <div class="course-actions">
-                            <button class="btn btn-success" onclick="startQuiz('${course.id}')">
-                                <i class="fas fa-play"></i> Start Quiz
-                            </button>
-                        </div>
-                    </div>
+    function fsNavigateModule(index) {
+        const course = getCourse(fsCourseId);
+        if (!course) return;
+        const enrolled = getEnrolled(fsCourseId);
+        fsCurrentModuleIndex = index;
+        document.querySelectorAll('.fs-module-item').forEach((el, idx) => {
+            el.classList.toggle('active', idx === index);
+        });
+        renderFSContent(course, enrolled);
+    }
+
+    function renderFSContent(course, enrolled) {
+        const module = course.modules[fsCurrentModuleIndex];
+        const titleEl = document.getElementById('fsModalTitle');
+        const subtitleEl = document.getElementById('fsModalSubtitle');
+        if (titleEl) titleEl.textContent = course.name;
+        if (subtitleEl) subtitleEl.textContent = `${course.code} • ${course.level.charAt(0).toUpperCase() + course.level.slice(1)} Level • Module ${fsCurrentModuleIndex + 1}/${course.modules.length}`;
+
+        const body = document.getElementById('fsModalBody');
+        if (!body) return;
+        body.innerHTML = `
+            <h3>${module.name}</h3>
+            <p class="desc">${course.longDescription}</p>
+            <div class="exercise-container">
+                <h4><i class="fas fa-laptop-code"></i> Try it Yourself</h4>
+                <div class="code-editor">
+                    <textarea id="fsCodeEditor" placeholder="Write your code here...">${getExerciseCode(course.id)}</textarea>
+                    <button class="run-btn" onclick="runFullCode()"><i class="fas fa-play"></i> Run Code</button>
                 </div>
-            `;
-        }
+                <div id="fsOutput">Output will appear here...</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-light" onclick="closeFullModal()"><i class="fas fa-times"></i> Close</button>
+                ${enrolled ? `<button class="btn btn-primary-light" onclick="fsNextModule()"><i class="fas fa-arrow-right"></i> Next Module</button>` : ''}
+                ${!enrolled ? `<button class="btn btn-primary-light" onclick="enrollCourse('${course.id}'); closeFullModal();"><i class="fas fa-graduation-cap"></i> Enroll Now</button>` : ''}
+            </div>
+        `;
+        document.querySelectorAll('.fs-module-item').forEach((el, idx) => {
+            el.classList.toggle('active', idx === fsCurrentModuleIndex);
+        });
+    }
 
-        function filterQuizzes() {
-            const term = document.getElementById('searchQuizzes')?.value?.toLowerCase() || '';
-            const level = document.getElementById('filterQuizLevel')?.value || '';
-            let filtered = courses.filter(c => {
-                const match = c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term);
-                return match && (level ? c.level === level : true);
-            });
-            const container = document.getElementById('quizzesContainer');
-            if (!container) return;
-            if (!filtered.length) {
-                container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon"><i class="fas fa-search"></i></div><h3 class="empty-title">No Quizzes Found</h3><p class="empty-text">Try adjusting your search or filters</p></div>`;
-                return;
+    function fsNextModule() {
+        const course = getCourse(fsCourseId);
+        if (!course) return;
+        const enr = getEnrolled(fsCourseId);
+        if (!enr) return;
+
+        if (fsCurrentModuleIndex < course.modules.length - 1) {
+            if (!enr.completed.includes(fsCurrentModuleIndex)) {
+                enr.completed.push(fsCurrentModuleIndex);
+                enr.exercisesCompleted += course.modules[fsCurrentModuleIndex].exercises || 0;
             }
-            container.innerHTML = filtered.map(c => createQuizCard(c)).join('');
-        }
-
-        // ===== START QUIZ =====
-        function startQuiz(courseId) {
-            const course = getCourse(courseId);
-            if (!course || !course.quizQuestions) return;
-
-            const questions = course.quizQuestions;
-            let currentQ = 0;
-            let score = 0;
-            let answered = [];
-
-            const modal = document.getElementById('quizModal');
-            const title = document.getElementById('quizModalTitle');
-            const subtitle = document.getElementById('quizModalSubtitle');
-            const body = document.getElementById('quizModalBody');
-
-            title.textContent = `${course.name} Quiz`;
-            subtitle.textContent = `Test your knowledge • ${questions.length} questions`;
-
-            function renderQuestion() {
-                if (currentQ >= questions.length) {
-                    // Show results
-                    const passed = score >= Math.ceil(questions.length * 0.6);
-                    body.innerHTML = `
-                        <div class="quiz-result">
-                            <div class="score ${passed ? 'pass' : 'fail'}">${score}/${questions.length}</div>
-                            <p style="font-size:1.2rem; margin:0.5rem 0;">${passed ? '🎉 Congratulations! You passed!' : '💪 Keep practicing! Try again.'}</p>
-                            <p style="color:var(--gray-500);">You need ${Math.ceil(questions.length * 0.6)} correct to pass.</p>
-                            <button class="btn btn-primary" onclick="closeQuizModal()" style="margin-top:1rem;"><i class="fas fa-times"></i> Close</button>
-                        </div>
-                    `;
-                    // Update progress
-                    const enrolled = getEnrolled(courseId);
-                    if (enrolled && passed && !enrolled.completed.includes(-1)) {
-                        enrolled.quizzesPassed += 1;
-                        enrolled.completed.push(-1); // Mark quiz as completed
-                        updateCourseProgress(courseId);
-                    }
-                    return;
-                }
-
-                const q = questions[currentQ];
-                const isAnswered = answered[currentQ] !== undefined;
-                const selectedAnswer = answered[currentQ];
-
-                body.innerHTML = `
-                    <div class="quiz-question">
-                        <div class="q-text">Question ${currentQ + 1} of ${questions.length}: ${q.question}</div>
-                        <div class="q-options">
-                            ${q.options.map((opt, idx) => {
-                                let classes = '';
-                                if (isAnswered) {
-                                    if (idx === q.correct) classes = 'correct disabled';
-                                    else if (idx === selectedAnswer && idx !== q.correct) classes = 'wrong disabled';
-                                    else classes = 'disabled';
-                                }
-                                const checked = selectedAnswer === idx ? 'checked' : '';
-                                return `<label class="${classes}">
-                                    <input type="radio" name="quiz_question" value="${idx}" ${checked} ${isAnswered ? 'disabled' : ''}>
-                                    ${opt}
-                                </label>`;
-                            }).join('')}
-                        </div>
-                    </div>
-                    <div style="display:flex; gap:12px; justify-content:space-between;">
-                        <span style="color:var(--gray-500); font-size:0.9rem;">Question ${currentQ + 1}/${questions.length}</span>
-                        ${!isAnswered ? `
-                            <button class="btn btn-primary" onclick="submitQuizAnswer('${courseId}')">
-                                <i class="fas fa-check"></i> Submit Answer
-                            </button>
-                        ` : `
-                            <button class="btn btn-primary" onclick="nextQuizQuestion()">
-                                Next <i class="fas fa-arrow-right"></i>
-                            </button>
-                        `}
-                    </div>
-                `;
-
-                modal.classList.add('active');
+            fsCurrentModuleIndex++;
+            enr.currentModule = fsCurrentModuleIndex;
+            updateCourseProgress(fsCourseId);
+            fsNavigateModule(fsCurrentModuleIndex);
+            loadMyLearning();
+        } else {
+            if (!enr.completed.includes(fsCurrentModuleIndex)) {
+                enr.completed.push(fsCurrentModuleIndex);
+                enr.exercisesCompleted += course.modules[fsCurrentModuleIndex].exercises || 0;
             }
-
-            // Make functions available globally
-            window.submitQuizAnswer = function(cid) {
-                const selected = document.querySelector('input[name="quiz_question"]:checked');
-                if (!selected) {
-                    alert('Please select an answer!');
-                    return;
-                }
-                const value = parseInt(selected.value);
-                const q = questions[currentQ];
-                if (value === q.correct) score++;
-                answered[currentQ] = value;
-                renderQuestion();
-            };
-
-            window.nextQuizQuestion = function() {
-                currentQ++;
-                renderQuestion();
-            };
-
-            window.closeQuizModal = function() {
-                modal.classList.remove('active');
-                updateAllUI();
-            };
-
-            renderQuestion();
+            updateCourseProgress(fsCourseId);
+            loadMyLearning();
+            alert('🎉 Congratulations! You completed all modules!');
+            closeFullModal();
         }
+    }
 
-        function closeQuizModal() {
-            document.getElementById('quizModal').classList.remove('active');
-            updateAllUI();
-        }
+    function closeFullModal() {
+        document.getElementById('fullscreenModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        updateAllUI();
+    }
 
-        // ===== FILTER COURSES =====
-        function filterCourses() {
-            const term = document.getElementById('searchCourses')?.value?.toLowerCase() || '';
-            const level = document.getElementById('filterLevel')?.value || '';
-            const sort = document.getElementById('sortCourses')?.value || 'popular';
-            let filtered = courses.filter(c => {
-                const match = c.name.toLowerCase().includes(term) || c.description.toLowerCase().includes(term) || c.code.toLowerCase().includes(term);
-                return match && (level ? c.level === level : true);
-            });
-            if (sort === 'popular') filtered.sort((a,b) => b.stats.learners - a.stats.learners);
-            else if (sort === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
-            const container = document.getElementById('coursesContainer');
-            if (!container) return;
-            if (!filtered.length) {
-                container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon"><i class="fas fa-search"></i></div><h3 class="empty-title">No Courses Found</h3><p class="empty-text">Try adjusting your search or filters</p></div>`;
-                return;
+    function runFullCode() {
+        const output = document.getElementById('fsOutput');
+        if (!output) return;
+        output.innerHTML = '⏳ Running...';
+        setTimeout(() => {
+            output.innerHTML = '✅ Code executed successfully!\n\nOutput: Hello World (simulated)';
+        }, 700);
+    }
+
+    function getExerciseCode(id) {
+        const map = { 
+            html:'<!DOCTYPE html>\n<html>\n<head><title>Page</title></head>\n<body>\n    <h1>Hello World</h1>\n</body>\n</html>', 
+            css:'body { background: #f0f0f0; }\nh1 { color: #4361ee; }', 
+            javascript:'// JavaScript code\nfunction greet(name) {\n    return "Hello, " + name;\n}\nconsole.log(greet("World"));' 
+        };
+        return map[id] || '// write your code here';
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        const map = { explore:'explore-tab', mylearning:'mylearning-tab', quizzes:'quizzes-tab' };
+        const target = document.getElementById(map[tab]);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            const text = b.textContent.toLowerCase();
+            if (text.includes('browse') && tab === 'explore') b.classList.add('active');
+            else if (text.includes('my learning') && tab === 'mylearning') b.classList.add('active');
+            else if (text.includes('quizzes') && tab === 'quizzes') b.classList.add('active');
+        });
+        if (tab === 'mylearning') loadMyLearning();
+        if (tab === 'quizzes') loadQuizzes();
+    }
+
+    // ===== DEEP LINK FROM HEADER SEARCH =====
+    // body.html's search dropdown stores these two sessionStorage keys
+    // when the person clicks a result: `searchTerm` (what they typed)
+    // and, if the result matched one of the six real courses defined
+    // above, `openCourseId` (that course's id). On load here we use
+    // them to filter the grid and/or pop the course straight open,
+    // then clear both so a plain page refresh doesn't repeat it.
+    function handleIncomingSearch() {
+        const savedSearchTerm = sessionStorage.getItem('searchTerm');
+        const openCourseId = sessionStorage.getItem('openCourseId');
+
+        if (savedSearchTerm) {
+            const searchInput = document.getElementById('searchCourses');
+            if (searchInput) {
+                searchInput.value = savedSearchTerm;
+                filterCourses();
             }
-            container.innerHTML = filtered.map(c => createCourseCard(c)).join('');
+            sessionStorage.removeItem('searchTerm');
         }
 
-        function enrollCourse(id) {
-            if (!getEnrolled(id)) {
-                myCourses.push({ courseId:id, progress:0, completed:[], currentModule:0, exercisesCompleted:0, quizzesPassed:0 });
-                saveMyCourses();
-                alert(`✅ Enrolled in ${getCourse(id).name}!`);
-                updateAllUI();
-            }
-        }
-
-        function continueCourse(id) {
-            const c = getCourse(id);
-            const enr = getEnrolled(id);
-            if (!enr) { enrollCourse(id); return; }
-            openFullPreview(id);
-        }
-
-        // ===== FULL SCREEN PREVIEW =====
-        function openFullPreview(courseId) {
-            const course = getCourse(courseId);
-            if (!course) return;
-            fsCourseId = courseId;
-            const enrolled = getEnrolled(courseId);
-            fsCurrentModuleIndex = enrolled ? enrolled.currentModule : 0;
-
-            const sidebarTitle = document.getElementById('fsSidebarTitle');
-            if (sidebarTitle) sidebarTitle.textContent = course.name;
-
-            const moduleList = document.getElementById('fsModuleList');
-            if (moduleList) {
-                moduleList.innerHTML = course.modules.map((m, idx) => {
-                    const isActive = idx === fsCurrentModuleIndex;
-                    const isCompleted = enrolled && enrolled.completed.includes(idx);
-                    return `<div class="fs-module-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="fsNavigateModule(${idx})">
-                        <span class="module-num">${idx + 1}</span>
-                        <span class="module-label">${m.name}</span>
-                        <span class="module-status-icon"><i class="fas ${isCompleted ? 'fa-check-circle' : isActive ? 'fa-play-circle' : 'fa-circle'}"></i></span>
-                    </div>`;
-                }).join('');
-            }
-
-            renderFSContent(course, enrolled);
-            document.getElementById('fullscreenModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function fsNavigateModule(index) {
-            const course = getCourse(fsCourseId);
-            if (!course) return;
-            const enrolled = getEnrolled(fsCourseId);
-            fsCurrentModuleIndex = index;
-            document.querySelectorAll('.fs-module-item').forEach((el, idx) => {
-                el.classList.toggle('active', idx === index);
-            });
-            renderFSContent(course, enrolled);
-        }
-
-        function renderFSContent(course, enrolled) {
-            const module = course.modules[fsCurrentModuleIndex];
-            const titleEl = document.getElementById('fsModalTitle');
-            const subtitleEl = document.getElementById('fsModalSubtitle');
-            if (titleEl) titleEl.textContent = course.name;
-            if (subtitleEl) subtitleEl.textContent = `${course.code} • ${course.level.charAt(0).toUpperCase() + course.level.slice(1)} Level • Module ${fsCurrentModuleIndex + 1}/${course.modules.length}`;
-
-            const body = document.getElementById('fsModalBody');
-            if (!body) return;
-            body.innerHTML = `
-                <h3>${module.name}</h3>
-                <p class="desc">${course.longDescription}</p>
-                <div class="exercise-container">
-                    <h4><i class="fas fa-laptop-code"></i> Try it Yourself</h4>
-                    <div class="code-editor">
-                        <textarea id="fsCodeEditor" placeholder="Write your code here...">${getExerciseCode(course.id)}</textarea>
-                        <button class="run-btn" onclick="runFullCode()"><i class="fas fa-play"></i> Run Code</button>
-                    </div>
-                    <div id="fsOutput">Output will appear here...</div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-outline-light" onclick="closeFullModal()"><i class="fas fa-times"></i> Close</button>
-                    ${enrolled ? `<button class="btn btn-primary-light" onclick="fsNextModule()"><i class="fas fa-arrow-right"></i> Next Module</button>` : ''}
-                    ${!enrolled ? `<button class="btn btn-primary-light" onclick="enrollCourse('${course.id}'); closeFullModal();"><i class="fas fa-graduation-cap"></i> Enroll Now</button>` : ''}
-                </div>
-            `;
-            document.querySelectorAll('.fs-module-item').forEach((el, idx) => {
-                el.classList.toggle('active', idx === fsCurrentModuleIndex);
-            });
-        }
-
-        function fsNextModule() {
-            const course = getCourse(fsCourseId);
-            if (!course) return;
-            const enr = getEnrolled(fsCourseId);
-            if (!enr) return;
-
-            if (fsCurrentModuleIndex < course.modules.length - 1) {
-                if (!enr.completed.includes(fsCurrentModuleIndex)) {
-                    enr.completed.push(fsCurrentModuleIndex);
-                    enr.exercisesCompleted += course.modules[fsCurrentModuleIndex].exercises || 0;
-                }
-                fsCurrentModuleIndex++;
-                enr.currentModule = fsCurrentModuleIndex;
-                updateCourseProgress(fsCourseId);
-                fsNavigateModule(fsCurrentModuleIndex);
-                loadMyLearning();
+        if (openCourseId) {
+            const course = getCourse(openCourseId);
+            if (course) {
+                // Real course - open its full preview directly.
+                openFullPreview(openCourseId);
             } else {
-                if (!enr.completed.includes(fsCurrentModuleIndex)) {
-                    enr.completed.push(fsCurrentModuleIndex);
-                    enr.exercisesCompleted += course.modules[fsCurrentModuleIndex].exercises || 0;
-                }
-                updateCourseProgress(fsCourseId);
-                loadMyLearning();
-                alert('🎉 Congratulations! You completed all modules!');
-                closeFullModal();
+                // Not one of the six real courses (e.g. "mathematics",
+                // "physics") - nothing to open, just leave the grid
+                // filtered by the search term set above.
+                const card = document.querySelector(`.course-card[data-id="${openCourseId}"]`);
+                if (card) card.classList.add('highlight-match');
             }
+            sessionStorage.removeItem('openCourseId');
         }
+    }
 
-        function closeFullModal() {
-            document.getElementById('fullscreenModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            updateAllUI();
+    document.addEventListener('DOMContentLoaded', () => { 
+        loadCourses(); 
+        loadMyLearning(); 
+        loadQuizzes(); 
+        handleIncomingSearch();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeFullModal();
+            closeQuizModal();
         }
-
-        function runFullCode() {
-            const output = document.getElementById('fsOutput');
-            if (!output) return;
-            output.innerHTML = '⏳ Running...';
-            setTimeout(() => {
-                output.innerHTML = '✅ Code executed successfully!\n\nOutput: Hello World (simulated)';
-            }, 700);
-        }
-
-        function getExerciseCode(id) {
-            const map = { 
-                html:'<!DOCTYPE html>\n<html>\n<head><title>Page</title></head>\n<body>\n    <h1>Hello World</h1>\n</body>\n</html>', 
-                css:'body { background: #f0f0f0; }\nh1 { color: #4361ee; }', 
-                javascript:'// JavaScript code\nfunction greet(name) {\n    return "Hello, " + name;\n}\nconsole.log(greet("World"));' 
-            };
-            return map[id] || '// write your code here';
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            const map = { explore:'explore-tab', mylearning:'mylearning-tab', quizzes:'quizzes-tab' };
-            const target = document.getElementById(map[tab]);
-            if (target) target.classList.add('active');
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                const text = b.textContent.toLowerCase();
-                if (text.includes('browse') && tab === 'explore') b.classList.add('active');
-                else if (text.includes('my learning') && tab === 'mylearning') b.classList.add('active');
-                else if (text.includes('quizzes') && tab === 'quizzes') b.classList.add('active');
-            });
-            if (tab === 'mylearning') loadMyLearning();
-            if (tab === 'quizzes') loadQuizzes();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => { 
-            loadCourses(); 
-            loadMyLearning(); 
-            loadQuizzes(); 
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeFullModal();
-                closeQuizModal();
-            }
-        });
-    </script>
-</body>
-</html>
+    });
+</script>
 {% endblock %}

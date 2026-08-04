@@ -44,6 +44,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            
         }
 
         .page-header {
@@ -858,7 +859,7 @@
                 <div class="chart-header">
                     <h3 class="chart-title">📈 Weekly Study Activity</h3>
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 0.8rem; color: var(--gray-500);">⏱️ Tracking site-wide</span>
+                        <span style="font-size: 0.8rem; color: var(--gray-500);">⏱️ Tracking in real-time</span>
                     </div>
                 </div>
                 <div class="time-chart" id="timeChart">
@@ -899,15 +900,26 @@
         }
 
         // =========================
-        // STUDY TIME (read-only here)
-        // Tracking itself now runs site-wide from body.html, so time
-        // accumulates across every page instead of resetting whenever
-        // you navigate away from this one. This page only reads that
-        // shared localStorage data to render the stats/chart below.
+        // PERSISTENT STUDY TIME TRACKING (NO RESET ON REFRESH)
         // =========================
         function getStudyTimeKey() {
             const email = '{{ session.get('email', 'default_user') }}';
             return `studyTimeData_${email}`;
+        }
+
+        function loadStudyTime() {
+            const key = getStudyTimeKey();
+            const stored = localStorage.getItem(key);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    // If corrupted, create fresh
+                    return createFreshStudyData();
+                }
+            }
+            // No data exists, create fresh
+            return createFreshStudyData();
         }
 
         function createFreshStudyData() {
@@ -922,17 +934,77 @@
             };
         }
 
-        function loadStudyTime() {
+        function saveStudyTime(data) {
             const key = getStudyTimeKey();
-            const stored = localStorage.getItem(key);
-            if (stored) {
-                try {
-                    return JSON.parse(stored);
-                } catch (e) {
-                    return createFreshStudyData();
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        // Start tracking a study session
+        function startStudySession() {
+            const data = loadStudyTime();
+            if (!data.isTracking) {
+                data.isTracking = true;
+                data.sessionStart = Date.now();
+                data.lastActivity = Date.now();
+                saveStudyTime(data);
+                console.log('📚 Study session started');
+            }
+        }
+
+        // Track activity (called on user interactions)
+        function trackActivity() {
+            const data = loadStudyTime();
+            if (data.isTracking && data.sessionStart) {
+                const now = Date.now();
+                const elapsedSeconds = (now - data.sessionStart) / 1000;
+                
+                // Only count if more than 5 seconds elapsed
+                if (elapsedSeconds > 5) {
+                    // Update total time
+                    data.totalSeconds += elapsedSeconds;
+                    
+                    // Record daily session
+                    const today = new Date().toISOString().split('T')[0];
+                    if (!data.dailySessions[today]) {
+                        data.dailySessions[today] = 0;
+                    }
+                    data.dailySessions[today] += elapsedSeconds;
+                    
+                    // Update session start to now to avoid double counting
+                    data.sessionStart = now;
+                    data.lastActivity = now;
+                    data.totalSessions += 1;
+                    
+                    saveStudyTime(data);
+                    updateTimeDisplay();
                 }
             }
-            return createFreshStudyData();
+        }
+
+        // Stop tracking (call when user leaves or is inactive)
+        function stopStudySession() {
+            const data = loadStudyTime();
+            if (data.isTracking) {
+                // Record final activity before stopping
+                if (data.sessionStart) {
+                    const elapsedSeconds = (Date.now() - data.sessionStart) / 1000;
+                    if (elapsedSeconds > 5) {
+                        data.totalSeconds += elapsedSeconds;
+                        const today = new Date().toISOString().split('T')[0];
+                        if (!data.dailySessions[today]) {
+                            data.dailySessions[today] = 0;
+                        }
+                        data.dailySessions[today] += elapsedSeconds;
+                        data.totalSessions += 1;
+                    }
+                }
+                data.isTracking = false;
+                data.sessionStart = null;
+                data.lastActivity = Date.now();
+                saveStudyTime(data);
+                console.log('⏹️ Study session stopped');
+                updateTimeDisplay();
+            }
         }
 
         // =========================
@@ -1032,7 +1104,7 @@
                     <div style="text-align: center; padding: 40px 20px; color: var(--gray-500); width: 100%;">
                         <i class="fas fa-clock" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
                         <p>Start learning to track your study time!</p>
-                        <p style="font-size: 0.9rem; margin-top: 5px;">Time will be recorded as you browse the site</p>
+                        <p style="font-size: 0.9rem; margin-top: 5px;">Time will be recorded as you complete modules</p>
                     </div>
                 `;
                 return;
@@ -1061,6 +1133,68 @@
                 `;
             }
             chart.innerHTML = html;
+        }
+
+        // =========================
+        // ACTIVITY TRACKING SETUP
+        // =========================
+        function setupActivityTracking() {
+            const events = ['click', 'scroll', 'keydown', 'mousemove', 'touchstart', 'touchmove'];
+            let activityTimeout;
+            
+            events.forEach(event => {
+                document.addEventListener(event, function() {
+                    clearTimeout(activityTimeout);
+                    activityTimeout = setTimeout(() => {
+                        const data = loadStudyTime();
+                        if (data.isTracking) {
+                            trackActivity();
+                        } else {
+                            startStudySession();
+                        }
+                    }, 1000);
+                });
+            });
+            
+            // Track page visibility (user switching tabs)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    stopStudySession();
+                } else {
+                    // Resume tracking when user comes back
+                    startStudySession();
+                    // Check if we need to record time
+                    trackActivity();
+                }
+            });
+            
+            // Track before user leaves
+            window.addEventListener('beforeunload', function() {
+                stopStudySession();
+            });
+        }
+
+        // =========================
+        // INITIALIZATION
+        // =========================
+        function initializeTracking() {
+            // Load existing data or create fresh
+            const data = loadStudyTime();
+            
+            // If no data exists (first visit), create fresh
+            if (!data.dailySessions || Object.keys(data.dailySessions).length === 0) {
+                const fresh = createFreshStudyData();
+                saveStudyTime(fresh);
+            }
+            
+            // Start tracking immediately
+            startStudySession();
+            
+            // Update display
+            updateTimeDisplay();
+            
+            // Set up activity tracking
+            setupActivityTracking();
         }
 
         // =========================
@@ -1555,7 +1689,7 @@
             loadCourseCards(enrolled);
             loadAchievements(enrolled);
             
-            // Render the site-wide study time data (tracked in body.html)
+            // Update time display (preserved across refreshes)
             updateTimeDisplay();
         }
 
@@ -1797,16 +1931,21 @@
         // DOCUMENT READY
         // =========================
         document.addEventListener('DOMContentLoaded', function() {
-            // Load all data (actual tracking is handled globally by body.html)
+            // Initialize time tracking (preserves existing data)
+            initializeTracking();
+            
+            // Load all data
             loadAllData();
             
             // Set up event listeners
             setupEventListeners();
             
-            // Refresh the displayed numbers periodically so this tab
-            // reflects time accrued while sitting open, and while
-            // browsing other tabs/pages in the meantime.
+            // Update time every 30 seconds
             setInterval(function() {
+                const data = loadStudyTime();
+                if (data.isTracking) {
+                    trackActivity();
+                }
                 updateTimeDisplay();
             }, 30000);
         });

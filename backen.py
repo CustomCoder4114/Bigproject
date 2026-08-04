@@ -3,6 +3,8 @@ import sqlite3
 import os
 import uuid
 import json
+import random
+import hashlib
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import math
@@ -20,6 +22,80 @@ ALLOWED_EXTENSIONS = {
 }
 MAX_CONTENT_LENGTH = 2 * 1024 * 1024 * 1024  # 2GB max file size
 CHUNK_SIZE = 10 * 1024 * 1024  # 10MB chunks
+
+# ============ QUOTES ============
+QUOTES = [
+    {"text": "Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.", "author": "Albert Schweitzer"},
+    {"text": "Education is the most powerful weapon which you can use to change the world.", "author": "Nelson Mandela"},
+    {"text": "An investment in knowledge pays the best interest.", "author": "Benjamin Franklin"},
+    {"text": "One child, one teacher, one book, one pen can change the world.", "author": "Malala Yousafzai"},
+    {"text": "The roots of education are bitter, but the fruit is sweet.", "author": "Aristotle"},
+    {"text": "Every expert was once a beginner. Keep learning, keep growing.", "author": "Anonymous"},
+    {"text": "The beautiful thing about learning is that nobody can take it away from you.", "author": "B.B. King"},
+    {"text": "Learning never exhausts the mind.", "author": "Leonardo da Vinci"},
+    {"text": "Live as if you were to die tomorrow. Learn as if you were to live forever.", "author": "Mahatma Gandhi"},
+    {"text": "The only way to do great work is to love what you do.", "author": "Steve Jobs"},
+    {"text": "Believe you can and you're halfway there.", "author": "Theodore Roosevelt"},
+    {"text": "It does not matter how slowly you go as long as you do not stop.", "author": "Confucius"},
+    {"text": "The future belongs to those who believe in the beauty of their dreams.", "author": "Eleanor Roosevelt"},
+    {"text": "Strive not to be a success, but rather to be of value.", "author": "Albert Einstein"},
+    {"text": "The only person you are destined to become is the person you decide to be.", "author": "Ralph Waldo Emerson"},
+    {"text": "Everything you've ever wanted is sitting on the other side of fear.", "author": "George Addair"},
+    {"text": "Success usually comes to those who are too busy to be looking for it.", "author": "Henry David Thoreau"},
+    {"text": "The secret of getting ahead is getting started.", "author": "Mark Twain"},
+    {"text": "Don't watch the clock; do what it does. Keep going.", "author": "Sam Levenson"},
+    {"text": "The only impossible journey is the one you never begin.", "author": "Tony Robbins"},
+    {"text": "Your limitation—it's only your imagination.", "author": "Anonymous"},
+    {"text": "Push yourself, because no one else is going to do it for you.", "author": "Anonymous"},
+    {"text": "Great things never come from comfort zones.", "author": "Anonymous"},
+    {"text": "Dream it. Wish it. Do it.", "author": "Anonymous"},
+    {"text": "Success doesn't just find you. You have to go out and get it.", "author": "Anonymous"},
+    {"text": "The harder you work for something, the greater you'll feel when you achieve it.", "author": "Anonymous"},
+    {"text": "Dream bigger. Do bigger.", "author": "Anonymous"},
+    {"text": "Don't stop when you're tired. Stop when you're done.", "author": "Anonymous"},
+    {"text": "Wake up with determination. Go to bed with satisfaction.", "author": "Anonymous"},
+    {"text": "Do something today that your future self will thank you for.", "author": "Anonymous"},
+    {"text": "Little things make big days.", "author": "Anonymous"},
+    {"text": "It's going to be hard, but hard does not mean impossible.", "author": "Anonymous"},
+    {"text": "The best time to start was yesterday. The next best time is now.", "author": "Anonymous"},
+    {"text": "You don't have to be great to start, but you have to start to be great.", "author": "Zig Ziglar"},
+    {"text": "The expert in anything was once a beginner.", "author": "Helen Hayes"},
+    {"text": "The only source of knowledge is experience.", "author": "Albert Einstein"},
+    {"text": "Tell me and I forget. Teach me and I remember. Involve me and I learn.", "author": "Benjamin Franklin"},
+    {"text": "Knowledge is power.", "author": "Francis Bacon"},
+    {"text": "Learning is a treasure that will follow its owner everywhere.", "author": "Chinese Proverb"},
+    {"text": "The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.", "author": "Brian Herbert"},
+    {"text": "Education is not preparation for life; education is life itself.", "author": "John Dewey"},
+    {"text": "The beautiful thing about learning is that no one can take it away from you.", "author": "B.B. King"},
+    {"text": "Change is the end result of all true learning.", "author": "Leo Buscaglia"},
+    {"text": "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.", "author": "Albert Einstein"},
+    {"text": "The mind is not a vessel to be filled, but a fire to be kindled.", "author": "Plutarch"},
+    {"text": "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.", "author": "Malcolm X"},
+    {"text": "Learning never stops, it just changes direction.", "author": "Anonymous"},
+    {"text": "The more that you read, the more things you will know. The more that you learn, the more places you'll go.", "author": "Dr. Seuss"},
+    {"text": "You are never too old to set another goal or to dream a new dream.", "author": "C.S. Lewis"},
+    {"text": "Success is not final, failure is not fatal: it is the courage to continue that counts.", "author": "Winston Churchill"},
+    {"text": "The only limit to our realization of tomorrow is our doubts of today.", "author": "Franklin D. Roosevelt"},
+    {"text": "It always seems impossible until it's done.", "author": "Nelson Mandela"},
+]
+
+def get_random_quote():
+    """Get a random quote - changes on every page load"""
+    return random.choice(QUOTES)
+
+def get_daily_quote():
+    """Get a quote based on the day of the year - changes daily"""
+    today = datetime.now()
+    day_of_year = today.timetuple().tm_yday
+    return QUOTES[day_of_year % len(QUOTES)]
+
+def get_user_quote(user_email):
+    """
+    Get a quote based on user's email hash - consistent per user
+    Changes only when the user logs in again
+    """
+    hash_value = int(hashlib.md5(user_email.encode()).hexdigest(), 16)
+    return QUOTES[hash_value % len(QUOTES)]
 
 # Create upload directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -165,10 +241,16 @@ def init_db():
     ''')
 
     # Add an avatar column to the existing users table if it isn't there
-    # yet. ALTER TABLE has no "IF NOT EXISTS" in SQLite, so we just try it
-    # and ignore the error if the column already exists from a prior run.
     try:
         cursor.execute('ALTER TABLE users ADD COLUMN avatar_filename TEXT')
+    except sqlite3.OperationalError:
+        pass  # column already exists
+
+    # Add a role column so we can tell admins apart from regular users.
+    # Existing rows (and any inserted without specifying a role) default
+    # to 'student', so nothing currently in the DB accidentally becomes admin.
+    try:
+        cursor.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'")
     except sqlite3.OperationalError:
         pass  # column already exists
     
@@ -199,7 +281,7 @@ def login():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT id, firstname, lastname, email 
+            SELECT id, firstname, lastname, email, role
             FROM users 
             WHERE email = ? AND password = ?
         """, (email, password))
@@ -208,12 +290,30 @@ def login():
         conn.close()
 
         if user:
-            # Save user info in s
+            # Save user info in session
             session['user_id'] = user[0]
             session['firstname'] = user[1]
             session['lastname'] = user[2]
             session['email'] = user[3]
+            # Older rows created before the role column existed will read
+            # as None here, so treat anything falsy as a regular student.
+            session['role'] = user[4] or 'student'
+            
+            # Store a quote for this user session
+            # Option 1: Random quote (changes every page load)
+            quote = get_random_quote()
+            # Option 2: User-based quote (changes only when user logs in again)
+            # quote = get_user_quote(user[3])
+            # Option 3: Daily quote (same for everyone all day)
+            # quote = get_daily_quote()
+            
+            session['quote_text'] = quote['text']
+            session['quote_author'] = quote['author']
 
+            # Admins land on the admin dashboard, everyone else on the
+            # regular student dashboard.
+            if session['role'] == 'admin':
+                return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
         else:
             message = "Invalid email or password."
@@ -225,10 +325,73 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
+    # Keep admins on their own dashboard even if they navigate here directly
+    # (e.g. via a bookmark or by typing the URL).
+    if session.get('role') == 'admin':
+        return redirect(url_for('admin_dashboard'))
+    
+    # If quote is not in session (e.g., user directly accessed dashboard without login),
+    # set a default quote
+    if 'quote_text' not in session:
+        quote = get_random_quote()
+        session['quote_text'] = quote['text']
+        session['quote_author'] = quote['author']
+
     return render_template(
         'dashboard.html',
         firstname=session['firstname'],
-        lastname=session['lastname']
+        lastname=session['lastname'],
+        quote_text=session.get('quote_text'),
+        quote_author=session.get('quote_author')
+    )
+
+@app.route('/admin-dashboard')
+def admin_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Non-admins who somehow land here (typed URL, stale bookmark, etc.)
+    # get sent back to the regular dashboard instead of seeing admin data.
+    if session.get('role') != 'admin':
+        return redirect(url_for('dashboard'))
+
+    if 'quote_text' not in session:
+        quote = get_random_quote()
+        session['quote_text'] = quote['text']
+        session['quote_author'] = quote['author']
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM users")
+    total_users = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM users WHERE role = 'admin'")
+    total_admins = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM resources")
+    total_resources = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT id, firstname, lastname, email, role
+        FROM users
+        ORDER BY id DESC
+        LIMIT 10
+    """)
+    recent_users = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        'admin_dashboard.html',
+        firstname=session['firstname'],
+        lastname=session['lastname'],
+        quote_text=session.get('quote_text'),
+        quote_author=session.get('quote_author'),
+        total_users=total_users,
+        total_admins=total_admins,
+        total_resources=total_resources,
+        recent_users=recent_users
     )
 
 @app.route('/career')
@@ -266,8 +429,13 @@ def register():
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
 
-        cursor.execute('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)',
-                       (firstname, lastname, email, password))
+        # Registrations always come in as regular students. Admin accounts
+        # are created separately (see create_admin.py) - never through
+        # this public-facing form.
+        cursor.execute('''
+            INSERT INTO users (firstname, lastname, email, password, role)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (firstname, lastname, email, password, 'student'))
 
         conn.commit()
         conn.close()
@@ -292,7 +460,10 @@ def inject_user():
         firstname=session.get('firstname'),
         lastname=session.get('lastname'),
         user_id=session.get('user_id'),
-        avatar_url=avatar_url
+        role=session.get('role'),
+        avatar_url=avatar_url,
+        quote_text=session.get('quote_text'),
+        quote_author=session.get('quote_author')
     )
 
 @app.route('/body')
@@ -321,20 +492,29 @@ def settings():
         return redirect(url_for('login'))
 
     return render_template('settings.html')
+
 @app.route('/strategies')
 def strategies():
     return render_template('strategies.html')
+
 @app.route('/skills')
 def skills():
     return render_template('skills.html')
+
 @app.route('/messages')
 def messages():
     if 'user_id' not in session:
         return redirect(url_for('login'))
     return render_template('messages.html')
+
 @app.route('/support')
 def support():
     return render_template('support.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 
 # ============ MESSAGING: USER SEARCH ============
 
@@ -378,8 +558,6 @@ def search_users():
         lastname = (lastname or '').strip()
         full_name = f"{firstname} {lastname}".strip()
 
-        # Skip accounts with no usable name rather than showing a
-        # placeholder like "Unknown User" in the search results.
         if not full_name:
             continue
 
@@ -389,8 +567,8 @@ def search_users():
             'id': user_id,
             'name': full_name,
             'avatar': initial,
-            'online': False,   # no presence tracking yet — see notes
-            'lastSeen': ''      # no last-seen tracking yet — see notes
+            'online': False,
+            'lastSeen': ''
         })
 
     return jsonify(results)
@@ -398,8 +576,7 @@ def search_users():
 
 @app.route('/messages/send', methods=['POST'])
 def send_message():
-    """Send a message to a specific user and persist it, so it's tied
-    to that account rather than living only in the sender's browser."""
+    """Send a message to a specific user and persist it."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
@@ -415,7 +592,6 @@ def send_message():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    # Make sure the receiver actually exists
     cursor.execute('SELECT id FROM users WHERE id = ?', (receiver_id,))
     if not cursor.fetchone():
         conn.close()
@@ -466,7 +642,6 @@ def get_conversation(other_user_id):
 
     rows = cursor.fetchall()
 
-    # Mark messages the other user sent to me as read
     cursor.execute('''
         UPDATE messages SET is_read = 1
         WHERE sender_id = ? AND receiver_id = ? AND is_read = 0
@@ -499,7 +674,6 @@ def list_conversations():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    # Every distinct user id I've exchanged a message with
     cursor.execute('''
         SELECT DISTINCT other_id FROM (
             SELECT receiver_id AS other_id FROM messages WHERE sender_id = ?
@@ -559,11 +733,8 @@ def list_conversations():
 
     conn.close()
 
-    # Most recently active conversation first (raw SQLite format sorts fine
-    # lexicographically since it's consistent across all rows)
     conversations.sort(key=lambda c: c['lastTimestamp'] or '', reverse=True)
 
-    # Normalize to proper UTC ISO strings for the response
     for c in conversations:
         c['lastTimestamp'] = to_iso_utc(c['lastTimestamp'])
 
@@ -573,8 +744,7 @@ def list_conversations():
 
 @app.route('/api/settings/upload-photo', methods=['POST'])
 def upload_profile_photo():
-    """Upload/replace the logged-in user's profile photo and persist it,
-    so it's still there after a page reload (previously nothing saved it)."""
+    """Upload/replace the logged-in user's profile photo and persist it."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
@@ -597,7 +767,6 @@ def upload_profile_photo():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    # Remove the previous avatar file so old photos don't pile up on disk
     cursor.execute('SELECT avatar_filename FROM users WHERE id = ?', (user_id,))
     row = cursor.fetchone()
     if row and row[0]:
@@ -627,12 +796,11 @@ def upload():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
-    """Handle single file upload - FIXED: Store same filename in DB and disk"""
+    """Handle single file upload"""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Not authenticated'}), 401
     
     try:
-        # Check if file exists
         if 'file' not in request.files:
             return jsonify({'success': False, 'message': 'No file part'}), 400
         
@@ -644,7 +812,6 @@ def upload_file():
         if not allowed_file(file.filename):
             return jsonify({'success': False, 'message': 'File type not allowed'}), 400
         
-        # Get form data
         title = request.form.get('title', file.filename)
         description = request.form.get('description', '')
         category = request.form.get('category', 'general')
@@ -652,40 +819,32 @@ def upload_file():
         difficulty = request.form.get('difficulty', 'beginner')
         privacy = request.form.get('privacy', 'public')
         
-        # Get user info from session
         user_id = session['user_id']
         firstname = session['firstname']
         lastname = session['lastname']
         
-        # Create user directory if it doesn't exist
         user_dir = os.path.join(UPLOAD_FOLDER, str(user_id))
         os.makedirs(user_dir, exist_ok=True)
         
-        # FIX 1: Generate unique filename and use SAME name for disk and DB
         original_filename = secure_filename(file.filename)
         file_extension = original_filename.split('.')[-1].lower() if '.' in original_filename else ''
         unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
         file_path = os.path.join(user_dir, unique_filename)
         
-        # Save file
         file.save(file_path)
         
-        # Get file info
         file_size = os.path.getsize(file_path)
         file_category = get_file_category(original_filename)
         thumbnail_url = get_thumbnail_url(file_category, category)
         
-        # Calculate duration for videos
         duration = None
         if file_category == 'video':
             duration = '15:30'
         
-        # Calculate pages for documents
         pages = 0
         if file_category in ['pdf', 'doc', 'presentation']:
             pages = 15
         
-        # Save to database - FIXED: Store unique_filename in file_name field
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
         
@@ -696,7 +855,7 @@ def upload_file():
              duration, pages)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            user_id, title, description, category, resource_type, unique_filename,  # FIX: Store unique_filename
+            user_id, title, description, category, resource_type, unique_filename,
             file_path, file_size, file_category, file_extension, privacy, difficulty,
             thumbnail_url, duration, pages
         ))
@@ -704,7 +863,6 @@ def upload_file():
         resource_id = cursor.lastrowid
         conn.commit()
         
-        # Get the inserted resource
         cursor.execute('''
             SELECT r.*, u.firstname, u.lastname 
             FROM resources r
@@ -715,7 +873,6 @@ def upload_file():
         resource_row = cursor.fetchone()
         conn.close()
         
-        # Convert row to dict
         if resource_row:
             resource = {
                 'id': resource_row[0],
@@ -741,7 +898,7 @@ def upload_file():
                 'upload_date': resource_row[20],
                 'author': f"{resource_row[21]} {resource_row[22]}" if resource_row[21] and resource_row[22] else 'Anonymous',
                 'author_initials': f"{resource_row[21][0]}{resource_row[22][0]}" if resource_row[21] and resource_row[22] else 'AU',
-                'file_url': f"/uploads/{user_id}/{resource_row[6]}",  # FIX: Use file_name from DB
+                'file_url': f"/uploads/{user_id}/{resource_row[6]}",
                 'is_large_file': file_size > 10 * 1024 * 1024
             }
             
@@ -759,29 +916,22 @@ def upload_file():
 
 @app.route('/uploads/<user_id>/<filename>')
 def serve_file(user_id, filename):
-    """Serve uploaded files - UPDATED: Support HTTP Range requests for video streaming,
-    and serve PDFs/text-like files inline instead of forcing a download."""
+    """Serve uploaded files"""
     try:
         file_path = os.path.join(UPLOAD_FOLDER, user_id, filename)
         
         if not os.path.exists(file_path):
             return jsonify({'success': False, 'message': 'File not found'}), 404
         
-        # Get file size and extension
         file_size = os.path.getsize(file_path)
         file_ext = filename.lower().split('.')[-1] if '.' in filename else ''
         
-        # Define media file extensions
         video_exts = ['mp4', 'avi', 'mov', 'mkv', 'webm', 'm4v', 'mpg', 'mpeg', 'wmv', 'flv']
         audio_exts = ['mp3', 'wav', 'aac', 'flac', 'm4a', 'wma', 'ogg']
         image_exts = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'svg', 'tiff', 'ico']
-
-        # Extensions that browsers can render inline (not just video/audio/image)
         inline_exts = ['pdf', 'txt', 'md', 'json', 'xml', 'csv', 'html', 'css', 'js']
         
-        # Determine MIME type
         mime_types = {
-            # Video
             'mp4': 'video/mp4',
             'webm': 'video/webm',
             'ogg': 'video/ogg',
@@ -793,15 +943,12 @@ def serve_file(user_id, filename):
             'm4v': 'video/x-m4v',
             'mpg': 'video/mpeg',
             'mpeg': 'video/mpeg',
-            # Audio
             'mp3': 'audio/mpeg',
             'wav': 'audio/wav',
-            'ogg': 'audio/ogg',
             'flac': 'audio/flac',
             'aac': 'audio/aac',
             'm4a': 'audio/mp4',
             'wma': 'audio/x-ms-wma',
-            # Images
             'jpg': 'image/jpeg',
             'jpeg': 'image/jpeg',
             'png': 'image/png',
@@ -811,29 +958,24 @@ def serve_file(user_id, filename):
             'svg': 'image/svg+xml',
             'tiff': 'image/tiff',
             'ico': 'image/x-icon',
-            # Documents
             'pdf': 'application/pdf',
             'doc': 'application/msword',
             'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'txt': 'text/plain',
             'rtf': 'application/rtf',
             'odt': 'application/vnd.oasis.opendocument.text',
-            # Spreadsheets
             'xls': 'application/vnd.ms-excel',
             'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'csv': 'text/csv',
             'ods': 'application/vnd.oasis.opendocument.spreadsheet',
-            # Presentations
             'ppt': 'application/vnd.ms-powerpoint',
             'pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
             'odp': 'application/vnd.oasis.opendocument.presentation',
-            # Archives
             'zip': 'application/zip',
             'rar': 'application/x-rar-compressed',
             '7z': 'application/x-7z-compressed',
             'tar': 'application/x-tar',
             'gz': 'application/gzip',
-            # Code
             'js': 'application/javascript',
             'html': 'text/html',
             'css': 'text/css',
@@ -856,11 +998,9 @@ def serve_file(user_id, filename):
         is_image = file_ext in image_exts
         is_media = is_video or is_audio
         
-        # === VIDEO STREAMING FIX: Handle HTTP Range requests ===
         range_header = request.headers.get('Range')
         
         if is_media and range_header:
-            # Parse range header
             range_header = range_header.strip().replace('bytes=', '')
             byte_ranges = range_header.split('-')
             
@@ -874,7 +1014,6 @@ def serve_file(user_id, filename):
             else:
                 end_byte = file_size - 1
             
-            # Ensure valid range
             if start_byte >= file_size:
                 start_byte = 0
             if end_byte >= file_size:
@@ -884,7 +1023,6 @@ def serve_file(user_id, filename):
             
             length = end_byte - start_byte + 1
             
-            # Read the specified byte range
             def generate():
                 with open(file_path, 'rb') as f:
                     f.seek(start_byte)
@@ -897,10 +1035,9 @@ def serve_file(user_id, filename):
                         yield chunk
                         remaining -= len(chunk)
             
-            # Create 206 Partial Content response
             resp = Response(
                 generate(),
-                206,  # Partial Content
+                206,
                 mimetype=mime_type,
                 direct_passthrough=True
             )
@@ -912,8 +1049,6 @@ def serve_file(user_id, filename):
             
             return resp
         
-        # For non-range requests:
-        # Media files (videos/audio) - serve without attachment for inline playback
         if is_media:
             response = send_from_directory(
                 os.path.join(UPLOAD_FOLDER, user_id),
@@ -925,7 +1060,6 @@ def serve_file(user_id, filename):
             response.headers.add('Cache-Control', 'public, max-age=31536000')
             return response
         
-        # Image files - serve directly without authentication
         if is_image:
             return send_from_directory(
                 os.path.join(UPLOAD_FOLDER, user_id),
@@ -933,11 +1067,9 @@ def serve_file(user_id, filename):
                 mimetype=mime_type
             )
         
-        # For other files, require login and check permissions
         if 'user_id' not in session:
             return jsonify({'success': False, 'message': 'Authentication required'}), 401
         
-        # Check permissions for non-media files
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
         cursor.execute('''
@@ -952,13 +1084,7 @@ def serve_file(user_id, filename):
         if file_info:
             privacy, owner_id = file_info
             if privacy == 'public' or str(session['user_id']) == str(owner_id):
-                # FIX: PDFs and plain-text-ish files render fine inline in
-                # the browser (e.g. inside an <iframe>), so don't force a
-                # download for those. Everything else (docx, zip, code
-                # files, etc.) still downloads as an attachment since
-                # browsers can't display them directly anyway.
                 force_download = file_ext not in inline_exts
-
                 return send_from_directory(
                     os.path.join(UPLOAD_FOLDER, user_id),
                     filename,
@@ -974,9 +1100,8 @@ def serve_file(user_id, filename):
 
 @app.route('/api/resources', methods=['GET'])
 def get_resources():
-    """Get all resources with filters - FIXED: Generate correct URLs"""
+    """Get all resources with filters"""
     try:
-        # Get query parameters
         category = request.args.get('category', '')
         search = request.args.get('search', '')
         sort_by = request.args.get('sort', 'newest')
@@ -987,7 +1112,6 @@ def get_resources():
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
         
-        # Build query
         query = '''
             SELECT r.*, u.firstname, u.lastname 
             FROM resources r
@@ -996,7 +1120,6 @@ def get_resources():
         '''
         params = []
         
-        # Add filters
         if category:
             query += ' AND r.category = ?'
             params.append(category)
@@ -1017,7 +1140,6 @@ def get_resources():
             query += ' AND (r.title LIKE ? OR r.description LIKE ?)'
             params.extend([f'%{search}%', f'%{search}%'])
         
-        # Add sorting
         if sort_by == 'newest':
             query += ' ORDER BY r.upload_date DESC'
         elif sort_by == 'oldest':
@@ -1029,14 +1151,12 @@ def get_resources():
         elif sort_by == 'smallest':
             query += ' ORDER BY r.file_size ASC'
         
-        # Add pagination
         query += ' LIMIT ? OFFSET ?'
         params.extend([limit, offset])
         
         cursor.execute(query, params)
         resources_rows = cursor.fetchall()
         
-        # Get total count
         count_query = '''
             SELECT COUNT(*) FROM resources r WHERE 1=1
         '''
@@ -1055,10 +1175,8 @@ def get_resources():
         
         conn.close()
         
-        # Convert rows to dicts
         resources = []
         for row in resources_rows:
-            # FIX: Generate correct URL using file_name from DB
             file_url = f"/uploads/{row[1]}/{row[6]}" if row[6] else ''
             
             resource = {
@@ -1085,7 +1203,7 @@ def get_resources():
                 'upload_date': row[20],
                 'author': f"{row[21]} {row[22]}" if row[21] and row[22] else 'Anonymous',
                 'author_initials': f"{row[21][0]}{row[22][0]}" if row[21] and row[22] else 'AU',
-                'file_url': file_url,  # FIXED: Correct URL format
+                'file_url': file_url,
                 'is_large_file': row[8] > 10 * 1024 * 1024 if row[8] else False
             }
             resources.append(resource)
@@ -1104,7 +1222,7 @@ def get_resources():
 
 @app.route('/api/resources/<int:resource_id>', methods=['GET'])
 def get_resource(resource_id):
-    """Get a specific resource by ID - FIXED: Generate correct URLs"""
+    """Get a specific resource by ID"""
     try:
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
@@ -1122,14 +1240,12 @@ def get_resource(resource_id):
         if not row:
             return jsonify({'success': False, 'message': 'Resource not found'}), 404
         
-        # Update view count
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
         cursor.execute('UPDATE resources SET views = views + 1 WHERE id = ?', (resource_id,))
         conn.commit()
         conn.close()
         
-        # FIX: Generate correct URL
         file_url = f"/uploads/{row[1]}/{row[6]}" if row[6] else ''
         
         resource = {
@@ -1156,7 +1272,7 @@ def get_resource(resource_id):
             'upload_date': row[20],
             'author': f"{row[21]} {row[22]}" if row[21] and row[22] else 'Anonymous',
             'author_initials': f"{row[21][0]}{row[22][0]}" if row[21] and row[22] else 'AU',
-            'file_url': file_url,  # FIXED: Correct URL format
+            'file_url': file_url,
             'is_large_file': row[8] > 10 * 1024 * 1024 if row[8] else False
         }
         
@@ -1171,7 +1287,7 @@ def get_resource(resource_id):
 
 @app.route('/api/resources/user/<int:user_id>', methods=['GET'])
 def get_user_resources(user_id):
-    """Get resources for a specific user - FIXED: Generate correct URLs"""
+    """Get resources for a specific user"""
     try:
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
@@ -1189,7 +1305,6 @@ def get_user_resources(user_id):
         
         resources = []
         for row in rows:
-            # FIX: Generate correct URL
             file_url = f"/uploads/{row[1]}/{row[6]}" if row[6] else ''
             
             resource = {
@@ -1216,7 +1331,7 @@ def get_user_resources(user_id):
                 'upload_date': row[20],
                 'author': f"{row[21]} {row[22]}" if row[21] and row[22] else 'Anonymous',
                 'author_initials': f"{row[21][0]}{row[22][0]}" if row[21] and row[22] else 'AU',
-                'file_url': file_url,  # FIXED: Correct URL format
+                'file_url': file_url,
                 'is_large_file': row[8] > 10 * 1024 * 1024 if row[8] else False
             }
             resources.append(resource)
@@ -1254,21 +1369,18 @@ def download_resource(resource_id):
             conn.close()
             return jsonify({'success': False, 'message': 'Resource not found'}), 404
         
-        # Update download count
         cursor.execute('UPDATE resources SET downloads = downloads + 1 WHERE id = ?', (resource_id,))
         conn.commit()
         
         user_id = row[1]
-        file_name = row[6]  # Use file_name from DB
+        file_name = row[6]
         privacy = row[11]
         
         conn.close()
         
-        # Check permissions
         if privacy != 'public' and str(session['user_id']) != str(user_id):
             return jsonify({'success': False, 'message': 'Access denied'}), 403
         
-        # Serve the file
         file_dir = os.path.join(UPLOAD_FOLDER, str(user_id))
         file_path = os.path.join(file_dir, file_name)
         
@@ -1320,7 +1432,6 @@ def resourses():
                          lastname=session['lastname'],
                          user_id=session['user_id'])
 
-# Helper function to format file size
 def format_file_size(bytes):
     if bytes == 0:
         return "0 Bytes"
@@ -1332,7 +1443,6 @@ def format_file_size(bytes):
 @app.route('/api/resources/<int:resource_id>', methods=['DELETE'])
 def delete_resource(resource_id):
     try:
-        # 1. User must be logged in
         if 'user_id' not in session:
             return jsonify({
                 'success': False,
@@ -1342,7 +1452,6 @@ def delete_resource(resource_id):
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
 
-        # 2. Get the resource from DB
         cursor.execute('''
             SELECT user_id, file_name 
             FROM resources 
@@ -1350,7 +1459,6 @@ def delete_resource(resource_id):
         ''', (resource_id,))
         resource = cursor.fetchone()
 
-        # 3. Resource must exist
         if not resource:
             conn.close()
             return jsonify({
@@ -1360,7 +1468,6 @@ def delete_resource(resource_id):
 
         owner_id, file_name = resource
 
-        # 4. User must own the resource
         if int(owner_id) != int(session['user_id']):
             conn.close()
             return jsonify({
@@ -1368,7 +1475,6 @@ def delete_resource(resource_id):
                 'message': 'You are not allowed to delete this resource'
             }), 403
 
-        # 5. Delete file from disk
         file_path = os.path.join(
             UPLOAD_FOLDER,
             str(owner_id),
@@ -1378,7 +1484,6 @@ def delete_resource(resource_id):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        # 6. Delete from database
         cursor.execute(
             'DELETE FROM resources WHERE id = ?',
             (resource_id,)
@@ -1386,7 +1491,6 @@ def delete_resource(resource_id):
         conn.commit()
         conn.close()
 
-        # 7. Return success
         return jsonify({
             'success': True,
             'message': 'Resource deleted successfully'

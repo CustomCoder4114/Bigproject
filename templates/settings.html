@@ -687,6 +687,17 @@
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
     }
 
+    .danger-zone-desc {
+        font-size: 13px;
+        color: #7f1d1d;
+        line-height: 1.5;
+        margin-bottom: 6px;
+    }
+
+    body.dark-mode .danger-zone-desc {
+        color: #fca5a5;
+    }
+
     /* Profile Image Upload */
     .profile-image-container {
         display: flex;
@@ -999,11 +1010,24 @@
         display: none;
     }
 
+    /*
+       FIX: this used to hardcode `width: 1000px; gap: 100px;`, which
+       broke every responsive @media rule elsewhere in this file - on
+       any screen narrower than ~1000px it forced horizontal overflow,
+       which could push the "Upload New Photo" button off-screen or
+       make it awkward to reach. Now it just fills the available width
+       and wraps its cards responsively instead.
+    */
     .settings-section.active {
         display: flex;
+        flex-wrap: wrap;
         animation: fadeIn 0.3s ease;
-        gap: 100px;
-        width: 1000px;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .settings-section.active > .settings-card {
+        flex: 1 1 420px;
     }
 
     @keyframes fadeIn {
@@ -1210,8 +1234,8 @@
             <span>Account & Security</span>
         </button>
         <button class="settings-tab" data-section="notifications" title="Notifications">
-            <i class="fas fa-sliders-h"></i>
-            <span>Advanced</span>
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
         </button>
         <button class="settings-tab" data-section="privacy" title="Privacy">
             <i class="fas fa-lock"></i>
@@ -1259,7 +1283,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="email" class="form-label">Email Address</label>
-                        <input type="email" id="email" class="form-control" value="student@example.com">
+                        <input type="email" id="email" class="form-control" value="{{ session.get('email', '') }}">
                         <div class="field-hint" id="emailHint"></div>
                     </div>
                     <div class="form-group">
@@ -1378,6 +1402,35 @@
                         <span>Log Out From All Devices</span>
                     </button>
                 </div>
+            </div>
+
+            <!--
+                FIX: this card was missing entirely, even though the CSS
+                (.danger-zone / .danger-btn) and the JS click handlers for
+                #deactivateAccountBtn / #deleteAccountBtn already existed
+                further down. Without these two buttons on the page, the
+                script crashed on load trying to attach a listener to a
+                null element, which silently broke everything wired up
+                after that point (including restoring your saved theme/
+                appearance settings on page load).
+            -->
+            <div class="settings-card danger-zone">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Danger Zone</h3>
+                </div>
+
+                <p class="danger-zone-desc">Deactivating hides your profile and signs you out; you can come back by logging in again.</p>
+                <button class="danger-btn" id="deactivateAccountBtn" type="button">
+                    <i class="fas fa-user-slash"></i>
+                    <span>Deactivate Account</span>
+                </button>
+
+                <p class="danger-zone-desc" style="margin-top: 20px;">Deleting your account is permanent and cannot be undone.</p>
+                <button class="danger-btn" id="deleteAccountBtn" type="button">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Delete Account Permanently</span>
+                </button>
             </div>
         </section>
 
@@ -1547,8 +1600,6 @@
                 </div>
             </div>
         </section>
-
-        
     </div>
 </div>
 
@@ -1734,8 +1785,7 @@
         account: { title: 'Account & Security', description: 'Secure your account and manage login settings' },
         notifications: { title: 'Notification Settings', description: 'Control how and when you receive notifications' },
         privacy: { title: 'Privacy Settings', description: 'Manage your privacy and data sharing preferences' },
-        appearance: { title: 'Appearance Settings', description: 'Customize the look and feel of the interface' },
-        advanced: { title: 'Advanced Settings', description: 'Account management and options' }
+        appearance: { title: 'Appearance Settings', description: 'Customize the look and feel of the interface' }
     };
 
     settingsTabs.forEach(tab => {
@@ -2192,7 +2242,7 @@
                         showToast('Simulated: no backend connected yet.', 'info');
                         close();
                     } else {
-                        window.location.href = '/login';
+                        window.location.href = '/Login';
                     }
                 } catch (err) {
                     showToast(err.message || 'Could not log out all devices.', 'error');
