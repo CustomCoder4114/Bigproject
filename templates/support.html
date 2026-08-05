@@ -344,6 +344,38 @@
             margin-bottom: 15px;
         }
 
+        .ticket-response {
+            background: var(--gray-50);
+            border-left: 3px solid var(--success-color);
+            border-radius: var(--border-radius-sm);
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+
+        .ticket-response-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: var(--success-color);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ticket-response-text {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .ticket-response-time {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 6px;
+        }
+
         .ticket-meta {
             display: flex;
             gap: 15px;
@@ -807,7 +839,11 @@
         // ============================================
         // EmailJS CONFIGURATION
         // ============================================
-        // Support tickets are emailed straight to: kibetdan4114@gmail.com
+        // Tickets are now persisted server-side (see below) and show up for
+        // admins in /admin_support automatically. EmailJS is kept as a
+        // best-effort secondary notification straight to the support inbox —
+        // if it fails, the ticket is still saved and visible to admins, so we
+        // never let it block the user-facing flow.
         const EMAILJS_PUBLIC_KEY = "pONGzo5pWq5jJzaMM";
         const EMAILJS_SERVICE_ID = "service_49v69xj";
         const EMAILJS_TEMPLATE_ID = "template_3grdzv9";
@@ -815,8 +851,8 @@
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
-        // Support Tickets Data - loaded from (and saved to) localStorage
-        let tickets = JSON.parse(localStorage.getItem('supportTickets')) || [];
+        // Tickets are now loaded from (and saved to) the server via /api/complaints
+        let tickets = [];
 
         let currentUser = "{{ firstname }} {{ lastname }}" || "Student User";
 
@@ -873,7 +909,35 @@
             setupTicketForm();
         });
 
+        // ============================================
+        // TICKETS — backed by GET/POST /api/complaints
+        // ============================================
         function loadTickets() {
+            const container = document.getElementById('ticketsContainer');
+
+            fetch('/api/complaints/mine')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        console.error('Failed to load tickets:', data.message);
+                        return;
+                    }
+                    tickets = data.complaints;
+                    renderTickets();
+                })
+                .catch(err => {
+                    console.error('Error loading tickets:', err);
+                    container.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1;">
+                            <div class="empty-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                            <h3 class="empty-title">Couldn't load your tickets</h3>
+                            <p class="empty-text">Please refresh the page to try again.</p>
+                        </div>
+                    `;
+                });
+        }
+
+        function renderTickets() {
             const container = document.getElementById('ticketsContainer');
 
             if (tickets.length === 0) {
@@ -893,32 +957,50 @@
             container.innerHTML = tickets.map(ticket => createTicketCard(ticket)).join('');
         }
 
+        // Backend statuses are pending / in-progress / resolved.
+        // Map them onto the existing status-open / status-in-progress / status-resolved CSS.
+        function statusInfo(status) {
+            if (status === 'resolved') return { cls: 'status-resolved', label: 'Resolved' };
+            if (status === 'in-progress') return { cls: 'status-in-progress', label: 'In Progress' };
+            return { cls: 'status-open', label: 'Open' };
+        }
+
         function createTicketCard(ticket) {
-            const statusClass = `status-${ticket.status.replace('-', '')}`;
-            const statusText = ticket.status === 'open' ? 'Open' : 
-                              ticket.status === 'in-progress' ? 'In Progress' : 'Resolved';
-            
+            const { cls: statusClass, label: statusText } = statusInfo(ticket.status);
+            const description = ticket.description || '';
+
             const priorityColors = {
                 low: '#10b981',
                 medium: '#f59e0b',
                 high: '#ef4444',
                 urgent: '#dc2626'
             };
-            
+            const priority = ticket.priority || 'medium';
+            const responseCount = ticket.response ? 1 : 0;
+
+            const responseBlock = ticket.response ? `
+                <div class="ticket-response">
+                    <div class="ticket-response-label"><i class="fas fa-headset"></i> Support Response</div>
+                    <div class="ticket-response-text">${escapeHtml(ticket.response)}</div>
+                    ${ticket.response_date ? `<div class="ticket-response-time">${formatDate(ticket.response_date)}</div>` : ''}
+                </div>
+            ` : '';
+
             return `
                 <div class="ticket-card" onclick="viewTicketDetails(${ticket.id})">
                     <div class="ticket-header">
-                        <div class="ticket-title">${ticket.title}</div>
+                        <div class="ticket-title">${escapeHtml(ticket.subject)}</div>
                         <div class="ticket-status ${statusClass}">${statusText}</div>
                     </div>
                     <div class="ticket-category">
-                        <i class="fas ${getCategoryIcon(ticket.category)}"></i> ${ticket.category.toUpperCase()}
+                        <i class="fas ${getCategoryIcon(ticket.category)}"></i> ${escapeHtml((ticket.category || 'other').toUpperCase())}
                     </div>
-                    <div class="ticket-message">${ticket.message.substring(0, 100)}${ticket.message.length > 100 ? '...' : ''}</div>
+                    <div class="ticket-message">${escapeHtml(description.substring(0, 100))}${description.length > 100 ? '...' : ''}</div>
+                    ${responseBlock}
                     <div class="ticket-meta">
-                        <span><i class="fas fa-calendar"></i> ${formatDate(ticket.createdAt)}</span>
-                        <span><i class="fas fa-flag" style="color: ${priorityColors[ticket.priority]}"></i> ${ticket.priority}</span>
-                        <span><i class="fas fa-comment"></i> ${ticket.responses.length} responses</span>
+                        <span><i class="fas fa-calendar"></i> ${formatDate(ticket.created_at)}</span>
+                        <span><i class="fas fa-flag" style="color: ${priorityColors[priority]}"></i> ${priority}</span>
+                        <span><i class="fas fa-comment"></i> ${responseCount} response${responseCount === 1 ? '' : 's'}</span>
                     </div>
                 </div>
             `;
@@ -927,10 +1009,22 @@
         function viewTicketDetails(id) {
             const ticket = tickets.find(t => t.id === id);
             if (!ticket) return;
-            
-            alert(`Ticket: ${ticket.title}\n\nStatus: ${ticket.status}\nPriority: ${ticket.priority}\n\nMessage: ${ticket.message}\n\nResponses: ${ticket.responses.length}`);
+
+            const { label: statusText } = statusInfo(ticket.status);
+            let details = `Ticket: ${ticket.subject}\n\nStatus: ${statusText}\nPriority: ${ticket.priority || 'medium'}\n\nMessage: ${ticket.description || ''}`;
+
+            if (ticket.response) {
+                details += `\n\n--- Support Response ---\n${ticket.response}`;
+            } else {
+                details += `\n\nOur team hasn't responded yet — we'll notify you here once they do.`;
+            }
+
+            alert(details);
         }
 
+        // ============================================
+        // KNOWLEDGE BASE (static content)
+        // ============================================
         function loadKnowledgeBase() {
             const container = document.getElementById('articlesContainer');
             container.innerHTML = knowledgeBase.map(article => `
@@ -951,53 +1045,63 @@
             }
         }
 
+        // ============================================
+        // NEW TICKET FORM — POSTs to /api/complaints
+        // ============================================
         function setupTicketForm() {
             document.getElementById('ticketForm').addEventListener('submit', (e) => {
                 e.preventDefault();
 
                 const submitBtn = document.getElementById('ticketSubmitBtn');
                 const originalBtnHTML = submitBtn.innerHTML;
-                
-                const newTicket = {
-                    id: Date.now(),
-                    title: document.getElementById('ticketTitle').value,
+
+                const payload = {
+                    subject: document.getElementById('ticketTitle').value.trim(),
                     category: document.getElementById('ticketCategory').value,
                     priority: document.getElementById('ticketPriority').value,
-                    message: document.getElementById('ticketMessage').value,
-                    status: 'open',
-                    createdAt: new Date().toISOString().split('T')[0],
-                    updatedAt: new Date().toISOString().split('T')[0],
-                    responses: []
+                    description: document.getElementById('ticketMessage').value.trim()
                 };
 
-                // Disable the button while we send the email
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
-                // Send the ticket details straight to the support inbox
-                emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                    to_email: SUPPORT_EMAIL,
-                    ticket_id: newTicket.id,
-                    from_user: currentUser,
-                    subject: newTicket.title,
-                    category: newTicket.category,
-                    priority: newTicket.priority,
-                    message: newTicket.message,
-                    created_at: newTicket.createdAt
-                }).then(() => {
-                    // Save the ticket after successful email
-                    tickets.unshift(newTicket);
-                    localStorage.setItem('supportTickets', JSON.stringify(tickets));
+                fetch('/api/complaints', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.message || 'Failed to submit ticket');
+                    }
+
+                    const savedTicket = data.complaint;
+
+                    // Best-effort email alert to the support inbox — failure here
+                    // does not affect the ticket, which is already saved.
+                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                        to_email: SUPPORT_EMAIL,
+                        ticket_id: savedTicket.id,
+                        from_user: currentUser,
+                        subject: savedTicket.subject,
+                        category: savedTicket.category,
+                        priority: savedTicket.priority,
+                        message: savedTicket.description,
+                        created_at: savedTicket.created_at
+                    }).catch(err => console.error('EmailJS alert failed (ticket still saved):', err));
 
                     document.getElementById('ticketForm').reset();
-                    alert(`✅ Ticket submitted successfully!\n\nYour ticket ID: #${newTicket.id}\n\nOur team will respond within 24 hours.`);
+                    alert(`✅ Ticket submitted successfully!\n\nYour ticket ID: #${savedTicket.id}\n\nOur team will respond within 24 hours.`);
 
                     loadTickets();
                     switchTab('tickets');
-                }).catch((err) => {
-                    console.error("Failed to email ticket:", err);
-                    alert("⚠️ We couldn't send your ticket right now. Please try again in a moment.");
-                }).finally(() => {
+                })
+                .catch(err => {
+                    console.error('Failed to submit ticket:', err);
+                    alert("⚠️ We couldn't submit your ticket right now. Please try again in a moment.");
+                })
+                .finally(() => {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalBtnHTML;
                 });
@@ -1103,6 +1207,13 @@
             if (diffDays === 1) return 'Yesterday';
             if (diffDays < 7) return `${diffDays} days ago`;
             return date.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Allow Enter key in chat

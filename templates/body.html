@@ -722,7 +722,7 @@
             height: 18px;
             border-radius: 50%;
             font-size: 0.7rem;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
         }
@@ -882,6 +882,7 @@
         
         .notification-content {
             flex: 1;
+            min-width: 0;
         }
         
         .notification-title {
@@ -901,6 +902,24 @@
         .notification-time {
             font-size: 11px;
             color: #9ca3af;
+        }
+
+        .notification-empty,
+        .notification-loading,
+        .notification-error {
+            padding: 32px 20px;
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        .notification-empty i,
+        .notification-loading i,
+        .notification-error i {
+            display: block;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
         
         .notification-footer {
@@ -985,6 +1004,10 @@
                 right: -4px;
             }
 
+            .notification-menu {
+                width: min(360px, 90vw);
+            }
+
             .search-wrapper {
                 order: 3;
                 width: 100%;
@@ -1064,6 +1087,12 @@
 
         body.dark-mode .notification-item.unread {
             background-color: #1c2b47;
+        }
+
+        body.dark-mode .notification-empty,
+        body.dark-mode .notification-loading,
+        body.dark-mode .notification-error {
+            color: #64748b;
         }
 
         body.dark-mode .search-bar input {
@@ -1194,7 +1223,7 @@
                 <div class="notification-dropdown" id="notificationDropdown">
                     <button class="notification-btn" id="notificationBtn">
                         <i class="far fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" id="notificationBadge"></span>
                     </button>
                     
                     <div class="notification-menu" id="notificationMenu">
@@ -1203,55 +1232,9 @@
                             <button class="mark-all-read" id="markAllRead">Mark all as read</button>
                         </div>
                         <div class="notifications-list" id="notificationsList">
-                            <div class="notification-item unread" data-id="1">
-                                <div class="notification-icon" style="background-color: #e0e7ff; color: #4361ee;">
-                                    <i class="fas fa-calendar-plus"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-title">New assignment posted</div>
-                                    <div class="notification-message">Mathematics: Chapter 5 Problem Set has been posted</div>
-                                    <div class="notification-time">2 hours ago</div>
-                                </div>
-                            </div>
-                            <div class="notification-item unread" data-id="2">
-                                <div class="notification-icon" style="background-color: #dcfce7; color: #4ade80;">
-                                    <i class="fas fa-comment"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-title">Class announcement</div>
-                                    <div class="notification-message">Physics: Lab session rescheduled to Thursday</div>
-                                    <div class="notification-time">5 hours ago</div>
-                                </div>
-                            </div>
-                            <div class="notification-item unread" data-id="3">
-                                <div class="notification-icon" style="background-color: #fef3c7; color: #f59e0b;">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-title">New message from Sarah</div>
-                                    <div class="notification-message">Sarah Johnson sent you a message about the group project</div>
-                                    <div class="notification-time">1 day ago</div>
-                                </div>
-                            </div>
-                            <div class="notification-item" data-id="4">
-                                <div class="notification-icon" style="background-color: #e0e7ff; color: #4361ee;">
-                                    <i class="fas fa-trophy"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-title">Achievement unlocked!</div>
-                                    <div class="notification-message">You earned the "Quick Learner" badge</div>
-                                    <div class="notification-time">2 days ago</div>
-                                </div>
-                            </div>
-                            <div class="notification-item" data-id="5">
-                                <div class="notification-icon" style="background-color: #fce7f3; color: #ec489a;">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <div class="notification-content">
-                                    <div class="notification-title">Course completed</div>
-                                    <div class="notification-message">Congratulations! You completed "Introduction to Python"</div>
-                                    <div class="notification-time">3 days ago</div>
-                                </div>
+                            <div class="notification-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Loading notifications…
                             </div>
                         </div>
                         <div class="notification-footer">
@@ -1748,16 +1731,10 @@
             }
         });
         
-        // ===== UPDATED: Removed logout confirmation popup =====
         const dropdownItems = document.querySelectorAll('.dropdown-item');
         dropdownItems.forEach(item => {
             item.addEventListener('click', function(e) {
                 userProfileDropdown.classList.remove('active');
-                // Logout now happens directly without a confirmation popup
-                if (this.classList.contains('logout-item')) {
-                    // Allow the logout to proceed without confirmation
-                    // The href="/" will handle the logout
-                }
             });
         });
         
@@ -1767,101 +1744,154 @@
             }
         });
 
-        // Notification Dropdown
+        // ===================================================================
+        // NOTIFICATIONS — fetched live from the backend, nothing hardcoded.
+        //
+        // Expected API contract (adjust the URLs below if yours differ):
+        //   GET  /notifications            -> [{id, title, message, time, icon, color, read}, ...]
+        //   POST /notifications/<id>/read  -> marks a single notification read
+        //   POST /notifications/read-all   -> marks every notification read
+        // ===================================================================
         const notificationDropdown = document.getElementById('notificationDropdown');
         const notificationBtn = document.getElementById('notificationBtn');
-        const notificationBadge = document.querySelector('.notification-badge');
-        
-        function saveReadStatus(notificationIds) {
-            localStorage.setItem('readNotifications', JSON.stringify(notificationIds));
+        const notificationBadge = document.getElementById('notificationBadge');
+        const notificationsList = document.getElementById('notificationsList');
+        const markAllReadBtn = document.getElementById('markAllRead');
+
+        let notifications = [];
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text == null ? '' : String(text);
+            return div.innerHTML;
         }
-        
-        function getReadStatus() {
-            const saved = localStorage.getItem('readNotifications');
-            return saved ? JSON.parse(saved) : [];
+
+        function formatNotifTime(value) {
+            if (!value) return '';
+            const date = new Date(value);
+            if (isNaN(date.getTime())) return escapeHtml(value); // backend already sent a display string
+            const diff = Date.now() - date.getTime();
+            if (diff < 60000) return 'Just now';
+            if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+            if (diff < 172800000) return 'Yesterday';
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
-        
-        function applyReadStatus() {
-            const readIds = getReadStatus();
-            const notificationItems = document.querySelectorAll('.notification-item');
-            
-            notificationItems.forEach(item => {
-                const id = item.dataset.id;
-                if (readIds.includes(id)) {
-                    item.classList.remove('unread');
-                } else {
-                    item.classList.add('unread');
-                }
+
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            if (unreadCount > 0) {
+                notificationBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                notificationBadge.style.display = 'flex';
+            } else {
+                notificationBadge.style.display = 'none';
+            }
+        }
+
+        function renderNotifications() {
+            if (notifications.length === 0) {
+                notificationsList.innerHTML = `
+                    <div class="notification-empty">
+                        <i class="far fa-bell-slash"></i>
+                        No notifications yet
+                    </div>
+                `;
+                updateNotificationBadge();
+                return;
+            }
+
+            let html = '';
+            notifications.forEach(n => {
+                const iconClass = n.icon || 'fas fa-bell';
+                const bg = n.color ? `${n.color}20` : '#e0e7ff';
+                const fg = n.color || '#4361ee';
+                html += `
+                    <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${escapeHtml(n.id)}">
+                        <div class="notification-icon" style="background-color: ${bg}; color: ${fg};">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${escapeHtml(n.title)}</div>
+                            <div class="notification-message">${escapeHtml(n.message)}</div>
+                            <div class="notification-time">${formatNotifTime(n.time)}</div>
+                        </div>
+                    </div>
+                `;
             });
+
+            notificationsList.innerHTML = html;
             updateNotificationBadge();
+
+            notificationsList.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    if (this.classList.contains('unread')) {
+                        markNotificationRead(id);
+                    }
+                });
+            });
         }
-        
+
+        function loadNotifications() {
+            fetch('/notifications')
+                .then(res => {
+                    if (!res.ok) throw new Error('Request failed');
+                    return res.json();
+                })
+                .then(data => {
+                    notifications = Array.isArray(data) ? data : (data.notifications || []);
+                    renderNotifications();
+                })
+                .catch(err => {
+                    console.error('Error loading notifications:', err);
+                    notificationsList.innerHTML = `
+                        <div class="notification-error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Couldn't load notifications
+                        </div>
+                    `;
+                });
+        }
+
+        function markNotificationRead(id) {
+            const n = notifications.find(x => String(x.id) === String(id));
+            if (n) n.read = true;
+            renderNotifications();
+
+            fetch(`/notifications/${id}/read`, { method: 'POST' })
+                .catch(err => console.error('Error marking notification read:', err));
+        }
+
         notificationBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             notificationDropdown.classList.toggle('active');
         });
-        
+
         document.addEventListener('click', function(e) {
             if (!notificationDropdown.contains(e.target)) {
                 notificationDropdown.classList.remove('active');
             }
         });
-        
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 notificationDropdown.classList.remove('active');
             }
         });
-        
-        const notificationItems = document.querySelectorAll('.notification-item');
-        notificationItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') return;
-                if (this.classList.contains('unread')) {
-                    this.classList.remove('unread');
-                    const readIds = getReadStatus();
-                    const id = this.dataset.id;
-                    if (!readIds.includes(id)) {
-                        readIds.push(id);
-                        saveReadStatus(readIds);
-                    }
-                    updateNotificationBadge();
-                }
-                notificationDropdown.classList.remove('active');
-            });
-        });
-        
-        const markAllReadBtn = document.getElementById('markAllRead');
+
         if (markAllReadBtn) {
             markAllReadBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const unreadItems = document.querySelectorAll('.notification-item.unread');
-                const readIds = getReadStatus();
-                unreadItems.forEach(item => {
-                    item.classList.remove('unread');
-                    const id = item.dataset.id;
-                    if (!readIds.includes(id)) {
-                        readIds.push(id);
-                    }
-                });
-                saveReadStatus(readIds);
-                updateNotificationBadge();
+                notifications.forEach(n => n.read = true);
+                renderNotifications();
+
+                fetch('/notifications/read-all', { method: 'POST' })
+                    .catch(err => console.error('Error marking all notifications read:', err));
             });
         }
-        
-        function updateNotificationBadge() {
-            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
-            if (notificationBadge) {
-                if (unreadCount > 0) {
-                    notificationBadge.textContent = unreadCount;
-                    notificationBadge.style.display = 'flex';
-                } else {
-                    notificationBadge.style.display = 'none';
-                }
-            }
-        }
-        
-        applyReadStatus();
+
+        loadNotifications();
+        setInterval(loadNotifications, 15000); // poll for new notifications
 
         // Close mobile sidebar on escape key
         document.addEventListener('keydown', function(e) {

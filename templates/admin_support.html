@@ -1,0 +1,1184 @@
+{% extends "admin.html" %}
+
+{% block allcontent %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Support - eSchool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a0ca3;
+            --secondary-color: #7209b7;
+            --accent-color: #4cc9f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --info-color: #3b82f6;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --border-radius: 20px;
+            --border-radius-sm: 12px;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::after {
+            content: "🎫";
+            position: absolute;
+            right: 20px;
+            bottom: -20px;
+            font-size: 8rem;
+            opacity: 0.08;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: white;
+            border-radius: var(--border-radius-sm);
+            padding: 18px 20px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-box .label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .stat-box.pending .number { color: var(--warning-color); }
+        .stat-box.in-progress .number { color: var(--info-color); }
+        .stat-box.resolved .number { color: var(--success-color); }
+
+        /* Tickets Layout */
+        .tickets-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            min-height: 500px;
+        }
+
+        /* Tickets List */
+        .tickets-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tickets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tickets-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            color: var(--dark-color);
+        }
+
+        .tickets-header .filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tickets-header select {
+            padding: 8px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.85rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .tickets-header select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .tickets-list {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 550px;
+        }
+
+        .tickets-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .tickets-list::-webkit-scrollbar-track {
+            background: var(--gray-100);
+            border-radius: 10px;
+        }
+
+        .tickets-list::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .ticket-item {
+            padding: 16px 18px;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 12px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .ticket-item:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .ticket-item.unread {
+            border-left: 4px solid var(--primary-color);
+            background: var(--gray-50);
+        }
+
+        .ticket-item.resolved {
+            border-left: 4px solid var(--success-color);
+            opacity: 0.7;
+        }
+
+        .ticket-item .ticket-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ticket-item .ticket-user {
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ticket-item .ticket-user .user-initials {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .ticket-item .ticket-type {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .ticket-item .ticket-type.technical {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .ticket-item .ticket-type.academic {
+            background: #e0e7ff;
+            color: var(--primary-color);
+        }
+
+        .ticket-item .ticket-type.billing {
+            background: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .ticket-item .ticket-type.content {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .ticket-item .ticket-type.account {
+            background: #fce7f3;
+            color: #db2777;
+        }
+
+        .ticket-item .ticket-type.other {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .ticket-item .ticket-title {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin: 6px 0 3px;
+        }
+
+        .ticket-item .ticket-preview {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .ticket-item .ticket-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .ticket-item .ticket-time {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+        }
+
+        .ticket-item .ticket-status {
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .ticket-item .ticket-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .ticket-item .ticket-status.resolved {
+            background: #dcfce7;
+            color: var(--success-color);
+        }
+
+        .ticket-item .ticket-status.in-progress {
+            background: #e0e7ff;
+            color: var(--primary-color);
+        }
+
+        .ticket-item .has-response {
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--success-color);
+        }
+
+        /* Ticket Detail Panel */
+        .ticket-detail-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ticket-detail-panel .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--gray-500);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .ticket-detail-panel .empty-state i {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 15px;
+        }
+
+        .ticket-detail-panel .empty-state h3 {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .ticket-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .ticket-detail-header .ticket-id {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+        }
+
+        .ticket-user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: var(--gray-50);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .ticket-user-info .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .ticket-user-info .user-details .name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .ticket-user-info .user-details .email {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        .ticket-detail-body {
+            background: var(--gray-50);
+            padding: 20px;
+            border-radius: var(--border-radius-sm);
+            margin: 10px 0 20px;
+        }
+
+        .ticket-detail-body .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-400);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .ticket-detail-body .text {
+            color: var(--gray-700);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .ticket-response-area {
+            margin-top: auto;
+            border-top: 1px solid var(--gray-200);
+            padding-top: 20px;
+        }
+
+        .ticket-response-area .response-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .ticket-response-area textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+            transition: var(--transition);
+        }
+
+        .ticket-response-area textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .ticket-response-area .response-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .existing-response {
+            background: var(--gray-50);
+            padding: 15px;
+            border-radius: var(--border-radius-sm);
+            margin-top: 15px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .existing-response .response-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-400);
+            font-weight: 600;
+        }
+
+        .existing-response .response-text {
+            color: var(--gray-700);
+            margin-top: 5px;
+            line-height: 1.6;
+        }
+
+        .existing-response .response-time {
+            font-size: 0.7rem;
+            color: var(--gray-400);
+            margin-top: 5px;
+        }
+
+        /* Dark Mode */
+        body.dark-mode .tickets-card,
+        body.dark-mode .ticket-detail-panel {
+            background-color: #1e293b;
+        }
+
+        body.dark-mode .tickets-header h2,
+        body.dark-mode .ticket-detail-header .ticket-id {
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .ticket-item {
+            border-color: #334155;
+            background-color: #263449;
+        }
+
+        body.dark-mode .ticket-item:hover {
+            border-color: var(--primary-color);
+        }
+
+        body.dark-mode .ticket-item .ticket-user {
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .ticket-item .ticket-title {
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .ticket-item .ticket-preview {
+            color: #94a3b8;
+        }
+
+        body.dark-mode .ticket-item.unread {
+            background: #1c2b47;
+        }
+
+        body.dark-mode .ticket-user-info {
+            background: #0f172a;
+        }
+
+        body.dark-mode .ticket-user-info .user-details .name {
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .ticket-detail-body {
+            background: #0f172a;
+        }
+
+        body.dark-mode .ticket-detail-body .text {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .ticket-response-area textarea {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .existing-response {
+            background: #0f172a;
+        }
+
+        body.dark-mode .existing-response .response-text {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .ticket-detail-panel .empty-state h3 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .ticket-detail-panel .empty-state i {
+            color: #475569;
+        }
+
+        body.dark-mode .tickets-header select {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #f1f5f9;
+        }
+
+        body.dark-mode .stat-box {
+            background-color: #1e293b;
+        }
+
+        body.dark-mode .stat-box .label {
+            color: #94a3b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .tickets-layout {
+                grid-template-columns: 1fr;
+            }
+            .ticket-detail-panel {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            .page-header {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            .stat-box .number {
+                font-size: 1.3rem;
+            }
+            .tickets-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tickets-header .filter-group {
+                flex-direction: column;
+            }
+            .tickets-header select {
+                width: 100%;
+            }
+            .ticket-response-area .response-actions {
+                flex-direction: column;
+            }
+            .ticket-response-area .response-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .ticket-detail-header {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            .stat-box .number {
+                font-size: 1.1rem;
+            }
+            .page-title {
+                font-size: 1.2rem;
+            }
+            .ticket-item .ticket-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <div class="header-content">
+                <h1 class="page-title"><i class="fas fa-ticket-alt"></i> Support Tickets</h1>
+                <p class="page-subtitle">View and respond to user support requests</p>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-box pending">
+                <div class="number" id="pendingCount">0</div>
+                <div class="label">🟡 Pending</div>
+            </div>
+            <div class="stat-box in-progress">
+                <div class="number" id="inProgressCount">0</div>
+                <div class="label">🔵 In Progress</div>
+            </div>
+            <div class="stat-box resolved">
+                <div class="number" id="resolvedCount">0</div>
+                <div class="label">✅ Resolved</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="totalCount">0</div>
+                <div class="label">📊 Total Tickets</div>
+            </div>
+        </div>
+
+        <!-- Tickets Layout -->
+        <div class="tickets-layout">
+            <!-- Tickets List -->
+            <div class="tickets-card">
+                <div class="tickets-header">
+                    <h2>All Tickets</h2>
+                    <div class="filter-group">
+                        <select id="statusFilter" onchange="filterTickets()">
+                            <option value="all">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                        <select id="categoryFilter" onchange="filterTickets()">
+                            <option value="all">All Categories</option>
+                            <option value="technical">Technical</option>
+                            <option value="academic">Academic</option>
+                            <option value="billing">Billing</option>
+                            <option value="content">Content</option>
+                            <option value="account">Account</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tickets-list" id="ticketsList">
+                    <!-- Tickets will be rendered here -->
+                    <div class="empty-state" id="emptyTickets">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>No tickets found</h3>
+                        <p>Support tickets will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Detail -->
+            <div class="ticket-detail-panel" id="ticketDetailPanel">
+                <div class="empty-state" id="emptyDetail">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Select a ticket</h3>
+                    <p>Click on a ticket from the list to view details</p>
+                </div>
+                <div id="ticketDetailContent" style="display: none;">
+                    <div class="ticket-detail-header">
+                        <div>
+                            <h3 id="detailSubject" style="font-family: 'Poppins', sans-serif; color: var(--dark-color);">Subject</h3>
+                            <span class="ticket-id" id="detailId">#TICKET-000</span>
+                        </div>
+                        <span id="detailStatusBadge" class="ticket-status pending">Pending</span>
+                    </div>
+
+                    <div class="ticket-user-info">
+                        <div class="avatar" id="detailAvatar">U</div>
+                        <div class="user-details">
+                            <div class="name" id="detailUserName">User Name</div>
+                            <div class="email" id="detailUserEmail">user@email.com</div>
+                        </div>
+                    </div>
+
+                    <div class="ticket-detail-body">
+                        <div class="label">Category</div>
+                        <div class="text" id="detailCategory">Technical</div>
+                        <div class="label" style="margin-top: 12px;">Description</div>
+                        <div class="text" id="detailDescription">Description goes here...</div>
+                        <div class="label" style="margin-top: 12px;">Submitted</div>
+                        <div class="text" id="detailTime">2 hours ago</div>
+                    </div>
+
+                    <div id="detailExistingResponse"></div>
+
+                    <div class="ticket-response-area">
+                        <div class="response-label"><i class="fas fa-reply"></i> Respond to Ticket</div>
+                        <textarea id="responseText" placeholder="Type your response here..." rows="3"></textarea>
+                        <div class="response-actions">
+                            <button class="btn btn-primary" onclick="sendResponse()">
+                                <i class="fas fa-paper-plane"></i> Send Response
+                            </button>
+                            <button class="btn btn-success" onclick="markResolved()">
+                                <i class="fas fa-check-circle"></i> Mark Resolved
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================================
+        // STATE
+        // =============================================================
+        let allTickets = [];
+        let currentTicketId = null;
+        let currentFilter = 'all';
+        let currentCategory = 'all';
+
+        // =============================================================
+        // LOAD TICKETS FROM BACKEND
+        // =============================================================
+        function loadTickets() {
+            fetch('/api/complaints')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        allTickets = data.complaints;
+                        renderStats();
+                        renderTickets();
+                    } else {
+                        console.error('Failed to load tickets:', data.message);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading tickets:', err);
+                });
+        }
+
+        // =============================================================
+        // RENDER STATS
+        // =============================================================
+        function renderStats() {
+            const pending = allTickets.filter(t => t.status === 'pending').length;
+            const inProgress = allTickets.filter(t => t.status === 'in-progress').length;
+            const resolved = allTickets.filter(t => t.status === 'resolved').length;
+
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('inProgressCount').textContent = inProgress;
+            document.getElementById('resolvedCount').textContent = resolved;
+            document.getElementById('totalCount').textContent = allTickets.length;
+        }
+
+        // =============================================================
+        // RENDER TICKETS
+        // =============================================================
+        function renderTickets() {
+            const container = document.getElementById('ticketsList');
+            const emptyEl = document.getElementById('emptyTickets');
+
+            let filtered = allTickets;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(t => t.status === currentFilter);
+            }
+
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(t => t.category === currentCategory);
+            }
+
+            // Sort by newest first
+            filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>No tickets found</h3>
+                        <p>Try changing your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(ticket => {
+                const isUnread = !ticket.is_read;
+                const isResolved = ticket.status === 'resolved';
+                const statusClass = ticket.status || 'pending';
+                const categoryClass = ticket.category || 'other';
+                const date = new Date(ticket.created_at);
+                const timeAgo = formatTimeAgo(date);
+
+                html += `
+                    <div class="ticket-item ${isUnread ? 'unread' : ''} ${isResolved ? 'resolved' : ''}" onclick="selectTicket('${ticket.id}')" data-id="${ticket.id}">
+                        <div class="ticket-top">
+                            <div class="ticket-user">
+                                <span class="user-initials">${getInitials(ticket.user_name || 'User')}</span>
+                                ${ticket.user_name || 'Unknown User'}
+                            </div>
+                            <span class="ticket-type ${categoryClass}">${capitalizeFirst(ticket.category || 'Other')}</span>
+                        </div>
+                        <div class="ticket-title">${escapeHtml(ticket.subject || 'No subject')}</div>
+                        <div class="ticket-preview">${escapeHtml((ticket.description || '').substring(0, 100))}${(ticket.description || '').length > 100 ? '...' : ''}</div>
+                        <div class="ticket-meta">
+                            <span class="ticket-time"><i class="far fa-clock"></i> ${timeAgo}</span>
+                            <span class="ticket-status ${statusClass}">${capitalizeFirst(ticket.status || 'pending')}</span>
+                        </div>
+                        ${ticket.response ? `<div class="has-response"><i class="fas fa-reply"></i> Replied</div>` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            // If there's a selected ticket, highlight it
+            if (currentTicketId) {
+                document.querySelectorAll('.ticket-item').forEach(el => {
+                    if (el.dataset.id === currentTicketId) {
+                        el.style.borderColor = 'var(--primary-color)';
+                        el.style.boxShadow = '0 0 0 2px var(--primary-color)';
+                    }
+                });
+            }
+        }
+
+        // =============================================================
+        // SELECT TICKET
+        // =============================================================
+        function selectTicket(ticketId) {
+            currentTicketId = ticketId;
+            const ticket = allTickets.find(t => t.id == ticketId);
+            if (!ticket) return;
+
+            // Mark as read
+            fetch(`/api/complaints/${ticketId}/read`, { method: 'POST' })
+                .then(() => {
+                    ticket.is_read = true;
+                    renderTickets();
+                });
+
+            showTicketDetail(ticket);
+        }
+
+        // =============================================================
+        // SHOW TICKET DETAIL
+        // =============================================================
+        function showTicketDetail(ticket) {
+            document.getElementById('emptyDetail').style.display = 'none';
+            document.getElementById('ticketDetailContent').style.display = 'block';
+
+            document.getElementById('detailSubject').textContent = ticket.subject || 'No Subject';
+            document.getElementById('detailId').textContent = `#TICKET-${String(ticket.id).padStart(4, '0')}`;
+            document.getElementById('detailStatusBadge').textContent = capitalizeFirst(ticket.status || 'pending');
+            document.getElementById('detailStatusBadge').className = `ticket-status ${ticket.status || 'pending'}`;
+
+            const initials = getInitials(ticket.user_name || 'User');
+            document.getElementById('detailAvatar').textContent = initials;
+            document.getElementById('detailUserName').textContent = ticket.user_name || 'Unknown User';
+            document.getElementById('detailUserEmail').textContent = ticket.user_email || 'No email';
+
+            document.getElementById('detailCategory').textContent = capitalizeFirst(ticket.category || 'Other');
+            document.getElementById('detailDescription').textContent = ticket.description || 'No description provided.';
+            document.getElementById('detailTime').textContent = formatTimeAgo(new Date(ticket.created_at));
+
+            // Show existing response
+            const responseContainer = document.getElementById('detailExistingResponse');
+            if (ticket.response) {
+                responseContainer.innerHTML = `
+                    <div class="existing-response">
+                        <div class="response-label"><i class="fas fa-reply"></i> Admin Response</div>
+                        <div class="response-text">${escapeHtml(ticket.response)}</div>
+                        <div class="response-time">${formatTimeAgo(new Date(ticket.response_date))}</div>
+                    </div>
+                `;
+                responseContainer.style.display = 'block';
+            } else {
+                responseContainer.style.display = 'none';
+            }
+
+            // Set response textarea
+            document.getElementById('responseText').value = '';
+
+            // Highlight the ticket in the list
+            document.querySelectorAll('.ticket-item').forEach(el => {
+                el.style.borderColor = '';
+                el.style.boxShadow = '';
+                if (el.dataset.id == ticket.id) {
+                    el.style.borderColor = 'var(--primary-color)';
+                    el.style.boxShadow = '0 0 0 2px var(--primary-color)';
+                }
+            });
+        }
+
+        // =============================================================
+        // SEND RESPONSE
+        // =============================================================
+        function sendResponse() {
+            const responseText = document.getElementById('responseText');
+            const text = responseText.value.trim();
+
+            if (!text) {
+                alert('Please enter a response.');
+                return;
+            }
+
+            if (!currentTicketId) {
+                alert('No ticket selected.');
+                return;
+            }
+
+            const btn = document.querySelector('.btn-primary');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            fetch(`/api/complaints/${currentTicketId}/respond`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ response: text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Update local data
+                    const ticket = allTickets.find(t => t.id == currentTicketId);
+                    if (ticket) {
+                        ticket.response = text;
+                        ticket.response_date = new Date().toISOString();
+                        ticket.status = 'in-progress';
+                    }
+                    renderStats();
+                    renderTickets();
+                    showTicketDetail(ticket);
+                    responseText.value = '';
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to send response'));
+                }
+            })
+            .catch(err => {
+                console.error('Error sending response:', err);
+                alert('Error sending response. Please try again.');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Response';
+            });
+        }
+
+        // =============================================================
+        // MARK RESOLVED
+        // =============================================================
+        function markResolved() {
+            if (!currentTicketId) {
+                alert('No ticket selected.');
+                return;
+            }
+
+            if (!confirm('Mark this ticket as resolved?')) return;
+
+            const btn = document.querySelector('.btn-success');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+            fetch(`/api/complaints/${currentTicketId}/resolve`, {
+                method: 'POST'
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const ticket = allTickets.find(t => t.id == currentTicketId);
+                    if (ticket) {
+                        ticket.status = 'resolved';
+                    }
+                    renderStats();
+                    renderTickets();
+                    showTicketDetail(ticket);
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to resolve ticket'));
+                }
+            })
+            .catch(err => {
+                console.error('Error resolving ticket:', err);
+                alert('Error resolving ticket. Please try again.');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Mark Resolved';
+            });
+        }
+
+        // =============================================================
+        // FILTER TICKETS
+        // =============================================================
+        function filterTickets() {
+            currentFilter = document.getElementById('statusFilter').value;
+            currentCategory = document.getElementById('categoryFilter').value;
+            renderTickets();
+        }
+
+        // =============================================================
+        // UTILITY FUNCTIONS
+        // =============================================================
+        function formatTimeAgo(date) {
+            if (!date) return 'Unknown';
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMin = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMin < 1) return 'Just now';
+            if (diffMin < 60) return `${diffMin}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        function getInitials(name) {
+            if (!name) return 'U';
+            return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function capitalizeFirst(str) {
+            if (!str) return '';
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // =============================================================
+        // AUTO-REFRESH
+        // =============================================================
+        setInterval(() => {
+            loadTickets();
+        }, 10000);
+
+        // =============================================================
+        // INIT
+        // =============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTickets();
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

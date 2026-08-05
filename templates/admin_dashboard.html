@@ -1,0 +1,372 @@
+{% extends "admin.html" %}
+
+{% block allcontent %}
+<div class="admin-content">
+    <div class="welcome-banner">
+        <h2>Welcome back, {{ firstname }}</h2>
+        <p>{{ quote_text }} — {{ quote_author }}</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon users"><i class="fas fa-users"></i></div>
+            <div>
+                <div class="stat-value">{{ total_users }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon admins"><i class="fas fa-user-shield"></i></div>
+            <div>
+                <div class="stat-value">{{ total_admins }}</div>
+                <div class="stat-label">Admin Accounts</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon resources"><i class="fas fa-file-alt"></i></div>
+            <div>
+                <div class="stat-value">{{ total_resources }}</div>
+                <div class="stat-label">Uploaded Resources</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #fce7f3; color: #ec489a;"><i class="fas fa-ticket-alt"></i></div>
+            <div>
+                <div class="stat-value">{{ pending_complaints }}</div>
+                <div class="stat-label">Pending Tickets</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 18px;">
+            <h3 style="margin: 0;">Recently Registered Users</h3>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="searchUsers" placeholder="Search users..." style="padding: 8px 14px; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 0.85rem; min-width: 200px;">
+                <button onclick="refreshUsers()" style="padding: 8px 16px; border: 2px solid #e2e8f0; background: white; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: var(--transition);">
+                    <i class="fas fa-rotate"></i> Refresh
+                </button>
+            </div>
+        </div>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody">
+                {% for user in recent_users %}
+                <tr data-user-id="{{ user[0] }}">
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }} {{ user[2] }}</td>
+                    <td>{{ user[3] }}</td>
+                    <td><span class="role-pill {{ user[4] or 'student' }}">{{ user[4] or 'student' }}</span></td>
+                    <td>
+                        <button class="delete-user-btn" onclick="deleteUser({{ user[0] }}, '{{ user[1] }} {{ user[2] }}')" 
+                                {% if user[0] == session.get('user_id') %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="noResultsMessage" style="display: none; text-align: center; padding: 30px; color: var(--gray-color);">
+            <i class="fas fa-search" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.5;"></i>
+            <p>No users found matching your search.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .delete-user-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: var(--danger-color);
+        font-size: 0.78rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+    }
+
+    .delete-user-btn:hover:not(:disabled) {
+        background: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+    }
+
+    .delete-user-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .delete-user-btn .spinner {
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .user-deleted {
+        animation: fadeOut 0.4s ease forwards;
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0; transform: scale(0.9); }
+    }
+
+    /* Dark mode */
+    body.dark-mode .delete-user-btn {
+        background: #3a1a1a;
+        border-color: #5a2a2a;
+        color: #ef4444;
+    }
+
+    body.dark-mode .delete-user-btn:hover:not(:disabled) {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+    }
+
+    body.dark-mode #searchUsers {
+        background-color: #0f172a;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode #searchUsers::placeholder {
+        color: #64748b;
+    }
+
+    body.dark-mode #searchUsers:focus {
+        border-color: var(--primary-color);
+    }
+
+    body.dark-mode .panel h3 {
+        color: #f1f5f9;
+    }
+
+    @media (max-width: 700px) {
+        .panel h3 {
+            font-size: 1rem;
+        }
+        #searchUsers {
+            min-width: 140px;
+            font-size: 0.8rem;
+            padding: 6px 12px;
+        }
+        .delete-user-btn {
+            padding: 4px 10px;
+            font-size: 0.7rem;
+        }
+        .users-table td, .users-table th {
+            padding: 8px 6px;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .panel h3 {
+            font-size: 0.9rem;
+        }
+        #searchUsers {
+            min-width: 100px;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+        }
+        .delete-user-btn {
+            padding: 3px 8px;
+            font-size: 0.65rem;
+        }
+        .users-table td, .users-table th {
+            padding: 6px 4px;
+            font-size: 0.7rem;
+        }
+        .users-table th {
+            font-size: 0.6rem;
+        }
+    }
+</style>
+
+<script>
+    // ===== SEARCH USERS =====
+    document.getElementById('searchUsers').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#usersTableBody tr');
+        const noResults = document.getElementById('noResultsMessage');
+        let found = false;
+
+        rows.forEach(row => {
+            const name = row.querySelector('td:nth-child(2)')?.textContent?.toLowerCase() || '';
+            const email = row.querySelector('td:nth-child(3)')?.textContent?.toLowerCase() || '';
+            const role = row.querySelector('td:nth-child(4)')?.textContent?.toLowerCase() || '';
+
+            if (name.includes(searchTerm) || email.includes(searchTerm) || role.includes(searchTerm)) {
+                row.style.display = '';
+                found = true;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        noResults.style.display = found ? 'none' : 'block';
+    });
+
+    // ===== DELETE USER =====
+    function deleteUser(userId, userName) {
+        if (!confirm(`Are you sure you want to delete "${userName}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+        const btn = row ? row.querySelector('.delete-user-btn') : null;
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner spinner"></i> Deleting...';
+        }
+
+        fetch(`/api/admin/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Animate and remove row
+                if (row) {
+                    row.classList.add('user-deleted');
+                    setTimeout(() => {
+                        row.remove();
+                        // Update stats
+                        updateStats();
+                        // Check if table is empty
+                        const remainingRows = document.querySelectorAll('#usersTableBody tr:not(.user-deleted)');
+                        if (remainingRows.length === 0) {
+                            document.getElementById('usersTableBody').innerHTML = `
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                                        <i class="fas fa-users" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.3;"></i>
+                                        No users found
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }, 400);
+                }
+                alert(`✅ User "${userName}" has been deleted successfully.`);
+            } else {
+                alert(`❌ Failed to delete user: ${data.message || 'Unknown error'}`);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting user:', error);
+            alert('❌ An error occurred while deleting the user. Please try again.');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+            }
+        });
+    }
+
+    // ===== REFRESH USERS =====
+    function refreshUsers() {
+        const btn = document.querySelector('.panel .refresh-btn') || document.querySelector('[onclick="refreshUsers()"]');
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-spinner spinner"></i> Loading...';
+            btn.disabled = true;
+        }
+
+        fetch('/api/admin/users')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const tbody = document.getElementById('usersTableBody');
+                    const users = data.users || [];
+
+                    if (users.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 30px; color: var(--gray-color);">
+                                    <i class="fas fa-users" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.3;"></i>
+                                    No users registered yet
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        tbody.innerHTML = users.map(user => `
+                            <tr data-user-id="${user.id}">
+                                <td>${user.id}</td>
+                                <td>${user.firstname || ''} ${user.lastname || ''}</td>
+                                <td>${user.email || ''}</td>
+                                <td><span class="role-pill ${user.role || 'student'}">${user.role || 'student'}</span></td>
+                                <td>
+                                    <button class="delete-user-btn" onclick="deleteUser(${user.id}, '${user.firstname || ''} ${user.lastname || ''}')" 
+                                            ${user.id == {{ session.get('user_id', 0) }} ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+
+                    // Update total users stat
+                    document.querySelector('.stat-card:first-child .stat-value').textContent = users.length;
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing users:', error);
+                alert('Failed to refresh users. Please try again.');
+            })
+            .finally(() => {
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-rotate"></i> Refresh';
+                    btn.disabled = false;
+                }
+            });
+    }
+
+    // ===== UPDATE STATS =====
+    function updateStats() {
+        const remainingRows = document.querySelectorAll('#usersTableBody tr:not(.user-deleted)');
+        const totalUsers = remainingRows.length;
+        const statElement = document.querySelector('.stat-card:first-child .stat-value');
+        if (statElement) {
+            statElement.textContent = totalUsers;
+        }
+    }
+
+    // ===== AUTO-REFRESH EVERY 30 SECONDS =====
+    setInterval(() => {
+        // Only refresh if the page is visible and the user is not actively searching
+        if (!document.hidden) {
+            const searchInput = document.getElementById('searchUsers');
+            if (searchInput && searchInput.value.trim() === '') {
+                refreshUsers();
+            }
+        }
+    }, 30000);
+</script>
+{% endblock %}

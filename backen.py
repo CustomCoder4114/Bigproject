@@ -182,6 +182,24 @@ def to_iso_utc(sqlite_timestamp):
         return sqlite_timestamp
     return sqlite_timestamp.replace(' ', 'T') + 'Z'
 
+
+def is_admin():
+    """True if the logged-in session belongs to an admin."""
+    return session.get('role') == 'admin'
+
+
+def create_notification(conn, user_id, title, message, icon='fa-bell', color='blue'):
+    """
+    Insert one notification row for a user. Caller owns the connection
+    and is responsible for committing (so callers that create many
+    notifications in a loop, like a broadcast, only commit once).
+    """
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO notifications (user_id, title, message, icon, color)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (user_id, title, message, icon, color))
+
 # Initialize database tables
 def init_db():
     conn = sqlite3.connect('users.db')
@@ -235,10 +253,53 @@ def init_db():
             text TEXT NOT NULL,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             is_read INTEGER DEFAULT 0,
+            is_broadcast INTEGER DEFAULT 0,
             FOREIGN KEY (sender_id) REFERENCES users (id),
             FOREIGN KEY (receiver_id) REFERENCES users (id)
         )
     ''')
+
+    # Notifications table — powers the bell icon in the base template,
+    # which already calls GET /notifications, POST /notifications/<id>/read,
+    # and POST /notifications/read-all.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS notifications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            message TEXT NOT NULL,
+            icon TEXT DEFAULT 'fa-bell',
+            color TEXT DEFAULT 'blue',
+            is_read INTEGER DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
+
+    # Complaints / support tickets table — backs admin_support.html's
+    # /api/complaints, /api/complaints/<id>/read, /respond, and /resolve.
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS complaints (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            subject TEXT NOT NULL,
+            description TEXT,
+            category TEXT DEFAULT 'other',
+            priority TEXT DEFAULT 'medium',
+            status TEXT DEFAULT 'pending',
+            is_read INTEGER DEFAULT 0,
+            response TEXT,
+            response_date TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users (id)
+        )
+    ''')
+
+    # Add priority column if the table pre-dates this feature
+    try:
+        cursor.execute("ALTER TABLE complaints ADD COLUMN priority TEXT DEFAULT 'medium'")
+    except sqlite3.OperationalError:
+        pass  # column already exists
 
     # Add an avatar column to the existing users table if it isn't there
     try:
@@ -247,10 +308,14 @@ def init_db():
         pass  # column already exists
 
     # Add a role column so we can tell admins apart from regular users.
-    # Existing rows (and any inserted without specifying a role) default
-    # to 'student', so nothing currently in the DB accidentally becomes admin.
     try:
         cursor.execute("ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'student'")
+    except sqlite3.OperationalError:
+        pass  # column already exists
+
+    # Add is_broadcast column to messages table if it doesn't exist
+    try:
+        cursor.execute("ALTER TABLE messages ADD COLUMN is_broadcast INTEGER DEFAULT 0")
     except sqlite3.OperationalError:
         pass  # column already exists
     
@@ -261,6 +326,30 @@ def init_db():
 init_db()
 
 # ============ EXISTING ROUTES ===============
+
+@app.route('/admin_messages')
+def admin_messages():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if session.get('role') != 'admin':
+        return redirect(url_for('dashboard'))
+    return render_template('admin_messages.html')
+
+@app.route('/admin_resources')
+def admin_resources():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if session.get('role') != 'admin':
+        return redirect(url_for('dashboard'))
+    return render_template('admin_resources.html')
+
+@app.route('/admin_support')
+def admin_support():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    if session.get('role') != 'admin':
+        return redirect(url_for('dashboard'))
+    return render_template('admin_support.html')
 
 @app.route('/intro')
 def intro():
@@ -295,23 +384,14 @@ def login():
             session['firstname'] = user[1]
             session['lastname'] = user[2]
             session['email'] = user[3]
-            # Older rows created before the role column existed will read
-            # as None here, so treat anything falsy as a regular student.
             session['role'] = user[4] or 'student'
             
             # Store a quote for this user session
-            # Option 1: Random quote (changes every page load)
             quote = get_random_quote()
-            # Option 2: User-based quote (changes only when user logs in again)
-            # quote = get_user_quote(user[3])
-            # Option 3: Daily quote (same for everyone all day)
-            # quote = get_daily_quote()
-            
             session['quote_text'] = quote['text']
             session['quote_author'] = quote['author']
 
-            # Admins land on the admin dashboard, everyone else on the
-            # regular student dashboard.
+            # Admins land on the admin dashboard, everyone else on the regular student dashboard
             if session['role'] == 'admin':
                 return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
@@ -325,13 +405,9 @@ def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    # Keep admins on their own dashboard even if they navigate here directly
-    # (e.g. via a bookmark or by typing the URL).
     if session.get('role') == 'admin':
         return redirect(url_for('admin_dashboard'))
     
-    # If quote is not in session (e.g., user directly accessed dashboard without login),
-    # set a default quote
     if 'quote_text' not in session:
         quote = get_random_quote()
         session['quote_text'] = quote['text']
@@ -350,8 +426,6 @@ def admin_dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
 
-    # Non-admins who somehow land here (typed URL, stale bookmark, etc.)
-    # get sent back to the regular dashboard instead of seeing admin data.
     if session.get('role') != 'admin':
         return redirect(url_for('dashboard'))
 
@@ -429,9 +503,6 @@ def register():
         conn = sqlite3.connect('users.db')
         cursor = conn.cursor()
 
-        # Registrations always come in as regular students. Admin accounts
-        # are created separately (see create_admin.py) - never through
-        # this public-facing form.
         cursor.execute('''
             INSERT INTO users (firstname, lastname, email, password, role)
             VALUES (?, ?, ?, ?, ?)
@@ -520,9 +591,7 @@ def logout():
 
 @app.route('/messages/search_users', methods=['GET'])
 def search_users():
-    """Search existing accounts by name for the messages page.
-    Excludes the logged-in user and returns a small JSON list the
-    frontend can render directly."""
+    """Search existing accounts by name for the messages page."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
@@ -533,7 +602,6 @@ def search_users():
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    # Search first name / last name / full name, exclude yourself
     like_term = f'%{q}%'
     cursor.execute('''
         SELECT id, firstname, lastname
@@ -576,54 +644,121 @@ def search_users():
 
 @app.route('/messages/send', methods=['POST'])
 def send_message():
-    """Send a message to a specific user and persist it."""
+    """Send a message to a specific user or broadcast to all users."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
     data = request.get_json(silent=True) or {}
     receiver_id = data.get('receiver_id')
     text = (data.get('text') or '').strip()
+    is_broadcast = data.get('is_broadcast', False)
 
-    if not receiver_id or not text:
-        return jsonify({'success': False, 'message': 'receiver_id and text are required'}), 400
+    if not text:
+        return jsonify({'success': False, 'message': 'Text is required'}), 400
 
     sender_id = session['user_id']
-
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
-    cursor.execute('SELECT id FROM users WHERE id = ?', (receiver_id,))
-    if not cursor.fetchone():
+    if is_broadcast:
+        # Check if user is admin
+        cursor.execute('SELECT role FROM users WHERE id = ?', (sender_id,))
+        user = cursor.fetchone()
+        if not user or user[0] != 'admin':
+            conn.close()
+            return jsonify({'success': False, 'message': 'Only admins can broadcast'}), 403
+
+        # Send to all users except the sender
+        cursor.execute('SELECT id FROM users WHERE id != ?', (sender_id,))
+        all_users = cursor.fetchall()
+        
+        if not all_users:
+            conn.close()
+            return jsonify({'success': False, 'message': 'No other users to send to'}), 404
+        
+        broadcast_count = 0
+        for user_row in all_users:
+            recipient_id = user_row[0]
+
+            cursor.execute('''
+                INSERT INTO messages (sender_id, receiver_id, text, is_read, is_broadcast)
+                VALUES (?, ?, ?, 0, 1)
+            ''', (sender_id, recipient_id, text))
+
+            # Every broadcast recipient also gets a bell notification
+            create_notification(
+                conn,
+                user_id=recipient_id,
+                title='New announcement',
+                message=text[:120],
+                icon='fa-bullhorn',
+                color='blue'
+            )
+
+            broadcast_count += 1
+        
+        conn.commit()
         conn.close()
-        return jsonify({'success': False, 'message': 'Recipient not found'}), 404
+        
+        return jsonify({
+            'success': True, 
+            'message': f'Broadcast sent to {broadcast_count} users',
+            'broadcast_count': broadcast_count
+        })
 
-    cursor.execute('''
-        INSERT INTO messages (sender_id, receiver_id, text, is_read)
-        VALUES (?, ?, ?, 0)
-    ''', (sender_id, receiver_id, text))
-    conn.commit()
+    else:
+        # Send to a specific user
+        if not receiver_id:
+            conn.close()
+            return jsonify({'success': False, 'message': 'receiver_id is required'}), 400
 
-    message_id = cursor.lastrowid
-    cursor.execute('SELECT id, sender_id, receiver_id, text, timestamp, is_read FROM messages WHERE id = ?', (message_id,))
-    row = cursor.fetchone()
-    conn.close()
+        cursor.execute('SELECT id FROM users WHERE id = ?', (receiver_id,))
+        if not cursor.fetchone():
+            conn.close()
+            return jsonify({'success': False, 'message': 'Recipient not found'}), 404
 
-    message = {
-        'id': row[0],
-        'sender_id': row[1],
-        'receiver_id': row[2],
-        'text': row[3],
-        'timestamp': to_iso_utc(row[4]),
-        'read': bool(row[5])
-    }
+        cursor.execute('''
+            INSERT INTO messages (sender_id, receiver_id, text, is_read, is_broadcast)
+            VALUES (?, ?, ?, 0, 0)
+        ''', (sender_id, receiver_id, text))
 
-    return jsonify({'success': True, 'message': message})
+        # Direct messages also notify the recipient
+        cursor.execute('SELECT firstname, lastname FROM users WHERE id = ?', (sender_id,))
+        sender_row = cursor.fetchone()
+        sender_name = f"{sender_row[0]} {sender_row[1]}".strip() if sender_row else 'Someone'
+
+        create_notification(
+            conn,
+            user_id=receiver_id,
+            title=f'New message from {sender_name}',
+            message=text[:120],
+            icon='fa-envelope',
+            color='green'
+        )
+
+        conn.commit()
+
+        message_id = cursor.lastrowid
+        cursor.execute('SELECT id, sender_id, receiver_id, text, timestamp, is_read, is_broadcast FROM messages WHERE id = ?', (message_id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        message = {
+            'id': row[0],
+            'sender_id': row[1],
+            'receiver_id': row[2],
+            'text': row[3],
+            'timestamp': to_iso_utc(row[4]),
+            'read': bool(row[5]),
+            'is_broadcast': bool(row[6])
+        }
+
+        return jsonify({'success': True, 'message': message})
 
 
 @app.route('/messages/conversation/<int:other_user_id>', methods=['GET'])
 def get_conversation(other_user_id):
-    """Return the full message thread between the logged-in user and
-    another specific user, and mark any unread messages from them as read."""
+    """Return the full message thread between the logged-in user and another specific user."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
@@ -633,7 +768,7 @@ def get_conversation(other_user_id):
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT id, sender_id, receiver_id, text, timestamp, is_read
+        SELECT id, sender_id, receiver_id, text, timestamp, is_read, is_broadcast
         FROM messages
         WHERE (sender_id = ? AND receiver_id = ?)
            OR (sender_id = ? AND receiver_id = ?)
@@ -642,6 +777,7 @@ def get_conversation(other_user_id):
 
     rows = cursor.fetchall()
 
+    # Mark messages from the other user as read
     cursor.execute('''
         UPDATE messages SET is_read = 1
         WHERE sender_id = ? AND receiver_id = ? AND is_read = 0
@@ -655,7 +791,8 @@ def get_conversation(other_user_id):
         'receiver_id': row[2],
         'text': row[3],
         'timestamp': to_iso_utc(row[4]),
-        'read': bool(row[5])
+        'read': bool(row[5]),
+        'is_broadcast': bool(row[6])
     } for row in rows]
 
     return jsonify(thread)
@@ -663,17 +800,17 @@ def get_conversation(other_user_id):
 
 @app.route('/messages/conversations', methods=['GET'])
 def list_conversations():
-    """Return every account the logged-in user has exchanged messages
-    with, each with the other user's name/avatar, the last message
-    preview, and how many messages from them are unread."""
+    """Return every account the logged-in user has exchanged messages with."""
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'Authentication required'}), 401
 
     my_id = session['user_id']
+    is_admin = session.get('role') == 'admin'
 
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
 
+    # Get all users the user has messaged with
     cursor.execute('''
         SELECT DISTINCT other_id FROM (
             SELECT receiver_id AS other_id FROM messages WHERE sender_id = ?
@@ -684,6 +821,37 @@ def list_conversations():
     other_ids = [row[0] for row in cursor.fetchall()]
 
     conversations = []
+    
+    # If admin, add a special broadcast conversation entry
+    if is_admin:
+        # Count how many broadcast messages the admin has sent
+        cursor.execute('''
+            SELECT COUNT(*) FROM messages 
+            WHERE sender_id = ? AND is_broadcast = 1
+        ''', (my_id,))
+        broadcast_count = cursor.fetchone()[0]
+        
+        if broadcast_count > 0:
+            # Get the latest broadcast message
+            cursor.execute('''
+                SELECT text, timestamp FROM messages 
+                WHERE sender_id = ? AND is_broadcast = 1
+                ORDER BY timestamp DESC LIMIT 1
+            ''', (my_id,))
+            last_broadcast = cursor.fetchone()
+            
+            conversations.append({
+                'id': -1,  # Special ID for broadcast
+                'name': '📢 All Users (Broadcast)',
+                'avatar': '📢',
+                'online': False,
+                'lastSeen': '',
+                'lastMessage': f'Broadcast: {last_broadcast[0][:50]}...' if last_broadcast else 'Send broadcast to all users',
+                'lastTimestamp': to_iso_utc(last_broadcast[1]) if last_broadcast else None,
+                'unread': 0,
+                'is_broadcast': True
+            })
+
     for other_id in other_ids:
         cursor.execute('SELECT firstname, lastname FROM users WHERE id = ?', (other_id,))
         user_row = cursor.fetchone()
@@ -728,17 +896,327 @@ def list_conversations():
             'lastSeen': '',
             'lastMessage': last_message,
             'lastTimestamp': last_timestamp,
-            'unread': unread
+            'unread': unread,
+            'is_broadcast': False
         })
 
     conn.close()
 
+    # Sort by most recent first
     conversations.sort(key=lambda c: c['lastTimestamp'] or '', reverse=True)
 
     for c in conversations:
         c['lastTimestamp'] = to_iso_utc(c['lastTimestamp'])
 
     return jsonify(conversations)
+
+# ============ NOTIFICATIONS ============
+
+@app.route('/notifications', methods=['GET'])
+def get_notifications():
+    """Return the logged-in user's notifications, newest first."""
+    if 'user_id' not in session:
+        return jsonify([])
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT id, title, message, icon, color, is_read, created_at
+        FROM notifications
+        WHERE user_id = ?
+        ORDER BY created_at DESC, id DESC
+        LIMIT 50
+    ''', (session['user_id'],))
+    rows = cursor.fetchall()
+    conn.close()
+
+    notifications = [{
+        'id': row[0],
+        'title': row[1],
+        'message': row[2],
+        'icon': row[3],
+        'color': row[4],
+        'read': bool(row[5]),
+        'time': to_iso_utc(row[6])
+    } for row in rows]
+
+    return jsonify(notifications)
+
+
+@app.route('/notifications/<int:notification_id>/read', methods=['POST'])
+def mark_notification_read(notification_id):
+    """Mark a single notification as read. Scoped to the logged-in user
+    so nobody can mark someone else's notification by guessing an id."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE notifications SET is_read = 1
+        WHERE id = ? AND user_id = ?
+    ''', (notification_id, session['user_id']))
+    conn.commit()
+    updated = cursor.rowcount
+    conn.close()
+
+    if updated == 0:
+        return jsonify({'success': False, 'message': 'Notification not found'}), 404
+
+    return jsonify({'success': True})
+
+
+@app.route('/notifications/read-all', methods=['POST'])
+def mark_all_notifications_read():
+    """Mark every unread notification belonging to the logged-in user as read."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE notifications SET is_read = 1
+        WHERE user_id = ? AND is_read = 0
+    ''', (session['user_id'],))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True})
+
+# ============ SUPPORT TICKETS / COMPLAINTS ============
+
+def _serialize_complaint(row):
+    """row layout: id, user_id, subject, description, category, priority, status,
+    is_read, response, response_date, created_at, firstname, lastname, email"""
+    firstname = (row[11] or '').strip()
+    lastname = (row[12] or '').strip()
+    full_name = f"{firstname} {lastname}".strip() or 'Unknown User'
+
+    return {
+        'id': row[0],
+        'user_id': row[1],
+        'subject': row[2],
+        'description': row[3],
+        'category': row[4],
+        'priority': row[5],
+        'status': row[6],
+        'is_read': bool(row[7]),
+        'response': row[8],
+        'response_date': to_iso_utc(row[9]),
+        'created_at': to_iso_utc(row[10]),
+        'user_name': full_name,
+        'user_email': row[13]
+    }
+
+
+# The admin panel's filter dropdown uses one category set (technical, academic,
+# billing, content, account, other) and the student-facing ticket form uses a
+# slightly different one (technical, account, course, billing, feature, other).
+# Accept the union so neither page's submissions get silently downgraded to "other".
+VALID_COMPLAINT_CATEGORIES = {
+    'technical', 'academic', 'billing', 'content', 'account', 'other', 'course', 'feature'
+}
+VALID_COMPLAINT_PRIORITIES = {'low', 'medium', 'high', 'urgent'}
+
+
+@app.route('/api/complaints', methods=['GET', 'POST'])
+def complaints():
+    """GET: admin fetches every ticket. POST: a logged-in user submits a new one."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        data = request.get_json(silent=True) or {}
+        subject = (data.get('subject') or '').strip()
+        description = (data.get('description') or '').strip()
+        category = (data.get('category') or 'other').strip().lower()
+        priority = (data.get('priority') or 'medium').strip().lower()
+
+        if category not in VALID_COMPLAINT_CATEGORIES:
+            category = 'other'
+        if priority not in VALID_COMPLAINT_PRIORITIES:
+            priority = 'medium'
+
+        if not subject:
+            conn.close()
+            return jsonify({'success': False, 'message': 'Subject is required'}), 400
+
+        cursor.execute('''
+            INSERT INTO complaints (user_id, subject, description, category, priority, status, is_read)
+            VALUES (?, ?, ?, ?, ?, 'pending', 0)
+        ''', (session['user_id'], subject, description, category, priority))
+        conn.commit()
+
+        complaint_id = cursor.lastrowid
+        cursor.execute('''
+            SELECT c.id, c.user_id, c.subject, c.description, c.category, c.priority, c.status,
+                   c.is_read, c.response, c.response_date, c.created_at,
+                   u.firstname, u.lastname, u.email
+            FROM complaints c
+            LEFT JOIN users u ON c.user_id = u.id
+            WHERE c.id = ?
+        ''', (complaint_id,))
+        row = cursor.fetchone()
+        conn.close()
+
+        return jsonify({'success': True, 'complaint': _serialize_complaint(row)})
+
+    # GET — admin only
+    if not is_admin():
+        conn.close()
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+
+    cursor.execute('''
+        SELECT c.id, c.user_id, c.subject, c.description, c.category, c.priority, c.status,
+               c.is_read, c.response, c.response_date, c.created_at,
+               u.firstname, u.lastname, u.email
+        FROM complaints c
+        LEFT JOIN users u ON c.user_id = u.id
+        ORDER BY c.created_at DESC, c.id DESC
+    ''')
+    rows = cursor.fetchall()
+    conn.close()
+
+    return jsonify({
+        'success': True,
+        'complaints': [_serialize_complaint(row) for row in rows]
+    })
+
+
+@app.route('/api/complaints/<int:complaint_id>/read', methods=['POST'])
+def mark_complaint_read(complaint_id):
+    """Admin opens a ticket — mark it as read."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+    if not is_admin():
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('UPDATE complaints SET is_read = 1 WHERE id = ?', (complaint_id,))
+    conn.commit()
+    updated = cursor.rowcount
+    conn.close()
+
+    if updated == 0:
+        return jsonify({'success': False, 'message': 'Ticket not found'}), 404
+
+    return jsonify({'success': True})
+
+
+@app.route('/api/complaints/<int:complaint_id>/respond', methods=['POST'])
+def respond_to_complaint(complaint_id):
+    """Admin writes a response. Ticket moves to in-progress and the user gets notified."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+    if not is_admin():
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+
+    data = request.get_json(silent=True) or {}
+    response_text = (data.get('response') or '').strip()
+    if not response_text:
+        return jsonify({'success': False, 'message': 'Response text is required'}), 400
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id, subject, status FROM complaints WHERE id = ?', (complaint_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'success': False, 'message': 'Ticket not found'}), 404
+
+    ticket_user_id, subject, current_status = row
+    new_status = 'resolved' if current_status == 'resolved' else 'in-progress'
+
+    cursor.execute('''
+        UPDATE complaints
+        SET response = ?, response_date = CURRENT_TIMESTAMP, status = ?, is_read = 1
+        WHERE id = ?
+    ''', (response_text, new_status, complaint_id))
+
+    create_notification(
+        conn,
+        user_id=ticket_user_id,
+        title=f'Support replied: {subject}'[:120],
+        message=response_text[:120],
+        icon='fa-headset',
+        color='blue'
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True, 'status': new_status})
+
+
+@app.route('/api/complaints/<int:complaint_id>/resolve', methods=['POST'])
+def resolve_complaint(complaint_id):
+    """Admin marks a ticket resolved."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+    if not is_admin():
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_id, response, subject FROM complaints WHERE id = ?', (complaint_id,))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        return jsonify({'success': False, 'message': 'Ticket not found'}), 404
+
+    ticket_user_id, existing_response, subject = row
+
+    cursor.execute('''
+        UPDATE complaints SET status = 'resolved', is_read = 1 WHERE id = ?
+    ''', (complaint_id,))
+
+    notification_message = existing_response if existing_response else 'Your ticket has been marked as resolved.'
+
+    create_notification(
+        conn,
+        user_id=ticket_user_id,
+        title=f'Resolved: {subject}'[:120],
+        message=notification_message[:120],
+        icon='fa-check-circle',
+        color='green'
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True})
+
+
+@app.route('/api/complaints/mine', methods=['GET'])
+def my_complaints():
+    """A regular user viewing their own submitted tickets (for the student-facing support page)."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT c.id, c.user_id, c.subject, c.description, c.category, c.priority, c.status,
+               c.is_read, c.response, c.response_date, c.created_at,
+               u.firstname, u.lastname, u.email
+        FROM complaints c
+        LEFT JOIN users u ON c.user_id = u.id
+        WHERE c.user_id = ?
+        ORDER BY c.created_at DESC, c.id DESC
+    ''', (session['user_id'],))
+    rows = cursor.fetchall()
+    conn.close()
+
+    return jsonify({
+        'success': True,
+        'complaints': [_serialize_complaint(row) for row in rows]
+    })
 
 # ============ UPLOAD ROUTES ============
 
@@ -1502,6 +1980,82 @@ def delete_resource(resource_id):
             'success': False,
             'message': 'Server error while deleting'
         }), 500
+
+# ============ ADMIN: USER MANAGEMENT ============
+
+@app.route('/api/admin/users', methods=['GET'])
+def admin_get_users():
+    """Get all users for admin panel."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+    
+    if session.get('role') != 'admin':
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT id, firstname, lastname, email, role
+        FROM users
+        ORDER BY id DESC
+    ''')
+    
+    users = cursor.fetchall()
+    conn.close()
+    
+    result = [{
+        'id': u[0],
+        'firstname': u[1],
+        'lastname': u[2],
+        'email': u[3],
+        'role': u[4] or 'student'
+    } for u in users]
+    
+    return jsonify({'success': True, 'users': result})
+
+
+@app.route('/api/admin/users/<int:user_id>', methods=['DELETE'])
+def admin_delete_user(user_id):
+    """Delete a user by ID (admin only)."""
+    if 'user_id' not in session:
+        return jsonify({'success': False, 'message': 'Authentication required'}), 401
+    
+    if session.get('role') != 'admin':
+        return jsonify({'success': False, 'message': 'Admin access required'}), 403
+    
+    # Prevent admin from deleting themselves
+    if user_id == session['user_id']:
+        return jsonify({'success': False, 'message': 'You cannot delete your own account'}), 403
+    
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    
+    # Check if user exists
+    cursor.execute('SELECT id FROM users WHERE id = ?', (user_id,))
+    if not cursor.fetchone():
+        conn.close()
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
+    # Delete user's resources first (foreign key constraint)
+    cursor.execute('DELETE FROM resources WHERE user_id = ?', (user_id,))
+    
+    # Delete user's messages
+    cursor.execute('DELETE FROM messages WHERE sender_id = ? OR receiver_id = ?', (user_id, user_id))
+    
+    # Delete user's notifications
+    cursor.execute('DELETE FROM notifications WHERE user_id = ?', (user_id,))
+    
+    # Delete user's complaints
+    cursor.execute('DELETE FROM complaints WHERE user_id = ?', (user_id,))
+    
+    # Delete the user
+    cursor.execute('DELETE FROM users WHERE id = ?', (user_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'success': True, 'message': 'User deleted successfully'})
 
 
 if __name__ == '__main__':

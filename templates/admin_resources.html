@@ -1,0 +1,904 @@
+{% extends "admin.html" %}
+
+{% block allcontent %}
+<div class="admin-content">
+    <div class="page-title-row">
+        <h2><i class="fas fa-file-alt" style="color: var(--primary-color); margin-right: 10px;"></i>Uploaded Resources</h2>
+        <span class="count-pill" id="resourceCountPill">Loading…</span>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="resourceSearch" placeholder="Search by title or uploader...">
+        </div>
+        <button class="refresh-btn" id="refreshBtn">
+            <i class="fas fa-rotate"></i>
+            <span>Refresh</span>
+        </button>
+    </div>
+
+    <div class="panel">
+        <table class="resources-table">
+            <thead>
+                <tr>
+                    <th>Resource</th>
+                    <th>Uploaded by</th>
+                    <th>Privacy</th>
+                    <th>Size</th>
+                    <th>Uploaded</th>
+                    <th>Stats</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="resourcesTableBody">
+                <tr class="loading-row">
+                    <td colspan="7">
+                        <i class="fas fa-spinner fa-spin"></i> Loading resources…
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ===== RESOURCE PREVIEW MODAL ===== -->
+<div class="resource-preview-overlay" id="resourcePreviewOverlay">
+    <div class="resource-preview-modal">
+        <button class="preview-close" id="previewCloseBtn" aria-label="Close preview">
+            <i class="fas fa-times"></i>
+        </button>
+        <div id="previewBody"></div>
+    </div>
+</div>
+
+<style>
+    /* Additional styles specific to resources page */
+    .toolbar {
+        background: white;
+        border-radius: 12px;
+        padding: 16px 20px;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 20px;
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .toolbar .search-box {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+    }
+
+    .toolbar .search-box i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray-color);
+        font-size: 0.9rem;
+    }
+
+    .toolbar .search-box input {
+        width: 100%;
+        padding: 10px 14px 10px 38px;
+        border: 2px solid #e2e8f0;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        background: #fafcfd;
+        transition: var(--transition);
+    }
+
+    .toolbar .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .toolbar .refresh-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border: 2px solid #e2e8f0;
+        background: white;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--dark-color);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .toolbar .refresh-btn:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    .panel {
+        background: white;
+        border-radius: 12px;
+        padding: 15px 25px 25px;
+        box-shadow: var(--card-shadow);
+        overflow-x: auto;
+    }
+
+    .resources-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .resources-table th,
+    .resources-table td {
+        text-align: left;
+        padding: 14px 10px;
+        font-size: 0.88rem;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+    }
+
+    .resources-table th {
+        color: var(--gray-color);
+        font-weight: 600;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    /* Whole row (except the delete button) opens the preview modal */
+    .resources-table tbody tr {
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .resources-table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+    .resource-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .resource-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+    }
+
+    .resource-icon.video { background: #ef4444; }
+    .resource-icon.audio { background: #8b5cf6; }
+    .resource-icon.image { background: #ec4899; }
+    .resource-icon.pdf { background: #dc2626; }
+    .resource-icon.doc { background: #2563eb; }
+    .resource-icon.presentation { background: #ea580c; }
+    .resource-icon.spreadsheet { background: #059669; }
+    .resource-icon.code { background: #4361ee; }
+    .resource-icon.zip { background: #78716c; }
+    .resource-icon.other { background: #6b7280; }
+
+    .resource-title {
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: var(--dark-color);
+        max-width: 320px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .resource-category {
+        font-size: 0.78rem;
+        color: var(--gray-color);
+        text-transform: capitalize;
+    }
+
+    .privacy-pill {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        text-transform: capitalize;
+        background: #f1f5f9;
+        color: var(--gray-color);
+    }
+
+    .privacy-pill.public {
+        background: #dcfce7;
+        color: #059862;
+    }
+
+    .privacy-pill.private {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .stats-mini {
+        font-size: 0.8rem;
+        color: var(--gray-color);
+        white-space: nowrap;
+    }
+
+    .stats-mini i {
+        margin-right: 4px;
+    }
+
+    .delete-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: var(--danger-color);
+        font-size: 0.82rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+    }
+
+    .delete-btn:hover {
+        background: var(--danger-color);
+        border-color: var(--danger-color);
+        color: white;
+    }
+
+    .delete-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    .empty-row td {
+        text-align: center;
+        padding: 50px 20px;
+        color: var(--gray-color);
+    }
+
+    .empty-row i {
+        display: block;
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        opacity: 0.4;
+    }
+
+    .loading-row td {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray-color);
+    }
+
+    /* ===== RESOURCE PREVIEW MODAL ===== */
+    .resource-preview-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 100000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .resource-preview-overlay.active {
+        display: flex;
+    }
+
+    .resource-preview-modal {
+        position: relative;
+        background: white;
+        border-radius: 16px;
+        max-width: 720px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .preview-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: #f1f5f9;
+        color: var(--dark-color);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    .preview-close:hover {
+        background: #e2e8f0;
+    }
+
+    .preview-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+        padding-right: 40px;
+    }
+
+    .preview-header .resource-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+
+    .preview-header h3 {
+        font-size: 1.15rem;
+        margin-bottom: 4px;
+        word-break: break-word;
+    }
+
+    .preview-meta {
+        font-size: 0.82rem;
+        color: var(--gray-color);
+    }
+
+    .preview-media {
+        margin-bottom: 18px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #f1f5f9;
+    }
+
+    .preview-media-image {
+        display: block;
+        width: 100%;
+        max-height: 420px;
+        object-fit: contain;
+        background: #0f172a;
+    }
+
+    .preview-media-video {
+        display: block;
+        width: 100%;
+        max-height: 420px;
+        background: #000;
+    }
+
+    .preview-media-audio {
+        display: block;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .preview-media-frame {
+        display: block;
+        width: 100%;
+        height: 420px;
+        border: none;
+        background: white;
+    }
+
+    .preview-no-inline {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--gray-color);
+    }
+
+    .preview-no-inline i {
+        display: block;
+        font-size: 2.4rem;
+        margin-bottom: 12px;
+        opacity: 0.5;
+    }
+
+    .preview-description {
+        font-size: 0.9rem;
+        color: var(--dark-color);
+        line-height: 1.6;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+    }
+
+    .preview-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+        padding-top: 16px;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .preview-footer .refresh-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 18px;
+        border: 2px solid var(--primary-color);
+        background: white;
+        color: var(--primary-color);
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .preview-footer .refresh-btn:hover {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    /* Dark mode styles */
+    body.dark-mode .toolbar {
+        background-color: #1e293b;
+    }
+
+    body.dark-mode .toolbar .search-box input {
+        background-color: #0f172a;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .toolbar .search-box input::placeholder {
+        color: #64748b;
+    }
+
+    body.dark-mode .toolbar .refresh-btn {
+        background-color: #0f172a;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .toolbar .refresh-btn:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    body.dark-mode .panel {
+        background-color: #1e293b;
+    }
+
+    body.dark-mode .resources-table tbody tr:hover {
+        background-color: #263449;
+    }
+
+    body.dark-mode .resources-table td {
+        border-bottom-color: #334155;
+    }
+
+    body.dark-mode .resources-table th {
+        color: #94a3b8;
+    }
+
+    body.dark-mode .resource-title {
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .resource-category {
+        color: #94a3b8;
+    }
+
+    body.dark-mode .stats-mini {
+        color: #94a3b8;
+    }
+
+    body.dark-mode .delete-btn {
+        background: #3a1a1a;
+        border-color: #5a2a2a;
+        color: #ef4444;
+    }
+
+    body.dark-mode .delete-btn:hover {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+    }
+
+    body.dark-mode .privacy-pill {
+        background: #263449;
+        color: #94a3b8;
+    }
+
+    body.dark-mode .privacy-pill.public {
+        background: #1a3a2a;
+        color: #4ade80;
+    }
+
+    body.dark-mode .privacy-pill.private {
+        background: #3a2a1a;
+        color: #f59e0b;
+    }
+
+    body.dark-mode .resource-preview-modal {
+        background: #1e293b;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .preview-close {
+        background: #263449;
+        color: #f1f5f9;
+    }
+
+    body.dark-mode .preview-close:hover {
+        background: #334155;
+    }
+
+    body.dark-mode .preview-media {
+        background: #0f172a;
+    }
+
+    body.dark-mode .preview-description {
+        color: #e2e8f0;
+    }
+
+    body.dark-mode .preview-footer {
+        border-top-color: #334155;
+    }
+
+    body.dark-mode .preview-no-inline {
+        color: #94a3b8;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+        .resources-table thead {
+            display: none;
+        }
+        .resources-table, .resources-table tbody, .resources-table tr, .resources-table td {
+            display: block;
+            width: 100%;
+        }
+        .resources-table tr {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 12px 0;
+        }
+        .resources-table td {
+            border-bottom: none;
+            padding: 4px 0;
+        }
+        .resource-title {
+            max-width: none;
+            white-space: normal;
+        }
+        .delete-btn {
+            padding: 5px 12px;
+            font-size: 0.78rem;
+        }
+        .stats-mini {
+            font-size: 0.75rem;
+        }
+        .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 12px 16px;
+        }
+        .toolbar .search-box {
+            min-width: auto;
+        }
+        .toolbar .refresh-btn {
+            justify-content: center;
+        }
+        .panel {
+            padding: 12px 16px 16px;
+        }
+        .resource-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 0.85rem;
+        }
+        .resource-title {
+            font-size: 0.85rem;
+        }
+        .resource-preview-modal {
+            padding: 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .resource-title {
+            font-size: 0.8rem;
+        }
+        .resource-category {
+            font-size: 0.7rem;
+        }
+        .delete-btn {
+            padding: 4px 10px;
+            font-size: 0.7rem;
+        }
+        .page-title-row h2 {
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<script>
+    // ===== SIDEBAR ACTIVE STATE =====
+    // Ensure the Resources link stays active
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remove active from all nav items
+        document.querySelectorAll('.admin-sidebar .nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        // Add active to Resources
+        const resourcesLink = document.querySelector('.admin-sidebar .nav-item[href*="admin_resources"]');
+        if (resourcesLink) {
+            resourcesLink.classList.add('active');
+        }
+    });
+
+    const categoryIcons = {
+        video: 'fa-video',
+        audio: 'fa-music',
+        image: 'fa-image',
+        pdf: 'fa-file-pdf',
+        doc: 'fa-file-word',
+        presentation: 'fa-file-powerpoint',
+        spreadsheet: 'fa-file-excel',
+        code: 'fa-file-code',
+        zip: 'fa-file-archive',
+        other: 'fa-file'
+    };
+
+    // File extensions the /uploads/<user_id>/<filename> route serves
+    // inline (see inline_exts in app.py) rather than forcing a
+    // download - safe to drop straight into an <iframe>.
+    const inlineFrameExts = ['pdf', 'txt', 'md', 'json', 'xml', 'csv', 'html', 'css', 'js'];
+
+    let allResources = [];
+
+    function formatFileSize(bytes) {
+        if (!bytes) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
+    }
+
+    function formatDate(raw) {
+        if (!raw) return '—';
+        const iso = raw.includes('T') ? raw : raw.replace(' ', 'T') + 'Z';
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return raw;
+        return d.toLocaleString(undefined, {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str || '';
+        return div.innerHTML;
+    }
+
+    function renderResources(resources) {
+        const tbody = document.getElementById('resourcesTableBody');
+        const countPill = document.getElementById('resourceCountPill');
+
+        countPill.textContent = `${resources.length} resource${resources.length === 1 ? '' : 's'}`;
+
+        if (resources.length === 0) {
+            tbody.innerHTML = `
+                <tr class="empty-row">
+                    <td colspan="7">
+                        <i class="fas fa-folder-open"></i>
+                        No resources found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = resources.map(r => {
+            const icon = categoryIcons[r.file_category] || categoryIcons.other;
+            const title = escapeHtml(r.title || r.file_name || 'Untitled');
+            const author = escapeHtml(r.author || 'Unknown');
+            return `
+                <tr data-resource-id="${r.id}" onclick="openResourcePreview(${r.id})">
+                    <td>
+                        <div class="resource-cell">
+                            <div class="resource-icon ${r.file_category || 'other'}">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div>
+                                <div class="resource-title" title="${title}">${title}</div>
+                                <div class="resource-category">${escapeHtml(r.category || 'general')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${author}</td>
+                    <td><span class="privacy-pill ${r.privacy || 'public'}">${escapeHtml(r.privacy || 'public')}</span></td>
+                    <td>${formatFileSize(r.file_size)}</td>
+                    <td>${formatDate(r.upload_date)}</td>
+                    <td class="stats-mini">
+                        <i class="fas fa-eye"></i>${r.views || 0}
+                        &nbsp;&nbsp;<i class="fas fa-download"></i>${r.downloads || 0}
+                    </td>
+                    <td>
+                        <button class="delete-btn" onclick="event.stopPropagation(); deleteResource(${r.id}, '${title.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    function applySearchFilter() {
+        const term = document.getElementById('resourceSearch').value.toLowerCase().trim();
+        if (!term) {
+            renderResources(allResources);
+            return;
+        }
+        const filtered = allResources.filter(r =>
+            (r.title || '').toLowerCase().includes(term) ||
+            (r.author || '').toLowerCase().includes(term) ||
+            (r.category || '').toLowerCase().includes(term)
+        );
+        renderResources(filtered);
+    }
+
+    async function loadResources() {
+        const tbody = document.getElementById('resourcesTableBody');
+        tbody.innerHTML = `
+            <tr class="loading-row">
+                <td colspan="7"><i class="fas fa-spinner fa-spin"></i> Loading resources…</td>
+            </tr>
+        `;
+
+        try {
+            const res = await fetch('/api/resources?sort=newest&limit=100');
+            const data = await res.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to load resources');
+            }
+
+            allResources = data.resources || [];
+            applySearchFilter();
+        } catch (err) {
+            tbody.innerHTML = `
+                <tr class="empty-row">
+                    <td colspan="7">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        Couldn't load resources. Try refreshing.
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    async function deleteResource(id, title) {
+        if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+
+        const row = document.querySelector(`tr[data-resource-id="${id}"]`);
+        const btn = row ? row.querySelector('.delete-btn') : null;
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…';
+        }
+
+        try {
+            const res = await fetch(`/api/resources/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+
+            if (!data.success) {
+                alert(data.message || 'Failed to delete resource.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                }
+                return;
+            }
+
+            allResources = allResources.filter(r => r.id !== id);
+            applySearchFilter();
+        } catch (err) {
+            alert('Failed to delete resource. Please try again.');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+            }
+        }
+    }
+
+    // ===== RESOURCE PREVIEW MODAL =====
+    function openResourcePreview(id) {
+        const r = allResources.find(x => x.id === id);
+        if (!r) return;
+        renderPreview(r);
+        document.getElementById('resourcePreviewOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeResourcePreview() {
+        document.getElementById('resourcePreviewOverlay').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        // Stop any playing media when the modal closes
+        const body = document.getElementById('previewBody');
+        body.querySelectorAll('video, audio').forEach(el => el.pause());
+    }
+
+    function renderPreview(r) {
+        const body = document.getElementById('previewBody');
+        const icon = categoryIcons[r.file_category] || categoryIcons.other;
+        const title = escapeHtml(r.title || r.file_name || 'Untitled');
+        const author = escapeHtml(r.author || 'Unknown');
+        const desc = escapeHtml(r.description || 'No description provided.');
+        const url = r.file_url || '';
+
+        let mediaHtml = '';
+        if (r.file_category === 'image') {
+            mediaHtml = `<img src="${url}" alt="${title}" class="preview-media-image">`;
+        } else if (r.file_category === 'video') {
+            mediaHtml = `<video src="${url}" controls class="preview-media-video"></video>`;
+        } else if (r.file_category === 'audio') {
+            mediaHtml = `<audio src="${url}" controls class="preview-media-audio"></audio>`;
+        } else if (inlineFrameExts.includes(r.file_extension)) {
+            // PDFs and text-ish files - the server serves these inline
+            // rather than forcing a download, so an iframe can render them.
+            mediaHtml = `<iframe src="${url}" class="preview-media-frame"></iframe>`;
+        } else {
+            mediaHtml = `
+                <div class="preview-no-inline">
+                    <i class="fas ${icon}"></i>
+                    <p>This file type can't be previewed inline. Use "Open in new tab" below.</p>
+                </div>
+            `;
+        }
+
+        body.innerHTML = `
+            <div class="preview-header">
+                <div class="resource-icon ${r.file_category || 'other'}"><i class="fas ${icon}"></i></div>
+                <div>
+                    <h3>${title}</h3>
+                    <div class="preview-meta">${author} • ${escapeHtml(r.category || 'general')} • ${formatFileSize(r.file_size)} • ${formatDate(r.upload_date)}</div>
+                </div>
+            </div>
+            <div class="preview-media">${mediaHtml}</div>
+            <p class="preview-description">${desc}</p>
+            <div class="preview-footer">
+                <span class="stats-mini">
+                    <i class="fas fa-eye"></i>${r.views || 0} views
+                    &nbsp;&nbsp;<i class="fas fa-download"></i>${r.downloads || 0} downloads
+                </span>
+                <a href="${url}" target="_blank" rel="noopener" class="refresh-btn">
+                    <i class="fas fa-up-right-from-square"></i> Open in new tab
+                </a>
+            </div>
+        `;
+    }
+
+    document.getElementById('previewCloseBtn').addEventListener('click', closeResourcePreview);
+
+    document.getElementById('resourcePreviewOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeResourcePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeResourcePreview();
+    });
+
+    document.getElementById('resourceSearch').addEventListener('input', applySearchFilter);
+    document.getElementById('refreshBtn').addEventListener('click', loadResources);
+
+    document.addEventListener('DOMContentLoaded', loadResources);
+</script>
+{% endblock %}
